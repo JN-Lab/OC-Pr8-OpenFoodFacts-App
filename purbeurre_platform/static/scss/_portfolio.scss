@@ -24,7 +24,7 @@
       .project-category,
       .project-name {
         padding: 0 15px;
-        @include sans-serif-font;
+        @include body-font;
       }
       .project-category {
         font-size: 14px;

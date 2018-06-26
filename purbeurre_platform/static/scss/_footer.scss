@@ -1,0 +1,14 @@
+// Styling for the footer
+
+footer {
+    background-color: $blue-dark;
+    height: 50px;
+  }
+  
+  .footer {
+    height: 100%;
+    & > div {
+      height: 100%;
+    }
+  }  
+  

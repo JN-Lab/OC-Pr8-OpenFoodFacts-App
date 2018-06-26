@@ -6,7 +6,7 @@ html {
 }
 
 body {
-  @include serif-font;
+  @include body-font;
 }
 
 hr {
@@ -33,7 +33,7 @@ h3,
 h4,
 h5,
 h6 {
-  @include sans-serif-font;
+  @include title-font;
 }
 
 .bg-primary {

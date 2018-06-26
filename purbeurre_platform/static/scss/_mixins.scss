@@ -10,9 +10,11 @@
   -o-background-size: cover;
   background-size: cover;
 }
-@mixin serif-font() {
-  font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
-}
-@mixin sans-serif-font() {
+
+@mixin title-font() {
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+@mixin body-font() {
+  font-family: 'Scope One', 'Helvetica Neue', Arial, sans-serif;
 }

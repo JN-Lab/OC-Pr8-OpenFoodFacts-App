@@ -1,14 +1,14 @@
 // Styling for the navbar
 #mainNav {
   border-bottom: 1px solid fade-out($gray-900, .9);
-  background-color: $white;
-  @include sans-serif-font;
+  background-color: $brown;
+  @include title-font;
   @include transition-all;
   .navbar-brand {
     font-weight: 700;
     text-transform: uppercase;
     color: $primary;
-    @include sans-serif-font;
+    @include title-font;
     &:focus,
     &:hover {
       color: darken($primary, .1);
@@ -57,7 +57,7 @@
     }
     &.navbar-shrink {
       border-bottom: 1px solid fade-out($gray-900, .9);
-      background-color: $white;
+      background-color: $brown;
       .navbar-brand {
         color: $primary;
         &:focus,
