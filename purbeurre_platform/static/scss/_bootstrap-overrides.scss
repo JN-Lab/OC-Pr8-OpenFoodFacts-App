@@ -16,7 +16,7 @@
 }
 
 .btn-primary {
-  background-color: $primary;
+  background-color: $blue-light;
   border-color: $primary;
   &:hover,
   &:focus,
@@ -28,4 +28,8 @@
   &:focus {
     box-shadow: 0 0 0 0.2rem rgba(240, 95, 64,.5) !important;
   }
+}
+
+.bg-secondary {
+  background-color: $secondary;
 }
