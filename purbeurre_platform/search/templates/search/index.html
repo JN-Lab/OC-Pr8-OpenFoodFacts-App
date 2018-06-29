@@ -13,7 +13,19 @@
           </div>
           <div class="col-lg-8 mx-auto">
             <h2 class="text-faded mb-5">Trouvez un produit de substitution pour ceux que vous consommez tous les jours</h2>
-            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#about">Find Out More</a>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <form class="form-inline form-homepage" action="" method="post">
+              {% csrf_token %}
+              <div class="input-group mb-3">
+                {{ home_form.search }}
+                <div class="input-group-append">
+                  <button type="submit" class="btn-submit-home btn btn-primary btn-xl">Chercher</button>  
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       </div>
