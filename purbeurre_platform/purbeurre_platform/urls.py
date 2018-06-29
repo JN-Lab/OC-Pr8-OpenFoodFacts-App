@@ -22,7 +22,7 @@ from search import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('search/', include('search.urls')),
+    path('search/', include('search.urls', namespace='search')),
     path('admin/', admin.site.urls),
 ]
 

@@ -6,12 +6,14 @@ from .forms import HeaderSearchForm, HomeSearchForm
 
 # Home page
 def index(request):
-    header_form = HeaderSearchForm(request.POST or None)
-    home_form = HomeSearchForm(request.POST or None)
-    if header_form.is_valid():
-        pass
-    if home_form.is_valid():
-        pass
+    header_form =  HeaderSearchForm()
+    home_form = HomeSearchForm()
+    return render(request, 'index.html', locals())
+
+# Search Selection
+def choice(request):
+    query = request.GET.get('search')
+    # juste pour tester
     return render(request, 'index.html', locals())
 
 # Search List

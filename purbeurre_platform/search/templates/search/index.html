@@ -17,7 +17,7 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-lg-8">
-            <form class="form-inline form-homepage" action="" method="post">
+            <form class="form-inline form-homepage" action="{% url 'search:choice' %}" method="get">
               {% csrf_token %}
               <div class="input-group mb-3">
                 {{ home_form.search }}

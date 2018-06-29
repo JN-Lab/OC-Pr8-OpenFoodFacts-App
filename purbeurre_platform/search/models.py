@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Category(models.Model):
     name = models.CharField(max_length=200)
     api_id = models.CharField(max_length=200)
-    total_product = models.IntegerField(default=0)
+    total_products = models.IntegerField(default=0)
     enough_good_nutriscore = models.BooleanField(default=False)
 
     def __str__(self):
