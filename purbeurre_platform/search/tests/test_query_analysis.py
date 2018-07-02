@@ -32,7 +32,52 @@ class TestQueryAnalysis(TestCase):
                     "https://www.wikidata.org/wiki/Q40050"
                 ],
                 "id": "en:beverages"
-            }
+            },
+            {
+                "url": "https://fr.openfoodfacts.org/categorie/boissons-non-sucrees",
+                "name": "Boissons non sucrées",
+                "products": 9153,
+                "id": "en:non-sugared-beverages"
+            },
+            {
+                "products": 8006,
+                "name": "Produits fermentés",
+                "url": "https://fr.openfoodfacts.org/categorie/produits-fermentes",
+                "id": "en:fermented-foods"
+            },
+            {
+                "id": "en:fermented-milk-products",
+                "sameAs": [
+                    "https://www.wikidata.org/wiki/Q3506176"
+                ],
+                "products": 8002,
+                "name": "Produits laitiers fermentés",
+                "url": "https://fr.openfoodfacts.org/categorie/produits-laitiers-fermentes"
+            },
+            {
+                "id": "en:non-alcoholic-beverages",
+                "url": "https://fr.openfoodfacts.org/categorie/boissons-sans-alcool",
+                "products": 7646,
+                "name": "Boissons sans alcool"
+            },
+            {
+                "url": "https://fr.openfoodfacts.org/categorie/biscuits-et-gateaux",
+                "products": 7294,
+                "name": "Biscuits et gâteaux",
+                "id": "en:biscuits-and-cakes"
+            },
+            {
+                "id": "en:meats",
+                "products": 7191,
+                "name": "Viandes",
+                "url": "https://fr.openfoodfacts.org/categorie/viandes"
+            },
+            {
+                "id": "en:spreads",
+                "url": "https://fr.openfoodfacts.org/categorie/produits-a-tartiner",
+                "products": 6724,
+                "name": "Produits à tartiner"
+            },
         ]
 
         products = [
@@ -65,6 +110,54 @@ class TestQueryAnalysis(TestCase):
                     "en:plant-based-foods-and-beverages",
                 ],
             },
+            {
+                "product_name_fr": "Banane à la feuille de coca",
+                "code": "12345787459",
+                "img_thumb_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+                "nutrition_grade_fr": "c",
+                "categories_hierarchy": [
+                    "en:plant-based-foods-and-beverages",
+                    "en:beverages",
+                    "en:biscuits-and-cakes"
+                ],
+            },
+            {
+                "product_name_fr": "steack charal",
+                "code": "987695121",
+                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "nutrition_grade_fr": "e",
+                "categories_hierarchy": [
+                    "en:meats",
+                ],
+            },
+            {
+                "product_name_fr": "nutella plein d'huiles de palme",
+                "code": "456789123",
+                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                "nutrition_grade_fr": "d",
+                "categories_hierarchy": [
+                    "en:spreads",
+                ],
+            },
+            {
+                "product_name_fr": "steack de fausses viandes",
+                "code": "987751251",
+                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "nutrition_grade_fr": "b",
+                "categories_hierarchy": [
+                    "en:meats",
+                ],
+            },
+            {
+                "product_name_fr": "lait demi-écrémé pour une meilleure digestion",
+                "code": "474369523",
+                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                "nutrition_grade_fr": "b",
+                "categories_hierarchy": [
+                    "en:non-alcoholic-beverages",
+                    "en:fermented-milk-products"
+                ],
+            },
         ]
 
         for category in categories:
@@ -80,9 +173,11 @@ class TestQueryAnalysis(TestCase):
                                    picture=product["img_thumb_url"])
             
             for category in product["categories_hierarchy"]:
-                cat_in_db = Category.objects.get(api_id=category) 
-                if cat_in_db:
+                try:
+                    cat_in_db = Category.objects.get(api_id=category) 
                     new_product.categories.add(cat_in_db)
+                except:
+                    pass
             
     def setUp(self):
         self.analysis = QueryAnalysis()
@@ -92,6 +187,21 @@ class TestQueryAnalysis(TestCase):
         self.fail_query_product = "céréales"
 
     def test_exists_in_category_success(self):
-        # A modifier -> Retourner QuerySet or None
-        print(Product.objects.all())
-        self.assertTrue(self.analysis.exists_in_category(self.success_query_cat))
+        results = [
+            "<Category: aliments et boissons à base de végétaux>",
+            "<Category: boissons>",
+            "<Category: boissons non sucrées>",
+            "<Category: boissons sans alcool>"]
+        self.assertQuerysetEqual(self.analysis.exists_in_db(Category, self.success_query_cat), results, ordered=False)
+
+    def test_exists_in_category_fail(self):
+        self.assertEqual(self.analysis.exists_in_db(Category, self.fail_query_cat), None)
+
+    def test_exists_in_product_success(self):
+        results = [
+            "<Product: cola à la mousse de bière>",
+            "<Product: banane à la feuille de coca>"]
+        self.assertQuerysetEqual(self.analysis.exists_in_db(Product, self.success_query_product), results, ordered=False)
+
+    def test_exists_in_product_fail(self):
+        self.assertEqual(self.analysis.exists_in_db(Product, self.fail_query_product), None)    
