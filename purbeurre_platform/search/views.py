@@ -13,8 +13,13 @@ def index(request):
 # Search Selection
 def choice(request):
     query = request.GET.get('search')
+    pass
     # juste pour tester
-    return render(request, 'index.html', locals())
+    # pour le contexte :
+    #   - si c'est cat ou produit
+    #   - nom de la cat ou produit
+    #   -  
+    # return render(request, 'choice.html', context)
 
 # Search List
 
