@@ -7,14 +7,14 @@ from ..models import Product, Category
 
 class QueryAnalysis:
     """
-    This class groups all the methods to check if the search terms asked
-    by the user is linked to a product or a category registered in the database
+    This class groups all the methods to interact with the database during:
+        -> Search process
     """
 
     def get_info_in_db(self, model, query):
         """
-        This method checked in database (Category or Product models) if there is 
-        one or several appropriate products according the user query
+        This method gets in database the categories or products (max 6) according
+        usr query. If there is any category or product, it returns None
         """
         
         words_query = query.lower().split()
@@ -30,6 +30,11 @@ class QueryAnalysis:
             return None
 
     def get_substitute_products_in_db(self, category_name, number):
+        """
+        This method gets substitute products from a category if there are
+        enough products with an "a" nutriscore or None 
+        """
+
         category = Category.objects.get(name=category_name)
         products = Product.objects.filter(categories=category.id, nutriscore="a")[:number]
         if len(products) >= number:
@@ -37,8 +42,16 @@ class QueryAnalysis:
         else:
             return None
 
-    def get_selected_product(self, product_name):
-        pass
+    def get_selected_product(self, product_code):
+        """
+        This method gets all necessary information from a products thanks to its code
+        """
+
+        try:
+            product = Product.objects.get(ref=product_code)
+            return product
+        except:
+            return None
 
     def set_product_registered(self, product):
         pass
