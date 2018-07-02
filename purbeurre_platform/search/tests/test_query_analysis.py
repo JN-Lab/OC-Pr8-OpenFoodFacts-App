@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+# coding: utf-8
 from django.test import TestCase
 from ..models import Product, Category
 from ..utils.query_analysis  import QueryAnalysis
@@ -114,7 +116,7 @@ class TestQueryAnalysis(TestCase):
                 "product_name_fr": "Banane à la feuille de coca",
                 "code": "12345787459",
                 "img_thumb_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
-                "nutrition_grade_fr": "c",
+                "nutrition_grade_fr": "a",
                 "categories_hierarchy": [
                     "en:plant-based-foods-and-beverages",
                     "en:beverages",
@@ -125,7 +127,7 @@ class TestQueryAnalysis(TestCase):
                 "product_name_fr": "steack charal",
                 "code": "987695121",
                 "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
-                "nutrition_grade_fr": "e",
+                "nutrition_grade_fr": "a",
                 "categories_hierarchy": [
                     "en:meats",
                 ],
@@ -134,7 +136,7 @@ class TestQueryAnalysis(TestCase):
                 "product_name_fr": "nutella plein d'huiles de palme",
                 "code": "456789123",
                 "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
-                "nutrition_grade_fr": "d",
+                "nutrition_grade_fr": "a",
                 "categories_hierarchy": [
                     "en:spreads",
                 ],
@@ -143,7 +145,7 @@ class TestQueryAnalysis(TestCase):
                 "product_name_fr": "steack de fausses viandes",
                 "code": "987751251",
                 "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
-                "nutrition_grade_fr": "b",
+                "nutrition_grade_fr": "a",
                 "categories_hierarchy": [
                     "en:meats",
                 ],
@@ -152,7 +154,7 @@ class TestQueryAnalysis(TestCase):
                 "product_name_fr": "lait demi-écrémé pour une meilleure digestion",
                 "code": "474369523",
                 "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
-                "nutrition_grade_fr": "b",
+                "nutrition_grade_fr": "a",
                 "categories_hierarchy": [
                     "en:non-alcoholic-beverages",
                     "en:fermented-milk-products"
@@ -180,28 +182,79 @@ class TestQueryAnalysis(TestCase):
                     pass
             
     def setUp(self):
-        self.analysis = QueryAnalysis()
-        self.success_query_cat = "boissons gazeuses"
-        self.fail_query_cat = "nutella"
-        self.success_query_product = "coca cola"
-        self.fail_query_product = "céréales"
+        """
+        This method just creates a QueryAnalysis object for all the tests
+        """
 
-    def test_exists_in_category_success(self):
+        self.analysis = QueryAnalysis()
+
+    def test_get_in_category_model_success(self):
+        """
+        This test verifies if the method get_info_in_db for Category model gets all the categories
+        which own a word in the query
+        """
+
+        query = "boissons gazeuses"
         results = [
             "<Category: aliments et boissons à base de végétaux>",
             "<Category: boissons>",
             "<Category: boissons non sucrées>",
             "<Category: boissons sans alcool>"]
-        self.assertQuerysetEqual(self.analysis.exists_in_db(Category, self.success_query_cat), results, ordered=False)
+        self.assertQuerysetEqual(self.analysis.get_info_in_db(Category, query), results, ordered=False)
 
-    def test_exists_in_category_fail(self):
-        self.assertEqual(self.analysis.exists_in_db(Category, self.fail_query_cat), None)
+    def test_get_in_category_model_fail(self):
+        """
+        This tests verifies if the method get_info_in_db for Category model returns None 
+        when any categories match with one word of the query
+        """
 
-    def test_exists_in_product_success(self):
+        query = "nutella"
+        self.assertEqual(self.analysis.get_info_in_db(Category, query), None)
+
+    def test_get_in_product_model_success(self):
+        """
+        This test verifies if the method get_info_in_db for Product model gets all the products
+        which own a word in the query
+        """
+
+        query = "coca cola"
         results = [
             "<Product: cola à la mousse de bière>",
             "<Product: banane à la feuille de coca>"]
-        self.assertQuerysetEqual(self.analysis.exists_in_db(Product, self.success_query_product), results, ordered=False)
+        self.assertQuerysetEqual(self.analysis.get_info_in_db(Product, query), results, ordered=False)
 
-    def test_exists_in_product_fail(self):
-        self.assertEqual(self.analysis.exists_in_db(Product, self.fail_query_product), None)    
+    def test_get_in_product_model_fail(self):
+        """
+        This tests verifies if the method get_info_in_db for Product model returns None 
+        when any products match with one word of the query
+        """
+
+        query = "céréales"
+        self.assertEqual(self.analysis.get_info_in_db(Product, query), None)
+
+    def test_get_substitute_products_in_db_success(self):
+        """
+        This test checks if the method get_substitute_products_in_db returns 
+        the number of products with an a nutriscore asked when there are enough
+        products in the db
+        """
+
+        category_name = "boissons"
+        number = 2
+
+        results = [
+            "<Product: banane à la feuille de coca>",
+            "<Product: le jus de raisin 100% jus de fruits>"
+        ]
+        self.assertQuerysetEqual(self.analysis.get_substitute_products_in_db(category_name, number), results, ordered=False)
+
+    def test_get_substitute_products_in_db_fail(self):
+        """
+        This test checks if the method get_substitute_products_in_db returns 
+        None when there are not enough products with a nutriscroe "a" in the db
+        """
+        
+        category_name = "boissons"
+        number = 4
+
+        self.assertEqual(self.analysis.get_substitute_products_in_db(category_name, number), None)
