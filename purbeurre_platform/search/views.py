@@ -13,6 +13,35 @@ def index(request):
 # Search Selection
 def choice(request):
     query = request.GET.get('search')
+    context = {
+        'type' : 'category', #product or category
+        'count' : 6, #nbre d'éléments
+        'elements' : [{
+            'name': 'cat_1',
+            'ref': '',
+            'nutriscore': '',
+            'picture': ''
+        },
+        {
+            'name': 'cat_2',
+            'ref': '',
+            'nutriscore': '',
+            'picture': ''
+        },
+        {
+            'name': 'cat_3',
+            'ref': '',
+            'nutriscore': '',
+            'picture': ''
+        },
+        {
+            'name': 'cat_4',
+            'ref': '',
+            'nutriscore': '',
+            'picture': ''
+        },
+        ],
+    }
     pass
     # juste pour tester
     # pour le contexte :
