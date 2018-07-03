@@ -62,7 +62,25 @@ class OpenFoodFactsInteractions:
         else:
             return None
     
-    def select_appropriate_products(self, data, query):
+    def get_products_from_api(self, data_from_api, query, max_numb):
+        """
+        This method coordinates all the methods from the class:
+            -> If api sends back products, it cleaned them
+            -> If selected product > wanted number, a process of selection is realized
+            -> It returns the necessary dict at the end
+        """
+        if data_from_api["count"] > 0:
+            products_selected = self._select_appropriate_products(data_from_api, query)
+            if products_selected["number"] > max_numb :
+                self._select_by_nutriscore_value(products_selected, max_numb)
+                self._select_by_image(products_selected, max_numb)
+                self._select_by_description(products_selected, max_numb)
+                self._select_by_random_way(products_selected, max_numb)
+            return products_selected
+        else:
+            return None
+
+    def _select_appropriate_products(self, data, query):
         """
         This method gets the data from API and cleaned them to return only
         products
@@ -74,70 +92,86 @@ class OpenFoodFactsInteractions:
             'number' : 0,
             'elements': []
         }
-
         test = re.compile(r".*%s.*" % query, re.IGNORECASE)
-        
         for product in data["products"]:
-            appropriate_name = test.match(product["product_name_fr"])
-            nutriscore = product["nutrition_grade_fr"]
-        
-            if appropriate_name and nutriscore:
-                element = {
-                    'name' : '',
-                    'ref' : '',
-                    'nutriscore' : '',
-                    'description' : '',
-                    'image_url' : '' 
-                }
-                element["name"] = product["product_name_fr"]
-                element["nutriscore"] = nutriscore
-                element["ref"] = product["code"]
-                try:
-                    element["description"] = product["generic_name_fr"]
-                    element["image_url"] = product["image_url"]
-                except:
-                    pass
-
-                products_info["elements"].append(element)
+            try:
+                appropriate_name = test.match(product["product_name_fr"])
+                nutriscore = product["nutrition_grade_fr"]
+            
+                if appropriate_name and nutriscore:
+                    element = {
+                        'name' : '',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : '',
+                        'image_url' : '' 
+                    }
+                    element["name"] = product["product_name_fr"]
+                    element["nutriscore"] = nutriscore
+                    element["ref"] = product["code"]
+                    try:
+                        element["description"] = product["generic_name_fr"]
+                        element["image_url"] = product["image_url"]
+                    except:
+                        pass
+            
+                    products_info["elements"].append(element)
+            except:
+                pass
 
         products_info["number"] = len(products_info["elements"])
 
         return products_info
 
-    def select_by_image(self, data, max_numb):
+    def _select_by_image(self, data, max_numb):
         """
         This method removes products without image url from products list
         if the number of products is > max_numb
         """
+        elements_cleaned = []
+        products_numb = data["number"]
         for product in data["elements"]:
-            if not product["image_url"] and len(data["elements"]) > max_numb:
-                data["elements"].remove(product)
-
+            if not product["image_url"] and products_numb > max_numb:
+                products_numb -= 1
+            else:
+                elements_cleaned.append(product)
+        data["elements"] = elements_cleaned
+        data["number"] = products_numb
         return data
 
-    def select_by_description(self, data, max_numb):
+    def _select_by_description(self, data, max_numb):
         """
         This method removes products without description from products list
         if the number of products is > max_numb
         """
+        elements_cleaned = []
+        products_numb = data["number"]
         for product in data["elements"]:
-            if not product["description"] and len(data["elements"]) > max_numb:
-                data["elements"].remove(product)
-
+            if not product["description"] and products_numb > max_numb:
+                products_numb -= 1
+            else:
+                elements_cleaned.append(product)
+        data["elements"] = elements_cleaned
+        data["number"] = products_numb
         return data
 
-    def select_by_nutriscore_value(self, data, max_numb):
+    def _select_by_nutriscore_value(self, data, max_numb):
         """
         This method removes products with good nutriscore from products list
         if the number of products is > max_numb
         """
+        elements_cleaned = []
+        products_numb = data["number"]
         for product in data["elements"]:
-            if product["nutriscore"] == "a" and len(data["elements"]) > max_numb:
-                data["elements"].remove(product)
-
+            if product["nutriscore"] == "a" and products_numb > max_numb:
+                products_numb -= 1
+            else:
+                elements_cleaned.append(product)
+        data["elements"] = elements_cleaned
+        data["number"] = products_numb
         return data
 
-    def select_by_random_way(self, data, max_numb):
+    def _select_by_random_way(self, data, max_numb):
         """
         This method selects on random way several products defines by max_numb
         argument if the length of the products is > max_numb 
@@ -146,24 +180,7 @@ class OpenFoodFactsInteractions:
             random_product = random.sample(data["elements"], max_numb)
             data["elements"] = random_product
 
+        data["number"] = len(data["elements"])
+
         return data
 
-    def get_products_from_api(self, query, max_numb):
-        """
-        This method coordinates all the methods from the class:
-            -> It gets json from the API accoding the user query (search by brand)
-            -> If api sends back products, it cleaned them
-            -> If selected product > wanted number, a process of selection is realized
-            -> It returns the necessary dict at the end
-        """
-        api_data = self.get_products_with_brand(query)
-        if api_data["count"] > 0:
-            products_selected = self.select_appropriate_products(api_data, query)
-            if products_selected["number"] > max_numb :
-                self.select_by_nutriscore_value(products_selected, max_numb)
-                self.select_by_image(products_selected, max_numb)
-                self.select_by_description(products_selected, max_numb)
-                self.select_by_random_way(products_selected, max_numb)
-            return products_selected
-        else:
-            return None
