@@ -199,6 +199,86 @@ class TestQueryAnalysis(TestCase):
 
         self.analysis = QueryAnalysis()
 
+    ## PUBLIC METHODS ##
+
+    def test_get_search_selection_category_success(self):
+        """
+        This tests checked all the process of queryanalysis with category found
+        """
+        query = "boissons gazeuses"
+        result = {
+                'type' : 'category',
+                'number' : 4,
+                'elements': [
+                    {
+                        'name' : 'aliments et boissons à base de végétaux',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:plant-based-foods-and-beverages',
+                        'image_url' : '' 
+                    },
+                    {
+                        'name' : 'boissons',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:beverages',
+                        'image_url' : '' 
+                    },
+                    {
+                        'name' : 'boissons non sucrées',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:non-sugared-beverages',
+                        'image_url' : '' 
+                    },
+                    {
+                        'name' : 'boissons sans alcool',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:non-alcoholic-beverages',
+                        'image_url' : '' 
+                    },
+                ]
+            }
+        self.assertEqual(self.analysis.get_search_selection(query), result)  
+
+    def test_get_search_selection_product_success(self):
+        """
+        This tests checked all the process of queryanalysis with category found
+        """
+        query = "coca cola"
+        result = {
+                'type' : 'product',
+                'number' : 2,
+                'elements': [
+                    {
+                        'name' : 'cola à la mousse de bière',
+                        'ref' : '456789123',
+                        'nutriscore' : 'd',
+                        'description' : 'du coca et de la bière, ca mousse pas mal',
+                        'image_url' : 'https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg' 
+                    },
+                    {
+                        'name' : 'banane à la feuille de coca',
+                        'ref' : '12345787459',
+                        'nutriscore' : 'a',
+                        'description' : '',
+                        'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    },
+                ]
+            }
+        self.assertEqual(self.analysis.get_search_selection(query), result)
+    
+    def test_get_search_selection_fail(self):
+        """
+        This tests checked all the process of queryanalysis with any category foun
+        """
+        query = "céréales"
+        result = None
+        self.assertEqual(self.analysis.get_search_selection(query), result)
+
+    ## PRIVATE METHODS ##
+
     def test_get_in_category_model_success(self):
         """
         This test verifies if the method get_info_in_db for Category model gets all the categories
@@ -212,7 +292,7 @@ class TestQueryAnalysis(TestCase):
             "<Category: boissons non sucrées>",
             "<Category: boissons sans alcool>"]
 
-        self.assertQuerysetEqual(self.analysis.get_info_in_db(Category, query), results, ordered=False)
+        self.assertQuerysetEqual(self.analysis._get_info_in_db(Category, query), results, ordered=False)
 
     def test_get_in_category_model_fail(self):
         """
@@ -221,7 +301,7 @@ class TestQueryAnalysis(TestCase):
         """
 
         query = "nutella"
-        self.assertEqual(self.analysis.get_info_in_db(Category, query), None)
+        self.assertEqual(self.analysis._get_info_in_db(Category, query), None)
 
     def test_get_in_product_model_success(self):
         """
@@ -233,7 +313,7 @@ class TestQueryAnalysis(TestCase):
         results = [
             "<Product: cola à la mousse de bière>",
             "<Product: banane à la feuille de coca>"]
-        self.assertQuerysetEqual(self.analysis.get_info_in_db(Product, query), results, ordered=False)
+        self.assertQuerysetEqual(self.analysis._get_info_in_db(Product, query), results, ordered=False)
 
     def test_get_in_product_model_fail(self):
         """
@@ -242,34 +322,7 @@ class TestQueryAnalysis(TestCase):
         """
 
         query = "céréales"
-        self.assertEqual(self.analysis.get_info_in_db(Product, query), None)
-
-    def test_get_substitute_products_in_db_success(self):
-        """
-        This test checks if the method get_substitute_products_in_db returns 
-        the number of products with an a nutriscore asked when there are enough
-        products in the db
-        """
-
-        category_name = "boissons"
-        number = 2
-
-        results = [
-            "<Product: banane à la feuille de coca>",
-            "<Product: le jus de raisin 100% jus de fruits>"
-        ]
-        self.assertQuerysetEqual(self.analysis.get_substitute_products_in_db(category_name, number), results, ordered=False)
-
-    def test_get_substitute_products_in_db_fail(self):
-        """
-        This test checks if the method get_substitute_products_in_db returns 
-        None when there are not enough products with a nutriscroe "a" in the db
-        """
-
-        category_name = "boissons"
-        number = 4
-
-        self.assertEqual(self.analysis.get_substitute_products_in_db(category_name, number), None)
+        self.assertEqual(self.analysis._get_info_in_db(Product, query), None)
 
     def test_queryset_to_dict_category(self):
         """
@@ -277,7 +330,7 @@ class TestQueryAnalysis(TestCase):
         It uses the get_info_in_db method to get the adequate queryset to test (same as the test before)
         """
         query = "boissons gazeuses"
-        queryset = self.analysis.get_info_in_db(Category, query)
+        queryset = self.analysis._get_info_in_db(Category, query)
         result = {
                 'type' : 'category',
                 'number' : 4,
@@ -313,7 +366,7 @@ class TestQueryAnalysis(TestCase):
                 ]
             }
 
-        self.assertEqual(self.analysis.queryset_to_dict(queryset, "category"), result)
+        self.assertEqual(self.analysis._queryset_to_dict(queryset, "category"), result)
 
     def test_queryset_to_dict_product(self):
         """
@@ -321,7 +374,7 @@ class TestQueryAnalysis(TestCase):
         It uses the get_info_in_db method to get the adequate queryset to test (same as the test before)
         """
         query = "coca cola"
-        queryset = self.analysis.get_info_in_db(Product, query)
+        queryset = self.analysis._get_info_in_db(Product, query)
 
         result = {
                 'type' : 'product',
@@ -343,4 +396,33 @@ class TestQueryAnalysis(TestCase):
                     },
                 ]
             }
-        self.assertEqual(self.analysis.queryset_to_dict(queryset, "product"), result)
+        self.assertEqual(self.analysis._queryset_to_dict(queryset, "product"), result)
+
+  
+
+    def test_get_substitute_products_in_db_success(self):
+        """
+        This test checks if the method get_substitute_products_in_db returns 
+        the number of products with an a nutriscore asked when there are enough
+        products in the db
+        """
+
+        category_name = "boissons"
+        number = 2
+
+        results = [
+            "<Product: banane à la feuille de coca>",
+            "<Product: le jus de raisin 100% jus de fruits>"
+        ]
+        self.assertQuerysetEqual(self.analysis.get_substitute_products_in_db(category_name, number), results, ordered=False)
+
+    def test_get_substitute_products_in_db_fail(self):
+        """
+        This test checks if the method get_substitute_products_in_db returns 
+        None when there are not enough products with a nutriscroe "a" in the db
+        """
+
+        category_name = "boissons"
+        number = 4
+
+        self.assertEqual(self.analysis.get_substitute_products_in_db(category_name, number), None)

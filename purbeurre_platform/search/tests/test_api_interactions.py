@@ -197,7 +197,7 @@ class TestApiInteractions(TestCase):
             ] 
         }
 
-    def test_get_products_from_api(self):
+    def test_get_products_selection(self):
 
         result = {
             'type' : 'product',
@@ -248,7 +248,7 @@ class TestApiInteractions(TestCase):
             ] 
         }
 
-        self.assertEqual(self.api_interaction.get_products_from_api(self.data_received, "nutella", 6), result)
+        self.assertEqual(self.api_interaction.get_products_selection(self.data_received, "nutella", 6), result)
 
     def test_select_appropriate_products_success(self):
 

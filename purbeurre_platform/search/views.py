@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import HeaderSearchForm, HomeSearchForm
+from .utils.treatment import Treatment
 
 # Create your views here.
 
@@ -12,43 +13,21 @@ def index(request):
 
 # Search Selection
 def choice(request):
+    header_form = HeaderSearchForm()
     query = request.GET.get('search')
-    context = {
-        'type' : 'category', #product or category
-        'count' : 6, #nbre d'éléments
-        'elements' : [{
-            'name': 'cat_1',
-            'ref': '',
-            'nutriscore': '',
-            'picture': ''
-        },
-        {
-            'name': 'cat_2',
-            'ref': '',
-            'nutriscore': '',
-            'picture': ''
-        },
-        {
-            'name': 'cat_3',
-            'ref': '',
-            'nutriscore': '',
-            'picture': ''
-        },
-        {
-            'name': 'cat_4',
-            'ref': '',
-            'nutriscore': '',
-            'picture': ''
-        },
-        ],
-    }
-    pass
-    # juste pour tester
-    # pour le contexte :
-    #   - si c'est cat ou produit
-    #   - nom de la cat ou produit
-    #   -  
-    # return render(request, 'choice.html', context)
+    find_info = Treatment()
+    selection = find_info.get_choice_selection(query)
+
+    if selection:
+        context = {
+            'element_type': selection["type"],
+            'list' : selection["elements"],
+            'header_form' : header_form
+        }
+        return render(request, 'choice.html', context)
+    else:
+        # Find the best scenario
+        pass
 
 # Search List
 

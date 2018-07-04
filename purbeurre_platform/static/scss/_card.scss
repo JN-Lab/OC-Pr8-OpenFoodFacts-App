@@ -1,0 +1,15 @@
+// Styling for card
+
+.card.product-card {
+    padding: 0px;
+    margin-bottom: 10px;
+ 
+    & > img {
+        height: 235px;
+        object-fit: cover;
+    }
+    & > .card-body {
+        border-top: 1px solid $gray-300;
+
+    }
+}

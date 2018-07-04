@@ -126,6 +126,15 @@ img::-moz-selection {
           #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
             color: #C45525; } }
 
+.card.product-card {
+  padding: 0px;
+  margin-bottom: 10px; }
+  .card.product-card > img {
+    height: 235px;
+    object-fit: cover; }
+  .card.product-card > .card-body {
+    border-top: 1px solid #dee2e6; }
+
 footer {
   background-color: #345A61;
   height: 50px; }
@@ -165,6 +174,45 @@ header.masthead {
   @media (min-width: 1200px) {
     header.masthead h1 {
       font-size: 4rem; } }
+
+header.minhead {
+  padding-top: 5rem;
+  padding-bottom: calc(5rem - 56px);
+  background-color: #E8A75D;
+  background-position: center center;
+  max-height: 300px;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; }
+  header.minhead hr {
+    margin-top: 15px;
+    margin-bottom: 15px; }
+  header.minhead h1 {
+    font-size: 1.5rem; }
+  header.minhead h2 {
+    font-size: 1rem; }
+  header.minhead p {
+    font-weight: 200; }
+  @media (min-width: 768px) {
+    header.minhead {
+      padding-bottom: calc(5rem - 33px);
+      min-heigth: 200px; }
+      header.minhead p {
+        font-size: 1.15rem; } }
+  @media (min-width: 992px) {
+    header.minhead {
+      height: 100vh;
+      min-height: 300px; }
+      header.minhead h1 {
+        font-size: 2rem; }
+      header.minhead h2 {
+        font-size: 1.5rem; } }
+  @media (min-width: 1200px) {
+    header.minhead h1 {
+      font-size: 3rem; }
+    header.minhead h2 {
+      font-size: 2rem; } }
 
 .service-box {
   max-width: 400px; }

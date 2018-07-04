@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}PurBeurre - Selection des produits à substituer{% endblock %}
+{% block content %}
+<header class="minhead text-center text-white d-flex">
+    <div class="container my-auto">
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="text-uppercase">
+                    <strong>Affinons votre sélection!</strong>
+                </h1>
+                <hr>
+            </div>
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-faded mb-5">Choisissez ce qui se rapproche le plus de votre besoin</h2>
+            </div>
+        </div>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 container">
+                <div class="row">
+                    {% if element_type == 'product' %}
+                        {% for element in list %}
+                            <div class="card product-card col-md-4 col-sm-12 col-12">
+                                <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ element.name }}</h5>
+                                    <p class="card-text">{{ element.description }}</p>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <a href="#" class="btn btn-primary">Selectionner</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

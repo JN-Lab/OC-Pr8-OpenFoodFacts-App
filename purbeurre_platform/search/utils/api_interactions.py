@@ -37,7 +37,7 @@ class OpenFoodFactsInteractions:
         }
     """
     
-    def get_products_with_brand(self, query):
+    def get_products_from_api(self, query):
         """
         This method gets all the products from the API linked to the brands asked by the user (query)
         If there is no product -> return None
@@ -62,7 +62,7 @@ class OpenFoodFactsInteractions:
         else:
             return None
     
-    def get_products_from_api(self, data_from_api, query, max_numb):
+    def get_products_selection(self, data_from_api, query, max_numb):
         """
         This method coordinates all the methods from the class:
             -> If api sends back products, it cleaned them
