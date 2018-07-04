@@ -6,6 +6,8 @@ from ..utils.query_analysis  import QueryAnalysis
 
 class TestQueryAnalysis(TestCase):
 
+    maxDiff = None
+
     @classmethod
     def setUpTestData(cls):
         """
@@ -200,7 +202,7 @@ class TestQueryAnalysis(TestCase):
             "<Category: boissons>",
             "<Category: boissons non sucrées>",
             "<Category: boissons sans alcool>"]
-        print(self.analysis.get_info_in_db(Category, query))
+
         self.assertQuerysetEqual(self.analysis.get_info_in_db(Category, query), results, ordered=False)
 
     def test_get_in_category_model_fail(self):
@@ -260,14 +262,76 @@ class TestQueryAnalysis(TestCase):
 
         self.assertEqual(self.analysis.get_substitute_products_in_db(category_name, number), None)
 
-    # def test_get_selected_product_success(self):
-    #     """
-    #     This test checks if the method get_selected_product returns a product if the code is 
-    #     found in the db
-    #     """
+    def test_queryset_to_dict_category(self):
+        """
+        This test checks if the method queryset_to_dict returns an appropriate dict for a categories queryset.
+        It uses the get_info_in_db method to get the adequate queryset to test (same as the test before)
+        """
+        query = "boissons gazeuses"
+        queryset = self.analysis.get_info_in_db(Category, query)
+        result = {
+                'type' : 'category',
+                'number' : 4,
+                'elements': [
+                    {
+                        'name' : 'aliments et boissons à base de végétaux',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:plant-based-foods-and-beverages',
+                        'image_url' : '' 
+                    },
+                    {
+                        'name' : 'boissons',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:beverages',
+                        'image_url' : '' 
+                    },
+                    {
+                        'name' : 'boissons non sucrées',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:non-sugared-beverages',
+                        'image_url' : '' 
+                    },
+                    {
+                        'name' : 'boissons sans alcool',
+                        'ref' : '',
+                        'nutriscore' : '',
+                        'description' : 'en:non-alcoholic-beverages',
+                        'image_url' : '' 
+                    },
+                ]
+            }
 
-    #     code = 474369523
-    #     result = "<Product: lait demi-écrémé pour une meilleure digestion>"
-    #     print(self.analysis.get_selected_product(code))
+        self.assertEqual(self.analysis.queryset_to_dict(queryset, "category"), result)
 
-    #     self.assertEqual(self.analysis.get_selected_product(code), result)
+    def test_queryset_to_dict_product(self):
+        """
+        This test checks if the method queryset_to_dict returns an appropriate dict for a products queryset.
+        It uses the get_info_in_db method to get the adequate queryset to test (same as the test before)
+        """
+        query = "coca cola"
+        queryset = self.analysis.get_info_in_db(Product, query)
+
+        result = {
+                'type' : 'product',
+                'number' : 2,
+                'elements': [
+                    {
+                        'name' : 'cola à la mousse de bière',
+                        'ref' : '456789123',
+                        'nutriscore' : 'd',
+                        'description' : '',
+                        'image_url' : 'https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg' 
+                    },
+                    {
+                        'name' : 'banane à la feuille de coca',
+                        'ref' : '12345787459',
+                        'nutriscore' : 'a',
+                        'description' : '',
+                        'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    },
+                ]
+            }
+        self.assertEqual(self.analysis.queryset_to_dict(queryset, "product"), result)
