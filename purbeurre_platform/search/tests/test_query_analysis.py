@@ -88,8 +88,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "Le jus de raisin 100% jus de fruits",
                 "code": "123456789",
-                "img_thumb_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+                "image_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
                 "nutrition_grade_fr": "a",
+                "generic_name_fr" : "jus de fruit naturel sans sucre ajouté",
                 "categories_hierarchy": [
                     "en:plant-based-foods-and-beverages",
                     "en:beverages",
@@ -98,8 +99,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "Le haricot 100% naturellement bleue",
                 "code": "987654321",
-                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
                 "nutrition_grade_fr": "b",
+                "generic_name_fr" : "",
                 "categories_hierarchy": [
                     "en:plant-based-foods",
                 ],
@@ -107,8 +109,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "cola à la mousse de bière",
                 "code": "456789123",
-                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
                 "nutrition_grade_fr": "d",
+                "generic_name_fr" : "du coca et de la bière, ca mousse pas mal",
                 "categories_hierarchy": [
                     "en:beverages",
                     "en:plant-based-foods-and-beverages",
@@ -117,8 +120,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "Banane à la feuille de coca",
                 "code": "12345787459",
-                "img_thumb_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+                "image_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
                 "nutrition_grade_fr": "a",
+                "generic_name_fr": "",
                 "categories_hierarchy": [
                     "en:plant-based-foods-and-beverages",
                     "en:beverages",
@@ -128,7 +132,8 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "steack charal",
                 "code": "987695121",
-                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "generic_name_fr":"mmmmmmhhhh Charal!!",
                 "nutrition_grade_fr": "a",
                 "categories_hierarchy": [
                     "en:meats",
@@ -137,8 +142,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "nutella plein d'huiles de palme",
                 "code": "456789123",
-                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
                 "nutrition_grade_fr": "a",
+                "generic_name_fr": "pas bon pour les singes et les artères",
                 "categories_hierarchy": [
                     "en:spreads",
                 ],
@@ -146,8 +152,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "steack de fausses viandes",
                 "code": "987751251",
-                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
                 "nutrition_grade_fr": "a",
+                "generic_name_fr": "ca a le gout de viande, mais c'est pas de la viande",
                 "categories_hierarchy": [
                     "en:meats",
                 ],
@@ -155,8 +162,9 @@ class TestQueryAnalysis(TestCase):
             {
                 "product_name_fr": "lait demi-écrémé pour une meilleure digestion",
                 "code": "474369523",
-                "img_thumb_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
                 "nutrition_grade_fr": "a",
+                "generic_name_fr": "lait de vache frais",
                 "categories_hierarchy": [
                     "en:non-alcoholic-beverages",
                     "en:fermented-milk-products"
@@ -174,7 +182,8 @@ class TestQueryAnalysis(TestCase):
             new_product = Product.objects.create(name=product["product_name_fr"].lower(),
                                    ref=product["code"],
                                    nutriscore=product["nutrition_grade_fr"],
-                                   picture=product["img_thumb_url"])
+                                   picture=product["image_url"],
+                                   description=product["generic_name_fr"])
             
             for category in product["categories_hierarchy"]:
                 try:
@@ -322,7 +331,7 @@ class TestQueryAnalysis(TestCase):
                         'name' : 'cola à la mousse de bière',
                         'ref' : '456789123',
                         'nutriscore' : 'd',
-                        'description' : '',
+                        'description' : 'du coca et de la bière, ca mousse pas mal',
                         'image_url' : 'https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg' 
                     },
                     {

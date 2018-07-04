@@ -77,6 +77,7 @@ class QueryAnalysis:
                 element["name"] = product.name
                 element["ref"] = product.ref
                 element["nutriscore"] = product.nutriscore
+                element["description"] = product.description
                 element["image_url"] = product.picture
                 dict_info["elements"].append(element)
 

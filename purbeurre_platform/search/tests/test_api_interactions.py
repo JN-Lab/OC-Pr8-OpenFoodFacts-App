@@ -5,8 +5,6 @@ from ..utils.api_interactions import OpenFoodFactsInteractions
 
 class TestApiInteractions(TestCase):
 
-    maxDiff = None
-
     def setUp(self):
 
         self.api_interaction = OpenFoodFactsInteractions()
