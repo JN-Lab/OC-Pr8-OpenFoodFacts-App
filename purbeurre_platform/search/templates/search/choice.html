@@ -11,7 +11,9 @@
                 <hr>
             </div>
             <div class="col-lg-8 mx-auto">
-                <h2 class="text-faded mb-5">Choisissez ce qui se rapproche le plus de votre besoin</h2>
+                <h2 class="text-faded mb-5">
+                    Choisissez ce qui se rapproche le plus de votre besoin
+                </h2>
             </div>
         </div>
     </div>
@@ -20,20 +22,37 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 container">
-                <div class="row">
-                    {% if element_type == 'product' %}
-                        {% for element in list %}
-                            <div class="card product-card col-md-4 col-sm-12 col-12">
-                                <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ element.name }}</h5>
-                                    <p class="card-text">{{ element.description }}</p>
+                <div class="row justify-content-center">
+                    {% if element_number > 0 %}
+                        {% if element_type == 'product' %}
+                            {% for element in list %}
+                                <div class="card product-card col-md-4 col-sm-12 col-12">
+                                    <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ element.name }}</h5>
+                                        <p class="card-text">{{ element.description }}</p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <a href="#" class="btn btn-primary">Selectionner</a>
+                                    </div>
                                 </div>
-                                <div class="card-footer bg-transparent">
-                                    <a href="#" class="btn btn-primary">Selectionner</a>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                    <div class="col-lg-8">
+                        <h3>
+                            Donner quelques précisions supplémentaires s'il vous plait
+                        </h3>
+                        <form class="form-inline form-homepage" action="{% url 'search:choice' %}" method="get">
+                            {% csrf_token %}
+                            <div class="input-group mb-3">
+                                {{ home_form.search }}
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn-submit-home btn btn-primary btn-xl">Chercher</button>  
                                 </div>
                             </div>
-                        {% endfor %}
+                        </form>
+                    </div>  
                     {% endif %}
                 </div>
             </div>

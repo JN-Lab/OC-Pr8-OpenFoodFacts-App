@@ -57,10 +57,7 @@ class OpenFoodFactsInteractions:
         request = requests.get('https://fr.openfoodfacts.org/cgi/search.pl', params=payload)
         data = request.json()
 
-        if data["count"] > 0:
-            return data
-        else:
-            return None
+        return data
     
     def get_products_selection(self, data_from_api, query, max_numb):
         """

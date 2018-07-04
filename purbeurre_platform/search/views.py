@@ -14,20 +14,27 @@ def index(request):
 # Search Selection
 def choice(request):
     header_form = HeaderSearchForm()
+    home_form = HomeSearchForm()
     query = request.GET.get('search')
     find_info = Treatment()
     selection = find_info.get_choice_selection(query)
 
     if selection:
         context = {
+            'element_number': selection["number"],
             'element_type': selection["type"],
             'list' : selection["elements"],
-            'header_form' : header_form
+            'header_form' : header_form,
+            'home_form' : home_form
         }
-        return render(request, 'choice.html', context)
+
     else:
-        # Find the best scenario
-        pass
+        context = {
+            'element_number': 0,
+            'header_form' : header_form,
+            'home_form' : home_form
+        }
+    return render(request, 'choice.html', context)
 
 # Search List
 
