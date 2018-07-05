@@ -15,25 +15,34 @@ class DBInit:
         if products:
             products.delete()
 
+        print("db clean process --> OK")
+
     def set_categories(self):
 
         min_product_number = 150
         max_product_number = 1000
         products_per_page = 1000
 
+        print("looking for interesting categories to inject")
         categories = self._get_categories_from_api()
+
         for category in categories["tags"]:
+            print("looking for category : {}".format(category["name"]))
             min_healthy_products = 0
             if category["products"] > min_product_number and category["products"] < max_product_number:
+                print("HEY -> Maybe this one")
                 page_number = self._get_product_pages_number(category["products"], products_per_page)
                 page = 1
-                while page <= page_number or min_healthy_products < 12:
+                while page <= page_number and min_healthy_products < 12:
+                    print("Page : {} | Total Pages : {}".format(page, page_number))
                     products_data = self._get_from_api_products_info_from_page_category(category["id"], products_per_page, page)
                     min_healthy_products += self._count_healthy_products(products_data["products"])
                     page +=1
+                    print("healthy products found : {}".format(min_healthy_products))
 
             if min_healthy_products >= 12:
                 self._inject_categories(category)
+                print("SUCCESS : category injected : {}".format(category["name"]))
     
     def _get_categories_from_api(self):
 
