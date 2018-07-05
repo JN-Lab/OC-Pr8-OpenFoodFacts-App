@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
 import operator
+import unicodedata
 from functools import reduce
 from django.db.models import Q
 from ..models import Product, Category
@@ -16,6 +17,7 @@ class QueryAnalysis:
         This is the main method which coordinates all the actions in the search process
         inside the db
         """
+        query = self._clean_query(query)
         check = self._get_info_in_db(Category, query)
         if check:
             categories = self._queryset_to_dict(check, "category")
@@ -27,6 +29,17 @@ class QueryAnalysis:
                 return products
             else:
                 return None
+
+    def _clean_query(self, query):
+        query = query.lower()
+        try:
+            query = unicode(query, 'utf-8')
+        except NameError:
+            pass
+        query = unicodedata.normalize('NFD', query)
+        query = query.encode('ascii', 'ignore')
+        query = query.decode('utf-8')
+        return str(query)
 
     def _get_info_in_db(self, model, query):
         """

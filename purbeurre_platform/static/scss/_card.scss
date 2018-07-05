@@ -13,3 +13,11 @@
 
     }
 }
+
+.card.category-card {
+    padding: 0px;
+    & > img {
+        background-color: $blue-dark;
+        height: 50px;
+    }
+}

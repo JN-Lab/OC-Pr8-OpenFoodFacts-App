@@ -135,6 +135,12 @@ img::-moz-selection {
   .card.product-card > .card-body {
     border-top: 1px solid #dee2e6; }
 
+.card.category-card {
+  padding: 0px; }
+  .card.category-card > img {
+    background-color: #345A61;
+    height: 50px; }
+
 footer {
   background-color: #345A61;
   height: 50px; }

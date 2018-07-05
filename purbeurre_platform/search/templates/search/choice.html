@@ -12,7 +12,11 @@
             </div>
             <div class="col-lg-8 mx-auto">
                 <h2 class="text-faded mb-5">
-                    Choisissez ce qui se rapproche le plus de votre besoin
+                    {% if element_number > 0 %}
+                        Choisissez ce qui se rapproche le plus de votre besoin
+                    {% else %}
+                        Nous n'avons rien trouvé correspondant à votre requête...
+                    {% endif %}
                 </h2>
             </div>
         </div>
@@ -28,6 +32,19 @@
                             {% for element in list %}
                                 <div class="card product-card col-md-4 col-sm-12 col-12">
                                     <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ element.name }}</h5>
+                                        <p class="card-text">{{ element.description }}</p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        <a href="#" class="btn btn-primary">Selectionner</a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            {% for element in list %}
+                                <div class="card category-card col-md-4 col-sm-12 col-12">
+                                    <img class="card-img-top" src="" alt="">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ element.name }}</h5>
                                         <p class="card-text">{{ element.description }}</p>
