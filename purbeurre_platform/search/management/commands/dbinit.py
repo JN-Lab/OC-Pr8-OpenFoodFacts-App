@@ -63,8 +63,8 @@ class DBInit:
             for page in range(page_number + 1):
                 products_data = self._get_from_api_products_info_from_page_category(category.api_id, products_per_page, page )
                 for product in products_data["products"]:
-                    print("looking for product : {}".format(product["product_name_fr"]))
                     try:
+                        print("looking for product : {}".format(product["product_name_fr"]))
                         if product["nutrition_grade_fr"] == "a":
                             product["product_name_fr"] = self._clean_name(product["product_name_fr"])
                             self._inject_products(product)
@@ -151,3 +151,4 @@ class Command(BaseCommand):
         db_init = DBInit()
         db_init.clean_db()
         db_init.set_categories()
+        db_init.set_products()
