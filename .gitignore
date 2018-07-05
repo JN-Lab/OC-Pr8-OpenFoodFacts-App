@@ -6,3 +6,5 @@ purbeurre_platform/search/__pycache__
 purbeurre_platform/search/migrations/__pycache__
 purbeurre_platform/search/utils/__pycache__
 purbeurre_platform/search/tests/__pycache__
+purbeurre_platform/search/management/__pycache__
+purbeurre_platform/search/management/commands/__pycache__
