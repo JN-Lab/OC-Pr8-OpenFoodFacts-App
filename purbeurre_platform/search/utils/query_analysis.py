@@ -31,7 +31,13 @@ class QueryAnalysis:
                 return None
 
     def _clean_query(self, query):
+        useless_terms = ['a', 'de', 'de', 'des', 'un', 'une', 'tout', 'tous', 'les',
+                         'la', 'le', 'qui', 'que', 'quoi', 'ce', 'ces']
+        
+        # set query in lowercase
         query = query.lower()
+        
+        # Remove accents
         try:
             query = unicode(query, 'utf-8')
         except NameError:
@@ -39,7 +45,17 @@ class QueryAnalysis:
         query = unicodedata.normalize('NFD', query)
         query = query.encode('ascii', 'ignore')
         query = query.decode('utf-8')
-        return str(query)
+        query = str(query)
+
+        # Delete useless terms in query
+        query_list = query.split()
+        clean_query_list = []
+        for word in query_list:
+            if word not in useless_terms:
+                clean_query_list.append(word)
+
+        query = ' '.join(clean_query_list)
+        return query
 
     def _get_info_in_db(self, model, query):
         """

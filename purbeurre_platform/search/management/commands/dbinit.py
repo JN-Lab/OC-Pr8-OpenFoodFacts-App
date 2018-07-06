@@ -54,6 +54,42 @@ class DBInit:
         print("### Start Products Selection ###")
 
         products_per_page = 1000
+        max_healthy_products = 6
+        max_dirty_products = 6
+
+        categories = Category.objects.all()
+        for category in categories:
+            print("looking for categories : {}".format(category.name))
+            page_number = self._get_product_pages_number(category.total_products, products_per_page)
+            page = 1
+            healthy_product = 0
+            dirty_products = 0
+            while page <= page_number and (healthy_product < max_healthy_products or dirty_products < max_dirty_products):
+                products_data = self._get_from_api_products_info_from_page_category(category.api_id, products_per_page, page )
+                for product in products_data["products"]:
+                    try:
+                        print("looking for product : {}".format(product["product_name_fr"]))
+                        if product["nutrition_grade_fr"] == "a" and healthy_product < max_healthy_products:
+                            product["product_name_fr"] = self._clean_name(product["product_name_fr"])
+                            self._inject_products(product)
+                            healthy_product += 1
+                            print("SUCCESS product {} injected".format(product["product_name_fr"]))
+                        elif product["nutrition_grade_fr"] == "d" and dirty_products < max_dirty_products:
+                            product["product_name_fr"] = self._clean_name(product["product_name_fr"])
+                            self._inject_products(product)
+                            dirty_products += 1
+                            print("SUCCESS product {} injected".format(product["product_name_fr"]))
+                    except:
+                        pass
+                page +=1
+        
+        print("### Selected Products Injected ###")
+
+    def set_products_old(self):
+
+        print("### Start Products Selection ###")
+
+        products_per_page = 1000
 
         categories = Category.objects.all()
         for category in categories:
