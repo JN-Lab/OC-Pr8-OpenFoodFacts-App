@@ -7,8 +7,19 @@ from django.core.management.base import BaseCommand
 from ...models import Product, Category
 
 class DBInit:
+    """
+    This class groups all the scripts to execute to populate the database with
+    the initial datas.
+    To objectives:
+        -> Respect the limitations of 10k rows from freemium account on Heroku
+        -> Get the most common datas in order to minimize API Call during navigation
+    """
     
     def clean_db(self):
+        """
+        This public method deletes all the categories and products in db
+        before populates it
+        """
         categories = Category.objects.all()
         products = Product.objects.all()
         if categories:
@@ -19,6 +30,10 @@ class DBInit:
         print("db clean process --> OK")
 
     def set_categories(self):
+        """
+        This public method realizes all the process to integrate the appropriate
+        categories in the database
+        """
 
         min_product_number = 150
         max_product_number = 1000
@@ -50,6 +65,10 @@ class DBInit:
         print("### Selected Categories Injected ###")
 
     def set_products(self):
+        """
+        This public method realizes all the process to integrate the appropriate
+        products in the database
+        """
 
         print("### Start Products Selection ###")
 
@@ -84,33 +103,11 @@ class DBInit:
                 page +=1
         
         print("### Selected Products Injected ###")
-
-    def set_products_old(self):
-
-        print("### Start Products Selection ###")
-
-        products_per_page = 1000
-
-        categories = Category.objects.all()
-        for category in categories:
-            print("looking for categories : {}".format(category.name))
-            page_number = self._get_product_pages_number(category.total_products, products_per_page)
-            page = 1
-            for page in range(page_number + 1):
-                products_data = self._get_from_api_products_info_from_page_category(category.api_id, products_per_page, page )
-                for product in products_data["products"]:
-                    try:
-                        print("looking for product : {}".format(product["product_name_fr"]))
-                        if product["nutrition_grade_fr"] == "a":
-                            product["product_name_fr"] = self._clean_name(product["product_name_fr"])
-                            self._inject_products(product)
-                            print("SUCCESS product {} injected".format(product["product_name_fr"]))
-                    except:
-                        pass
-
-        print("### Selected Products Injected ###")
     
     def _get_categories_from_api(self):
+        """
+        This method requests the API to get all the categories
+        """
 
         request = requests.get("https://fr.openfoodfacts.org/categories.json")
         data = request.json()
@@ -118,6 +115,9 @@ class DBInit:
         return data
 
     def _get_from_api_products_info_from_page_category(self, category, page_size, page):
+        """
+        This method requests from the API a page of products according a category 
+        """
 
         payload = {
             'action' : 'process',
@@ -135,11 +135,19 @@ class DBInit:
         return data
 
     def _get_product_pages_number(self, total_products, products_per_page):
+        """
+        This method calculates the number of pages to get all the products
+        from a category
+        """
 
         page_number = math.ceil(total_products / products_per_page)
         return page_number
 
     def _count_healthy_products(self, products_list):
+        """
+        This method calculates the amount of products with a nutriscore "a" on
+        product list
+        """
         healthy_product = 0
         for product in products_list:
             try:
@@ -151,12 +159,19 @@ class DBInit:
         return healthy_product
     
     def _inject_categories(self, category):
+        """
+        This method injects a category into the database
+        """
         Category.objects.create(name=category["name"],
                                 api_id=category["id"],
                                 total_products=category["products"],
                                 enough_good_nutriscore=True)
 
     def _inject_products(self, product):
+        """
+        This method injects a product with its categories depedencies
+        into a database
+        """
         new_product = Product.objects.create(name=product["product_name_fr"],
                                ref=product["code"],
                                nutriscore=product["nutrition_grade_fr"],
@@ -171,6 +186,9 @@ class DBInit:
                 pass
 
     def _clean_name(self, name):
+        """
+        This method cleans a name before inject it into the database
+        """
         name = name.lower()
         try:
             name = unicode(name, 'utf-8')
@@ -183,6 +201,10 @@ class DBInit:
 
 
 class Command(BaseCommand):
+    """
+    This class describe the different actions to realize when the dbinit command
+    is launched.
+    """
     def handle(self, **options):
         db_init = DBInit()
         db_init.clean_db()
