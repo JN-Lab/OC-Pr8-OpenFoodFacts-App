@@ -32,7 +32,7 @@ class QueryAnalysis:
 
     def _clean_query(self, query):
         useless_terms = ['a', 'de', 'de', 'des', 'un', 'une', 'tout', 'tous', 'les',
-                         'la', 'le', 'qui', 'que', 'quoi', 'ce', 'ces']
+                         'la', 'le', 'qui', 'que', 'quoi', 'ce', 'ces', 'sans', 'avec']
         
         # set query in lowercase
         query = query.lower()

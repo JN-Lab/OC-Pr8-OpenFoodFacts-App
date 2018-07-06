@@ -69,6 +69,7 @@ class OpenFoodFactsInteractions:
         if data_from_api["count"] > 0:
             products_selected = self._select_appropriate_products(data_from_api, query)
             if products_selected["number"] > max_numb :
+                self._select_by_product_name(products_selected, max_numb)
                 self._select_by_nutriscore_value(products_selected, max_numb)
                 self._select_by_image(products_selected, max_numb)
                 self._select_by_description(products_selected, max_numb)
@@ -181,3 +182,22 @@ class OpenFoodFactsInteractions:
 
         return data
 
+    def _select_by_product_name(self, data, max_numb):
+        """
+        This method removes products if a similar product name had already been accepted
+        """
+        elements_cleaned = []
+        products_name_accepted = []
+        products_numb = data["number"]
+        for product in data["elements"]:
+            if product["name"].lower() in products_name_accepted and products_numb > max_numb:
+                products_numb -= 1
+            else:
+                elements_cleaned.append(product)
+                products_name_accepted.append(product["name"].lower())
+
+        data["elements"] = elements_cleaned
+        data["number"] = products_numb
+        print(products_name_accepted)
+        print(data["elements"])
+        return data

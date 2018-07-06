@@ -5,6 +5,8 @@ from ..utils.api_interactions import OpenFoodFactsInteractions
 
 class TestApiInteractions(TestCase):
 
+    maxDiff = None
+
     def setUp(self):
 
         self.api_interaction = OpenFoodFactsInteractions()
@@ -225,12 +227,12 @@ class TestApiInteractions(TestCase):
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
                 },
                 {
-                    "name" : "Nutella",
-                    "ref": "385657387484",
+                    "name" : "Biscuits B Ready noisettes/cacao Nutella",
+                    "ref": "3453548914",
                     "nutriscore": "e",
-                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "description": "",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
-                },  
+                }, 
                 {
                     "name" : "Nutella au caramel",
                     "ref": "301776542",
@@ -439,5 +441,68 @@ class TestApiInteractions(TestCase):
         }
         self.assertEqual(self.api_interaction._select_by_nutriscore_value(self.selected_products, 6), result)
     
-
+    def test_select_by_product_name(self):
         
+        result = {
+            'type' : 'product',
+            'number' : 8,
+            'elements' : [
+                {
+                    "name" : "Nutella",
+                    "ref": "3017620429484",
+                    "nutriscore": "e",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Pâte à Tartiner Nutella,",
+                    "ref": "364561612564",
+                    "nutriscore": "e",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Pate Tartiner Nutella 750G",
+                    "ref": "54651861",
+                    "nutriscore": "e",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Biscuits B Ready noisettes/cacao Nutella",
+                    "ref": "3453548914",
+                    "nutriscore": "e",
+                    "description": "",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Nutella au caramel",
+                    "ref": "301776542",
+                    "nutriscore": "b",
+                    "description": "Pâtes à tartiner aux noisettes et au caramel",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "gateaux Nutella et caramel,",
+                    "ref": "364561614754",
+                    "nutriscore": "b",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Nutella light",
+                    "ref": "54651861",
+                    "nutriscore": "a",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Nutella in da mix",
+                    "ref": "385657387484",
+                    "nutriscore": "a",
+                    "description": "",
+                    "image_url": "",
+                }
+            ] 
+        }
+        self.assertEqual(self.api_interaction._select_by_product_name(self.selected_products, 6), result)
