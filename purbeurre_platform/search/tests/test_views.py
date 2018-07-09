@@ -12,5 +12,5 @@ class IndexPageTestCase(TestCase):
 
 class ChoicePageTestCase(TestCase):
 
-    def test_choice_page(self, type, type_id):
+    def test_choice_page(self):
         pass

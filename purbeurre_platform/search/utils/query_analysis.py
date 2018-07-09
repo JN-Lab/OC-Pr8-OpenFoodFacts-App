@@ -144,13 +144,36 @@ class QueryAnalysis:
         except:
             return None
 
-class SubstituteSelection:
+class SelectionToSubstitute:
 
-    def get_substitue_products(self):
-        pass
+    def get_products_to_substitute(self, element_type, type_name):
+        if element_type == "category":
+            products = self._get_dirty_products_from_categories(type_name)
+        elif element_type == "product":
+            products = self._get_dirty_products_from_products(type_name)
+        
+        return products
 
-    def _get_products_from_products(self):
-        pass
+    def _get_dirty_products_from_products(self, product_name):
+        # We get product info
+        product = Product.objects.get(name=product_name)
+        # We select the appropriate category associated by choosing the cat with the minimum size
+        total_product = 1000
+        choosen_category = ""
+        for category in product.categories.all():
+            if category.total_products < total_product:
+                total_product = category.total_products
+                choosen_category = category.api_id
+        # We select the products to substitute thankts to the choosen_category
+        products = self._get_dirty_products_from_categories(choosen_category)
+        return products
 
-    def _get_products_from_categories(self):
-        pass
+    def _get_dirty_products_from_categories(self, category_name):
+        """
+        This method gets dirty products to subsititude from a selected category:
+            -> we use api_id value because it is cleaner than name
+        """
+
+        category = Category.objects.get(api_id=category_name)
+        products = Product.objects.filter(Q(categories=category.id) & ~Q(nutriscore="a"))[:6]
+        return products

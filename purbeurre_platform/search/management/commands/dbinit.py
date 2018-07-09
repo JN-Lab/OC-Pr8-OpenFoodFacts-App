@@ -93,7 +93,7 @@ class DBInit:
                             self._inject_products(product)
                             healthy_product += 1
                             print("SUCCESS product {} injected".format(product["product_name_fr"]))
-                        elif product["nutrition_grade_fr"] == "d" and dirty_products < max_dirty_products:
+                        elif (product["nutrition_grade_fr"] == "d" or product["nutrition_grade_fr"] == "e") and dirty_products < max_dirty_products:
                             product["product_name_fr"] = self._clean_name(product["product_name_fr"])
                             self._inject_products(product)
                             dirty_products += 1
@@ -131,7 +131,6 @@ class DBInit:
 
         request = requests.get("https://fr.openfoodfacts.org/cgi/search.pl?", params=payload)
         data = request.json()
-
         return data
 
     def _get_product_pages_number(self, total_products, products_per_page):
@@ -172,18 +171,20 @@ class DBInit:
         This method injects a product with its categories depedencies
         into a database
         """
-        new_product = Product.objects.create(name=product["product_name_fr"],
-                               ref=product["code"],
-                               nutriscore=product["nutrition_grade_fr"],
-                               picture=product["image_url"],
-                               description=product["generic_name_fr"])
-            
-        for category in product["categories_hierarchy"]:
-            try:
-                cat_in_db = Category.objects.get(api_id=category) 
-                new_product.categories.add(cat_in_db)
-            except:
-                pass
+        product_exist = Product.objects.filter(name=product["product_name_fr"]).exists()
+        if not product_exist:
+            new_product = Product.objects.create(name=product["product_name_fr"],
+                                ref=product["code"],
+                                nutriscore=product["nutrition_grade_fr"],
+                                picture=product["image_url"],
+                                description=product["generic_name_fr"])
+                
+            for category in product["categories_hierarchy"]:
+                try:
+                    cat_in_db = Category.objects.get(api_id=category) 
+                    new_product.categories.add(cat_in_db)
+                except:
+                    pass
 
     def _clean_name(self, name):
         """

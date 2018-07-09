@@ -2,7 +2,7 @@
 # coding: utf-8
 from django.test import TestCase
 from ..models import Product, Category
-from ..utils.query_analysis  import QueryAnalysis
+from ..utils.query_analysis  import QueryAnalysis, SelectionToSubstitute
 
 class TestQueryAnalysis(TestCase):
 
@@ -198,6 +198,7 @@ class TestQueryAnalysis(TestCase):
         """
 
         self.analysis = QueryAnalysis()
+        self.to_substitute = SelectionToSubstitute()
 
     ## PUBLIC METHODS ##
 
@@ -426,3 +427,12 @@ class TestQueryAnalysis(TestCase):
         number = 4
 
         self.assertEqual(self.analysis.get_substitute_products_in_db(category_name, number), None)
+
+    def test_get_products_from_categories(self):
+
+        category_name = "en:beverages"
+        results = [
+            "<Product: cola à la mousse de bière>",
+        ]
+
+        self.assertQuerysetEqual(self.to_substitute._get_dirty_products_from_categories(category_name), results, ordered=False)

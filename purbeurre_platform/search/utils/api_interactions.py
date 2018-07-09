@@ -198,6 +198,4 @@ class OpenFoodFactsInteractions:
 
         data["elements"] = elements_cleaned
         data["number"] = products_numb
-        print(products_name_accepted)
-        print(data["elements"])
         return data
