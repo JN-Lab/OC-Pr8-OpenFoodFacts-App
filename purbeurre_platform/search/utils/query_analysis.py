@@ -143,3 +143,14 @@ class QueryAnalysis:
             return product
         except:
             return None
+
+class SubstituteSelection:
+
+    def get_substitue_products(self):
+        pass
+
+    def _get_products_from_products(self):
+        pass
+
+    def _get_products_from_categories(self):
+        pass

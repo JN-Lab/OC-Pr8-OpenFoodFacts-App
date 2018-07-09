@@ -20,6 +20,10 @@ def choice(request):
     selection = find_info.get_choice_selection(query)
 
     if selection:
+        #convert products or categories name into slug type
+        for product in selection["elements"]:
+            product["slug_name"] = product["name"].replace(" ", "-")
+        
         context = {
             'element_number': selection["number"],
             'element_type': selection["type"],
@@ -37,6 +41,9 @@ def choice(request):
     return render(request, 'choice.html', context)
 
 # Search List
+def list(request, type, type_name):
+    context = {}
+    return render(request, 'list.html', context)    
 
 # Product
 
