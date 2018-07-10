@@ -2,7 +2,7 @@
 # coding: utf-8
 from django.test import TestCase
 from ..models import Product, Category
-from ..utils.query_analysis  import QueryAnalysis, SelectionToSubstitute
+from ..utils.db_interactions  import DBInteractions, SubstituteSelection
 
 class TestQueryAnalysis(TestCase):
 
@@ -197,8 +197,8 @@ class TestQueryAnalysis(TestCase):
         This method just creates a QueryAnalysis object for all the tests
         """
 
-        self.analysis = QueryAnalysis()
-        self.to_substitute = SelectionToSubstitute()
+        self.analysis = DBInteractions()
+        self.substitute_process = SubstituteSelection()
 
     ## PUBLIC METHODS ##
 
@@ -399,40 +399,13 @@ class TestQueryAnalysis(TestCase):
             }
         self.assertEqual(self.analysis._queryset_to_dict(queryset, "product"), result)
 
-  
 
-    def test_get_substitute_products_in_db_success(self):
-        """
-        This test checks if the method get_substitute_products_in_db returns 
-        the number of products with an a nutriscore asked when there are enough
-        products in the db
-        """
+    # def test_get_products_from_categories(self):
 
-        category_name = "boissons"
-        number = 2
+    #     category_name = "en:beverages"
+    #     results = [
+    #         "<Product: Le jus de raisin 100% jus de fruits>",
+    #         "<Product: banane à la feuille de coca>",
+    #     ]
 
-        results = [
-            "<Product: banane à la feuille de coca>",
-            "<Product: le jus de raisin 100% jus de fruits>"
-        ]
-        self.assertQuerysetEqual(self.analysis.get_substitute_products_in_db(category_name, number), results, ordered=False)
-
-    def test_get_substitute_products_in_db_fail(self):
-        """
-        This test checks if the method get_substitute_products_in_db returns 
-        None when there are not enough products with a nutriscroe "a" in the db
-        """
-
-        category_name = "boissons"
-        number = 4
-
-        self.assertEqual(self.analysis.get_substitute_products_in_db(category_name, number), None)
-
-    def test_get_products_from_categories(self):
-
-        category_name = "en:beverages"
-        results = [
-            "<Product: cola à la mousse de bière>",
-        ]
-
-        self.assertQuerysetEqual(self.to_substitute._get_dirty_products_from_categories(category_name), results, ordered=False)
+    #     self.assertQuerysetEqual(self.substitute_process._get_healthy_products_from_categories(category_name), results, ordered=False)

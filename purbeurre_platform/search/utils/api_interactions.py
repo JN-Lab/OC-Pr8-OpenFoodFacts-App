@@ -37,7 +37,52 @@ class OpenFoodFactsInteractions:
         }
     """
     
-    def _get_products_from_api(self, query):
+    def get_products_selection(self, query, max_numb):
+        """
+        This method coordinates severa methods from the class to give some example :
+            -> If api sends back products, it cleaned them
+            -> If selected product > wanted number, a process of selection is realized
+            -> It returns the necessary dict at the end
+        """
+
+        data_from_api = self._get_products_from_api_brand_search(query)
+
+        if data_from_api["count"] > 0:
+            products_selected = self._select_appropriate_products(data_from_api, query)
+            if products_selected["number"] > max_numb :
+                self._select_by_product_name(products_selected, max_numb)
+                self._select_by_nutriscore_value(products_selected, max_numb)
+                self._select_by_image(products_selected, max_numb)
+                self._select_by_description(products_selected, max_numb)
+                self._select_by_random_way(products_selected, max_numb)
+            return products_selected
+        else:
+            return None
+
+    def get_substitute_products_from_api(self, element_type, type_name, max_numb):
+        """
+        This method coordinates all 
+        """
+        if element_type == "category":
+            data_from_api = self._get_products_from_api_category_search(type_name)
+        elif element_type == "product":
+            # Maybe to optimize
+            data_from_api = self._get_products_from_api_brand_search(type_name)
+
+        if data_from_api["count"] > 0:
+            products_selected = self._select_substitute_products(data_from_api)
+            if products_selected["number"] > max_numb :
+                self._select_by_product_name(products_selected, max_numb)
+                self._select_by_nutriscore_value(products_selected, max_numb)
+                self._select_by_image(products_selected, max_numb)
+                self._select_by_description(products_selected, max_numb)
+                self._select_by_random_way(products_selected, max_numb)
+            return products_selected
+        else:
+            return None          
+
+        
+    def _get_products_from_api_brand_search(self, query):
         """
         This method gets all the products from the API linked to the brands asked by the user (query)
         If there is no product -> return None
@@ -58,28 +103,57 @@ class OpenFoodFactsInteractions:
         data = request.json()
 
         return data
-    
-    def get_products_selection(self, query, max_numb):
+
+    def _get_products_from_api_category_search(self, category_name):
         """
-        This method coordinates all the methods from the class:
-            -> If api sends back products, it cleaned them
-            -> If selected product > wanted number, a process of selection is realized
-            -> It returns the necessary dict at the end
+        This method requests all the products from a category
         """
 
-        data_from_api = self._get_products_from_api(query)
+        request = requests.get("https://fr.openfoodfacts.org/categorie/" + category_name + ".json")
+        data = request.json()
 
-        if data_from_api["count"] > 0:
-            products_selected = self._select_appropriate_products(data_from_api, query)
-            if products_selected["number"] > max_numb :
-                self._select_by_product_name(products_selected, max_numb)
-                self._select_by_nutriscore_value(products_selected, max_numb)
-                self._select_by_image(products_selected, max_numb)
-                self._select_by_description(products_selected, max_numb)
-                self._select_by_random_way(products_selected, max_numb)
-            return products_selected
-        else:
-            return None
+        return data
+
+    def _select_substitute_products(self, data):
+        """
+        This method gets the data from the API (products json linked to a category)
+        and cleaned them to return only products:
+            -> with a product name
+            -> a nutriscore equal to "d" or "e"
+            -> an image url
+            -> a description
+        """
+        products_info = {
+            'type' : 'product',
+            'number' : 0,
+            'elements': []
+        }
+        for product in data["products"]:
+            element = {
+                "name" : "",
+                "ref" : "",
+                "nutriscore" : "",
+                "description" : "",
+                "image_url" : "" 
+            }
+            try:
+                if str(product["product_name_fr"]).split() and product["nutrition_grade_fr"] == "a":
+                    element["name"] = product["product_name_fr"]
+                    element["ref"] = product["code"]
+                    element["nutriscore"] = product["nutrition_grade_fr"]
+                    try:
+                        element["description"] = product["generic_name_fr"]
+                        element["image_url"] = product["image_url"]
+                    except:
+                        pass
+
+                    products_info["elements"].append(element)
+            except:
+                pass
+
+        products_info["number"] = len(products_info["elements"])
+
+        return products_info
 
     def _select_appropriate_products(self, data, query):
         """

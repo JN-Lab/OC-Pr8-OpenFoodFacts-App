@@ -6,12 +6,13 @@ from functools import reduce
 from django.db.models import Q
 from ..models import Product, Category
 
-class QueryAnalysis:
+class DBInteractions:
     """
     This class groups all the methods to interact with the database during:
         -> Search process
     """
 
+    ## PUBLIC METHODS ##
     def get_search_selection(self, query):
         """
         This is the main method which coordinates all the actions in the search process
@@ -30,6 +31,7 @@ class QueryAnalysis:
             else:
                 return None
 
+    ## PRIVATE METHODS ##
     def _clean_query(self, query):
         useless_terms = ['a', 'de', 'de', 'des', 'un', 'une', 'tout', 'tous', 'les',
                          'la', 'le', 'qui', 'que', 'quoi', 'ce', 'ces', 'sans', 'avec']
@@ -120,19 +122,6 @@ class QueryAnalysis:
         dict_info["number"] = len(dict_info["elements"])
         return dict_info
 
-    def get_substitute_products_in_db(self, category_name, number):
-        """
-        This method gets substitute products from a category if there are
-        enough products with an "a" nutriscore or None 
-        """
-
-        category = Category.objects.get(name=category_name)
-        products = Product.objects.filter(categories=category.id, nutriscore="a")[:number]
-        if len(products) >= number:
-            return products
-        else:
-            return None
-
     def get_selected_product(self, product_code):
         """
         This method gets all necessary information from a products thanks to its code
@@ -144,36 +133,42 @@ class QueryAnalysis:
         except:
             return None
 
-class SelectionToSubstitute:
+class SubstituteSelection:
 
-    def get_products_to_substitute(self, element_type, type_name):
+    def get_substitute_products_in_db(self, element_type, type_name):
         if element_type == "category":
-            products = self._get_dirty_products_from_categories(type_name)
+            products = self._get_healthy_products_from_categories(type_name)
         elif element_type == "product":
-            products = self._get_dirty_products_from_products(type_name)
+            products = self._get_healthy_products_from_products(type_name)
         
         return products
 
-    def _get_dirty_products_from_products(self, product_name):
-        # We get product info
-        product = Product.objects.get(name=product_name)
-        # We select the appropriate category associated by choosing the cat with the minimum size
-        total_product = 1000
-        choosen_category = ""
-        for category in product.categories.all():
-            if category.total_products < total_product:
-                total_product = category.total_products
-                choosen_category = category.api_id
-        # We select the products to substitute thankts to the choosen_category
-        products = self._get_dirty_products_from_categories(choosen_category)
-        return products
+    def _get_healthy_products_from_products(self, product_name):
+        try:
+            # We get product info
+            product = Product.objects.get(name=product_name)
+            # We select the appropriate category associated by choosing the cat with the minimum size
+            total_product = 1000
+            choosen_category = ""
+            for category in product.categories.all():
+                if category.total_products < total_product:
+                    total_product = category.total_products
+                    choosen_category = category.api_id
+            # We select the products to substitute thankts to the choosen_category
+            products = self._get_healthy_products_from_categories(choosen_category)
+            return products
 
-    def _get_dirty_products_from_categories(self, category_name):
+        except:
+            return None
+
+    def _get_healthy_products_from_categories(self, category_name):
         """
         This method gets dirty products to subsititude from a selected category:
             -> we use api_id value because it is cleaner than name
         """
-
-        category = Category.objects.get(api_id=category_name)
-        products = Product.objects.filter(Q(categories=category.id) & ~Q(nutriscore="a"))[:6]
-        return products
+        try:
+            category = Category.objects.get(api_id=category_name)
+            products = Product.objects.filter(Q(categories=category.id) & Q(nutriscore="a"))[:6]
+            return products
+        except:
+            return None

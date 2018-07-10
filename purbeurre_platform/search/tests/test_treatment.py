@@ -2,7 +2,7 @@
 # coding: utf-8
 from django.test import TestCase
 from unittest.mock import patch
-from search.utils.query_analysis import QueryAnalysis
+from search.utils.db_interactions import DBInteractions
 from search.utils.api_interactions import OpenFoodFactsInteractions
 from search.utils.treatment import Treatment
 
@@ -10,8 +10,8 @@ class TestTreatment(TestCase):
 
     maxDiff = None
 
-    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api')
-    @patch('search.utils.query_analysis.QueryAnalysis.get_search_selection')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_brand_search')
+    @patch('search.utils.db_interactions.DBInteractions.get_search_selection')
     def test_get_choice_selection_api_success(self, mock_get_search_selection, mock_get_products_from_api):
         api_response = {
             "skip": 0,

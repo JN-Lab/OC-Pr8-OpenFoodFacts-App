@@ -202,7 +202,7 @@ class TestApiInteractions(TestCase):
 
     ## PUBLIC METHODS ##
 
-    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_brand_search')
     def test_get_products_selection(self, mock_get_products_from_api):
 
         mock_get_products_from_api.return_value = self.data_received
