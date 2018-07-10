@@ -98,11 +98,11 @@ class OpenFoodFactsInteractions:
             
                 if appropriate_name and nutriscore:
                     element = {
-                        'name' : '',
-                        'ref' : '',
-                        'nutriscore' : '',
-                        'description' : '',
-                        'image_url' : '' 
+                        "name" : "",
+                        "ref" : "",
+                        "nutriscore" : "",
+                        "description" : "",
+                        "image_url" : "" 
                     }
                     element["name"] = product["product_name_fr"]
                     element["nutriscore"] = nutriscore

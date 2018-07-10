@@ -23,7 +23,7 @@ class Treatment:
             else:
                 return None
 
-    def get_subsitute_selection(self):
+    def get_substitute_selection(self):
         pass
     def get_substitute_products(self):
         pass
