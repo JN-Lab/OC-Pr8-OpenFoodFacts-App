@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
 from django.test import TestCase
-from ..utils.api_interactions import OpenFoodFactsInteractions
+from unittest.mock import patch
+from search.utils.api_interactions import OpenFoodFactsInteractions
 
 class TestApiInteractions(TestCase):
 
@@ -199,8 +200,12 @@ class TestApiInteractions(TestCase):
             ] 
         }
 
-    def test_get_products_selection(self):
+    ## PUBLIC METHODS ##
 
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api')
+    def test_get_products_selection(self, mock_get_products_from_api):
+
+        mock_get_products_from_api.return_value = self.data_received
         result = {
             'type' : 'product',
             'number' : 6,
@@ -250,7 +255,9 @@ class TestApiInteractions(TestCase):
             ] 
         }
 
-        self.assertEqual(self.api_interaction.get_products_selection(self.data_received, "nutella", 6), result)
+        self.assertEqual(self.api_interaction.get_products_selection("nutella", 6), result)
+
+    ## PRIVATE METHODS ##
 
     def test_select_appropriate_products_success(self):
 

@@ -37,7 +37,7 @@ class OpenFoodFactsInteractions:
         }
     """
     
-    def get_products_from_api(self, query):
+    def _get_products_from_api(self, query):
         """
         This method gets all the products from the API linked to the brands asked by the user (query)
         If there is no product -> return None
@@ -59,13 +59,16 @@ class OpenFoodFactsInteractions:
 
         return data
     
-    def get_products_selection(self, data_from_api, query, max_numb):
+    def get_products_selection(self, query, max_numb):
         """
         This method coordinates all the methods from the class:
             -> If api sends back products, it cleaned them
             -> If selected product > wanted number, a process of selection is realized
             -> It returns the necessary dict at the end
         """
+
+        data_from_api = self._get_products_from_api(query)
+
         if data_from_api["count"] > 0:
             products_selected = self._select_appropriate_products(data_from_api, query)
             if products_selected["number"] > max_numb :

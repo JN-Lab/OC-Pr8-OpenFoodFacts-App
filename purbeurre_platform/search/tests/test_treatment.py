@@ -10,7 +10,7 @@ class TestTreatment(TestCase):
 
     maxDiff = None
 
-    @patch('search.utils.api_interactions.OpenFoodFactsInteractions.get_products_from_api')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api')
     @patch('search.utils.query_analysis.QueryAnalysis.get_search_selection')
     def test_get_choice_selection_api_success(self, mock_get_search_selection, mock_get_products_from_api):
         api_response = {

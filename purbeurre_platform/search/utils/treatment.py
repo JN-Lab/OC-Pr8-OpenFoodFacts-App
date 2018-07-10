@@ -16,8 +16,7 @@ class Treatment:
         if db_info:
             return db_info
         else : 
-            api_data = self.api_interactions.get_products_from_api(query)
-            api_info = self.api_interactions.get_products_selection(api_data, query, 6)
+            api_info = self.api_interactions.get_products_selection(query, 6)
             if api_info:
                 return api_info
             else:
