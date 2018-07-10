@@ -2,7 +2,7 @@
 # coding: utf-8
 from django.test import TestCase
 from ..models import Product, Category
-from ..utils.db_interactions  import DBInteractions, SubstituteSelection
+from ..utils.db_interactions  import DBInteractions
 
 class TestQueryAnalysis(TestCase):
 
@@ -198,7 +198,6 @@ class TestQueryAnalysis(TestCase):
         """
 
         self.analysis = DBInteractions()
-        self.substitute_process = SubstituteSelection()
 
     ## PUBLIC METHODS ##
 
@@ -241,8 +240,8 @@ class TestQueryAnalysis(TestCase):
                     },
                 ]
             }
-        self.assertEqual(self.analysis.get_search_selection(query), result)  
-
+        self.assertEqual(self.analysis.get_search_selection(query), result)
+    
     def test_get_search_selection_product_success(self):
         """
         This tests checked all the process of queryanalysis with category found
@@ -277,6 +276,56 @@ class TestQueryAnalysis(TestCase):
         query = "céréales"
         result = None
         self.assertEqual(self.analysis.get_search_selection(query), result)
+
+    def test_get_sustitute_products_in_db_category_search(self):
+        element_type = "category"
+        type_name = "en:beverages"
+        result = {
+                'type' : 'product',
+                'number' : 2,
+                'elements': [
+                    {
+                        'name' : 'le jus de raisin 100% jus de fruits',
+                        'ref' : '123456789',
+                        'nutriscore' : 'a',
+                        'description' : 'jus de fruit naturel sans sucre ajouté',
+                        'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    },
+                    {
+                        'name' : 'banane à la feuille de coca',
+                        'ref' : '12345787459',
+                        'nutriscore' : 'a',
+                        'description' : '',
+                        'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    },
+                ]
+            }
+        self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, type_name), result)
+    
+    def test_get_sustitute_products_in_db_product_search(self):
+        element_type = "product"
+        type_name = "cola à la mousse de bière"
+        result = {
+            'type' : 'product',
+            'number' : 2,
+            'elements': [
+                {
+                    'name' : 'le jus de raisin 100% jus de fruits',
+                    'ref' : '123456789',
+                    'nutriscore' : 'a',
+                    'description' : 'jus de fruit naturel sans sucre ajouté',
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                },
+                {
+                    'name' : 'banane à la feuille de coca',
+                    'ref' : '12345787459',
+                    'nutriscore' : 'a',
+                    'description' : '',
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                },
+            ]
+        }
+        self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, type_name), result)
 
     ## PRIVATE METHODS ##
 

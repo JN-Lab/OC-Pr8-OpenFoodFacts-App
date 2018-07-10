@@ -1,19 +1,18 @@
 #! /usr/bin/env python3
 # coding: utf-8
 
-from .db_interactions import DBInteractions, SubstituteSelection
+from .db_interactions import DBInteractions
 from .api_interactions import OpenFoodFactsInteractions
 
 class Treatment:
 
     def __init__(self):
-        self.query_analysis = DBInteractions()
-        self.db_selection_to_substitute = SubstituteSelection()
+        self.db_interactions = DBInteractions()
         self.api_interactions = OpenFoodFactsInteractions()
 
     def get_choice_selection(self, query):
 
-        db_info = self.query_analysis.get_search_selection(query)
+        db_info = self.db_interactions.get_search_selection(query)
         if db_info:
             return db_info
         else : 
@@ -24,7 +23,7 @@ class Treatment:
                 return None
 
     def get_substitute_selection(self, element_type, type_name):
-        db_info = self.db_selection_to_substitute.get_substitute_products_in_db(element_type, type_name)
+        db_info = self.db_interactions.get_substitute_products_in_db(element_type, type_name)
         if db_info:
             return db_info
         else:

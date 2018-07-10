@@ -31,6 +31,23 @@ class DBInteractions:
             else:
                 return None
 
+    def get_substitute_products_in_db(self, element_type, type_name):
+        """
+        This is the main method which coordinates all the actions to find substitue
+        products inside the db
+        """
+        if element_type == "category":
+            check = self._get_healthy_products_from_categories(type_name)
+        elif element_type == "product":
+            check = self._get_healthy_products_from_products(type_name)
+        
+        if check:
+            products = self._queryset_to_dict(check, "product")
+            return products
+        else:
+            return None
+            
+
     ## PRIVATE METHODS ##
     def _clean_query(self, query):
         useless_terms = ['a', 'de', 'de', 'des', 'un', 'une', 'tout', 'tous', 'les',
@@ -122,7 +139,7 @@ class DBInteractions:
         dict_info["number"] = len(dict_info["elements"])
         return dict_info
 
-    def get_selected_product(self, product_code):
+    def _get_selected_product(self, product_code):
         """
         This method gets all necessary information from a products thanks to its code
         """
@@ -133,25 +150,17 @@ class DBInteractions:
         except:
             return None
 
-class SubstituteSelection:
 
-    def get_substitute_products_in_db(self, element_type, type_name):
-        if element_type == "category":
-            products = self._get_healthy_products_from_categories(type_name)
-        elif element_type == "product":
-            products = self._get_healthy_products_from_products(type_name)
-        
-        return products
 
     def _get_healthy_products_from_products(self, product_name):
         try:
             # We get product info
             product = Product.objects.get(name=product_name)
             # We select the appropriate category associated by choosing the cat with the minimum size
-            total_product = 1000
+            total_product = -1
             choosen_category = ""
             for category in product.categories.all():
-                if category.total_products < total_product:
+                if category.total_products < total_product or total_product < 0:
                     total_product = category.total_products
                     choosen_category = category.api_id
             # We select the products to substitute thankts to the choosen_category
@@ -172,3 +181,4 @@ class SubstituteSelection:
             return products
         except:
             return None
+

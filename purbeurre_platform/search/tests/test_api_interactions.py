@@ -21,6 +21,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Cre Avela Nute",
@@ -28,6 +37,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "on sait pas mais c'est grec",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Pâte à Tartiner Nutella,",
@@ -35,6 +53,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Pate Tartiner Nutella 750G",
@@ -42,6 +69,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Biscuits nutella",
@@ -49,6 +85,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "B-ready",
@@ -56,6 +101,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Biscuits B Ready noisettes/cacao Nutella",
@@ -63,6 +117,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Nutella",
@@ -70,6 +133,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Nutella au caramel",
@@ -77,6 +149,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "b",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au caramel",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],            
                 },
                 {
                     "product_name_fr" : "Jambon au cacao",
@@ -84,6 +165,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "",
                     "generic_name_fr": "on sait pas mais c'est grec",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "gateaux Nutella et caramel,",
@@ -91,6 +181,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "b",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Nutella light",
@@ -98,6 +197,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "a",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "nute et la",
@@ -105,6 +213,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "B-not-ready",
@@ -112,6 +229,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "a",
                     "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Biscuits granola",
@@ -119,6 +245,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "e",
                     "generic_name_fr": "",
                     "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     "product_name_fr" : "Nutella in da mix",
@@ -126,6 +261,15 @@ class TestApiInteractions(TestCase):
                     "nutrition_grade_fr": "a",
                     "generic_name_fr": "",
                     "image_url": "",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
             ]
         }

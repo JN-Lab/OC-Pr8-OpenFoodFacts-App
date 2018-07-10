@@ -25,73 +25,172 @@ class TestTreatment(TestCase):
                     "code" : "456789123",
                     "generic_name_fr" : "le vrai et l'unique",
                     "image_url" : "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     'product_name_fr' : 'glace au nutella',
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'c',
                     'generic_name_fr' : '',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'a',
                     'generic_name_fr' : 'un produit sans nom',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     'product_name_fr' : 'nutella à la banane et noix de coco',
                     'code' : '12345787459',
                     'generic_name_fr' : '',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ], 
                 },
-                                {
+                {
                     "product_name_fr" : "Nutella",
                     "nutrition_grade_fr" : "d",
                     "code" : "456789953",
                     "generic_name_fr" : "le vrai et l'unique une nouvelle fois",
                     "image_url" : "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     'product_name_fr' : 'glace au nutella light',
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'a',
                     'generic_name_fr' : '',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ], 
                 },
                 {
                     'product_name_fr' : 'nutella et chantilly dans le pot',
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'c',
                     'generic_name_fr' : "c'est gras mais c'est bon",
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ], 
                 },
                 {
                     'product_name_fr' : 'nutella avec de la banane et sa peau',
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'b',
                     'generic_name_fr' : 'une description mais pas très utile',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ], 
                 },
                 {
                     'product_name_fr' : 'nutella bio',
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'b',
                     'generic_name_fr' : 'la blague!',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     'product_name_fr' : 'nutella sans huile mais avec de la graisse de porc',
                     'code' : '4796563787459',
                     'nutrition_grade_fr' : 'd',
                     'generic_name_fr' : '',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg'
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ],
                 },
                 {
                     'product_name_fr' : 'nutella en biscuit',
                     'code' : '12345787459',
                     'nutrition_grade_fr' : 'd',
                     'generic_name_fr' : 'une description mais pas très utile',
-                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg',
+                    "categories_hierarchy": [
+                        "en:breakfasts",
+                        "en:spreads",
+                        "en:sweet-spreads",
+                        "fr:pates-a-tartiner",
+                        "en:chocolate-spreads",
+                        "en:hazelnut-spreads",
+                        "en:cocoa-and-hazelnuts-spreads"
+                    ], 
                 },
             ]
         }

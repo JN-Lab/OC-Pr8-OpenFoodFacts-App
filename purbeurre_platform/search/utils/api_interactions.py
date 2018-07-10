@@ -170,10 +170,11 @@ class OpenFoodFactsInteractions:
         test = re.compile(r".*%s.*" % query, re.IGNORECASE)
         for product in data["products"]:
             try:
+                at_least_one_category = product["categories_hierarchy"][0]
                 appropriate_name = test.match(product["product_name_fr"])
                 nutriscore = product["nutrition_grade_fr"]
             
-                if appropriate_name and nutriscore:
+                if appropriate_name and nutriscore and at_least_one_category:
                     element = {
                         "name" : "",
                         "ref" : "",
