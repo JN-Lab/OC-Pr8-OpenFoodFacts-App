@@ -17,7 +17,7 @@ class TestTreatment(TestCase):
             "skip": 0,
             "page": 1,
             "page_size": "150",
-            "count": 11,
+            "count": 13,
             "products": [
                 {
                     "product_name_fr" : "Nutella",
@@ -192,6 +192,20 @@ class TestTreatment(TestCase):
                         "en:cocoa-and-hazelnuts-spreads"
                     ], 
                 },
+                {
+                    "name" : "Nutella light",
+                    "ref": "54651861",
+                    "nutriscore": "a",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Nutella in da mix",
+                    "ref": "385657387484",
+                    "nutriscore": "a",
+                    "description": "",
+                    "image_url": "",
+                }
             ]
         }
 

@@ -22,12 +22,12 @@ class Treatment:
             else:
                 return None
 
-    def get_substitute_selection(self, element_type, type_name):
-        db_info = self.db_interactions.get_substitute_products_in_db(element_type, type_name)
+    def get_substitute_selection(self, element_type, info_id):
+        db_info = self.db_interactions.get_substitute_products_in_db(element_type, info_id)
         if db_info:
             return db_info
         else:
-            api_info = self.api_interactions.get_substitute_products_from_api(element_type, type_name, 6)
+            api_info = self.api_interactions.get_substitute_products_from_api(element_type, info_id, 6)
             if api_info:
                 return api_info
             else:

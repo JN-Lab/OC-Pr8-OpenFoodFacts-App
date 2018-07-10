@@ -4,7 +4,7 @@ from django.test import TestCase
 from ..models import Product, Category
 from ..utils.db_interactions  import DBInteractions
 
-class TestQueryAnalysis(TestCase):
+class TestDBInteractions(TestCase):
 
     maxDiff = None
 
@@ -141,7 +141,7 @@ class TestQueryAnalysis(TestCase):
             },
             {
                 "product_name_fr": "nutella plein d'huiles de palme",
-                "code": "456789123",
+                "code": "4567859631223",
                 "image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
                 "nutrition_grade_fr": "a",
                 "generic_name_fr": "pas bon pour les singes et les artères",
@@ -279,7 +279,7 @@ class TestQueryAnalysis(TestCase):
 
     def test_get_sustitute_products_in_db_category_search(self):
         element_type = "category"
-        type_name = "en:beverages"
+        info_id = "en:beverages"
         result = {
                 'type' : 'product',
                 'number' : 2,
@@ -300,11 +300,12 @@ class TestQueryAnalysis(TestCase):
                     },
                 ]
             }
-        self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, type_name), result)
+        self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, info_id), result)
     
     def test_get_sustitute_products_in_db_product_search(self):
+
         element_type = "product"
-        type_name = "cola à la mousse de bière"
+        info_id = "456789123"
         result = {
             'type' : 'product',
             'number' : 2,
@@ -325,7 +326,7 @@ class TestQueryAnalysis(TestCase):
                 },
             ]
         }
-        self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, type_name), result)
+        self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, info_id), result)
 
     ## PRIVATE METHODS ##
 

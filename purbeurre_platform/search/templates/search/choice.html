@@ -37,7 +37,7 @@
                                         <p class="card-text">{{ element.description }}</p>
                                     </div>
                                     <div class="card-footer bg-transparent">
-                                        <a href="{% url 'search:list' element_type=element_type type_name=element.slug_name %}" class="btn btn-primary">Selectionner</a>
+                                        <a href="{% url 'search:list' element_type=element_type info_id=element.ref %}" class="btn btn-primary">Selectionner</a>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -50,7 +50,7 @@
                                         <p class="card-text">{{ element.description }}</p>
                                     </div>
                                     <div class="card-footer bg-transparent">
-                                        <a href="{% url 'search:list' element_type=element_type type_name=element.slug_name %}" class="btn btn-primary">Selectionner</a>
+                                        <a href="{% url 'search:list' element_type=element_type info_id=element.description %}" class="btn btn-primary">Selectionner</a>
                                     </div>
                                 </div>
                             {% endfor %}

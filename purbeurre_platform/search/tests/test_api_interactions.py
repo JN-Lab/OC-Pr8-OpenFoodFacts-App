@@ -13,7 +13,7 @@ class TestApiInteractions(TestCase):
         self.api_interaction = OpenFoodFactsInteractions()
 
         self.data_received = {
-            "count" : 16,
+            "count" : 18,
             "products": [
                 {
                     "product_name_fr" : "Nutella",
@@ -270,6 +270,20 @@ class TestApiInteractions(TestCase):
                         "en:hazelnut-spreads",
                         "en:cocoa-and-hazelnuts-spreads"
                     ],
+                },
+                {
+                    "product_name_fr" : "Nutella c'est bon",
+                    "code": "3856573872569",
+                    "nutrition_grade_fr": "a",
+                    "generic_name_fr": "pour tester l'absence de categories_hierarchy",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "product_name_fr" : "Nutella c'est pas bon pour la santé",
+                    "code": "385657395169",
+                    "nutrition_grade_fr": "d",
+                    "generic_name_fr": "pour tester l'absence de categories_hierarchy",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
                 },
             ]
         }

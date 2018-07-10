@@ -59,15 +59,15 @@ class OpenFoodFactsInteractions:
         else:
             return None
 
-    def get_substitute_products_from_api(self, element_type, type_name, max_numb):
+    def get_substitute_products_from_api(self, element_type, info_id, max_numb):
         """
         This method coordinates all 
         """
         if element_type == "category":
-            data_from_api = self._get_products_from_api_category_search(type_name)
+            data_from_api = self._get_products_from_api_category_search(info_id)
         elif element_type == "product":
             # Maybe to optimize
-            data_from_api = self._get_products_from_api_brand_search(type_name)
+            data_from_api = self._get_products_from_api_brand_search(info_id)
 
         if data_from_api["count"] > 0:
             products_selected = self._select_substitute_products(data_from_api)

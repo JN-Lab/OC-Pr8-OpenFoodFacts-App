@@ -41,7 +41,8 @@ def choice(request):
     return render(request, 'choice.html', context)
 
 # Search List
-def list(request, element_type, type_name):
+def list(request, element_type, info_id):
+    # info_id = description for category et ref for product
     if element_type == "category":
         pass
     elif element_type == "product":

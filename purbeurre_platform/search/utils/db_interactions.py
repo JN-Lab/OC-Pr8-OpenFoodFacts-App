@@ -31,15 +31,15 @@ class DBInteractions:
             else:
                 return None
 
-    def get_substitute_products_in_db(self, element_type, type_name):
+    def get_substitute_products_in_db(self, element_type, info_id):
         """
         This is the main method which coordinates all the actions to find substitue
         products inside the db
         """
         if element_type == "category":
-            check = self._get_healthy_products_from_categories(type_name)
+            check = self._get_healthy_products_from_categories(info_id)
         elif element_type == "product":
-            check = self._get_healthy_products_from_products(type_name)
+            check = self._get_healthy_products_from_products(info_id)
         
         if check:
             products = self._queryset_to_dict(check, "product")
@@ -152,10 +152,10 @@ class DBInteractions:
 
 
 
-    def _get_healthy_products_from_products(self, product_name):
+    def _get_healthy_products_from_products(self, product_ref):
         try:
             # We get product info
-            product = Product.objects.get(name=product_name)
+            product = Product.objects.get(ref=product_ref)
             # We select the appropriate category associated by choosing the cat with the minimum size
             total_product = -1
             choosen_category = ""
