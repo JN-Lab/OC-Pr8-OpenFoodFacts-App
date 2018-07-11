@@ -414,6 +414,75 @@ class TestApiInteractions(TestCase):
         }
 
         self.assertEqual(self.api_interaction.get_products_selection("nutella", 6), result)
+    
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_category_search')
+    def test_get_substitute_products_from_api_category_search_success(self, mock_get_products_from_api):
+        mock_get_products_from_api.return_value = self.data_received
+        result =   {
+            'type' : 'product',
+            'number' : 4,
+            'elements' : [
+                {
+                    "name" : "Nutella light",
+                    "ref": "54651861",
+                    "nutriscore": "a",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "B-not-ready",
+                    "ref": "384551677252",
+                    "nutriscore": "a",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Nutella in da mix",
+                    "ref": "385657387484",
+                    "nutriscore": "a",
+                    "description": "",
+                    "image_url": "",
+                },
+                {
+                    "name" : "Nutella c'est bon",
+                    "ref": "3856573872569",
+                    "nutriscore": "a",
+                    "description": "pour tester l'absence de categories_hierarchy",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+            ]
+        }
+        self.assertEqual(self.api_interaction.get_substitute_products_from_api("category", "en:beverages", 6), result)
+    
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_category_search')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_product_from_api_code_search')
+    def test_get_substitute_products_from_api_product_search_fail(self, mock_api_code, mock_api_category):
+        
+        code = "3017620429484"
+        mock_api_code.return_value = {
+            "status": 1,
+            "status_verbose": "product found",
+            "product": {
+                "product_name_fr" : "Nutella",
+                "code": "3017620429484",
+                "nutrition_grade_fr": "e",
+                "generic_name_fr": "Pâtes à tartiner aux noisettes et au cacao",
+                "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                "categories_hierarchy": [
+                    "en:breakfasts",
+                    "en:spreads",
+                    "en:sweet-spreads",
+                    "fr:pates-a-tartiner",
+                    "en:chocolate-spreads",
+                    "en:hazelnut-spreads",
+                    "en:cocoa-and-hazelnuts-spreads"
+                ],
+            },
+        }
+        mock_api_category.return_value = self.data_received
+
+        self.assertEqual(self.api_interaction.get_substitute_products_from_api("product", code, 6), None)
+
 
     ## PRIVATE METHODS ##
 

@@ -67,7 +67,30 @@ class OpenFoodFactsInteractions:
             data_from_api = self._get_products_from_api_category_search(info_id)
         elif element_type == "product":
             # Maybe to optimize
-            data_from_api = self._get_products_from_api_brand_search(info_id)
+            product = self._get_product_from_api_code_search(info_id)
+            # we select the appropriate category
+            product_categories = product["product"]["categories_hierarchy"]
+            data_from_api = {}
+            validated = False
+
+            # We try to find an associated category to the product where there are at least 6 "a" products
+            while not validated and len(product_categories) > 0:
+                category_to_check = product_categories.pop()
+                check_category = self._get_products_from_api_category_search(category_to_check)
+                substitute_product = 0
+                for product in check_category["products"]:
+                    try:
+                        if product["nutrition_grade_fr"] == "a":
+                            substitute_product += 1
+                    except:
+                        pass 
+                if substitute_product >= max_numb:
+                    validated = True
+                    data_from_api = check_category
+
+            # If we don't find any categories, we set up count attribute to 0
+            if not validated:
+                data_from_api["count"] = 0
 
         if data_from_api["count"] > 0:
             products_selected = self._select_substitute_products(data_from_api)
@@ -110,6 +133,13 @@ class OpenFoodFactsInteractions:
         """
 
         request = requests.get("https://fr.openfoodfacts.org/categorie/" + category_name + ".json")
+        data = request.json()
+
+        return data
+
+    def _get_product_from_api_code_search(self, code):
+
+        request = requests.get("https://fr.openfoodfacts.org/api/v0/product/" + code + ".json")
         data = request.json()
 
         return data
