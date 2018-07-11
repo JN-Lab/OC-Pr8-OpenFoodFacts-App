@@ -41,13 +41,26 @@ def choice(request):
     return render(request, 'choice.html', context)
 
 # Search List
-def list(request, element_type, info_id):
-    # info_id = description for category et ref for product
-    if element_type == "category":
-        pass
-    elif element_type == "product":
-        pass
-    context = {}
+def substitute(request, element_type, info_id):
+
+    header_form = HeaderSearchForm()
+    home_form = HomeSearchForm()
+    find_info = Treatment()
+    selection = find_info.get_substitute_selection(element_type, info_id)
+    if selection:
+        context = {
+            'element_number': selection["number"],
+            'element_type': selection["type"],
+            'list' : selection["elements"],
+            'header_form' : header_form,
+            'home_form' : home_form
+        }
+    else:
+        context = {
+            'element_number': 0,
+            'header_form' : header_form,
+            'home_form' : home_form
+        }
     return render(request, 'list.html', context)    
 
 # Product

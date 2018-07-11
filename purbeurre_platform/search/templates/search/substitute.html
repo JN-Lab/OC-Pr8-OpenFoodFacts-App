@@ -12,11 +12,7 @@
             </div>
             <div class="col-lg-8 mx-auto">
                 <h2 class="text-faded mb-5">
-                    {% if element_number > 0 %}
-                        Choisissez ce qui se rapproche le plus de votre besoin
-                    {% else %}
-                        Nous n'avons rien trouvé correspondant à votre requête...
-                    {% endif %}
+                    Voici des propositions de produits de substitution
                 </h2>
             </div>
         </div>
@@ -34,7 +30,7 @@
                                     <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
                                     <div class="card-body">
                                         <h5 class="card-title">{{ element.name }}</h5>
-                                        <p class="card-text">{{ element.description }}</p>
+                                        <p class="card-text">{{ element.description }}-{{ element.nutriscore }}</p>
                                     </div>
                                     <div class="card-footer bg-transparent">
                                         <a href="{% url 'search:substitute' element_type=element_type info_id=element.ref %}" class="btn btn-primary">Selectionner</a>
