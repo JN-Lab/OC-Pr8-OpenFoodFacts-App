@@ -29,8 +29,8 @@
                                 <div class="card product-card col-md-4 col-sm-12 col-12">
                                     <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ element.name }}</h5>
-                                        <p class="card-text">{{ element.description }}-{{ element.nutriscore }}</p>
+                                        <h5 class="card-title">{{ element.name }} <span class="badge badge_pill badge-success">{{ element.nutriscore }}</span></h5>
+                                        <p class="card-text">{{ element.description }}</p>
                                     </div>
                                     <div class="card-footer bg-transparent">
                                         <a href="{% url 'search:substitute' element_type=element_type info_id=element.ref %}" class="btn btn-primary">Selectionner</a>

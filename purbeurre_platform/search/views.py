@@ -61,7 +61,7 @@ def substitute(request, element_type, info_id):
             'header_form' : header_form,
             'home_form' : home_form
         }
-    return render(request, 'list.html', context)    
+    return render(request, 'substitute.html', context)    
 
 # Product
 

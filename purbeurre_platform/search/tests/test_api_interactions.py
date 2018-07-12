@@ -360,7 +360,7 @@ class TestApiInteractions(TestCase):
 
     ## PUBLIC METHODS ##
 
-    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_brand_search')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_search')
     def test_get_products_selection(self, mock_get_products_from_api):
 
         mock_get_products_from_api.return_value = self.data_received
@@ -415,7 +415,7 @@ class TestApiInteractions(TestCase):
 
         self.assertEqual(self.api_interaction.get_products_selection("nutella", 6), result)
     
-    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_category_search')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_search')
     def test_get_substitute_products_from_api_category_search_success(self, mock_get_products_from_api):
         mock_get_products_from_api.return_value = self.data_received
         result =   {
@@ -454,7 +454,7 @@ class TestApiInteractions(TestCase):
         }
         self.assertEqual(self.api_interaction.get_substitute_products_from_api("category", "en:beverages", 6), result)
     
-    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_category_search')
+    @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_products_from_api_search')
     @patch('search.utils.api_interactions.OpenFoodFactsInteractions._get_product_from_api_code_search')
     def test_get_substitute_products_from_api_product_search_fail(self, mock_api_code, mock_api_category):
         

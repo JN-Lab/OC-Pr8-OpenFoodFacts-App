@@ -4,6 +4,7 @@ import operator
 import unicodedata
 from functools import reduce
 from django.db.models import Q
+from django.utils import timezone
 from ..models import Product, Category
 
 class DBInteractions:
@@ -146,6 +147,9 @@ class DBInteractions:
 
         try:
             product = Product.objects.get(ref=product_code)
+            ##
+            # Update last_interaction field with timezone.now
+            ##
             return product
         except:
             return None
@@ -156,6 +160,10 @@ class DBInteractions:
         try:
             # We get product info
             product = Product.objects.get(ref=product_ref)
+            ##
+            # Update last_interaction field with timezone.now
+            ##
+
             # We select the appropriate category associated by choosing the cat with the minimum size
             total_product = -1
             choosen_category = ""
@@ -178,6 +186,9 @@ class DBInteractions:
         try:
             category = Category.objects.get(api_id=category_name)
             products = Product.objects.filter(Q(categories=category.id) & Q(nutriscore="a"))[:6]
+            ##
+            # Update last_interaction field with timezone.now
+            ##
             return products
         except:
             return None

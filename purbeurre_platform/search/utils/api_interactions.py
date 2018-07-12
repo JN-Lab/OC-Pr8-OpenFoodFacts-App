@@ -45,7 +45,7 @@ class OpenFoodFactsInteractions:
             -> It returns the necessary dict at the end
         """
 
-        data_from_api = self._get_products_from_api_brand_search(query)
+        data_from_api = self._get_products_from_api_search('brands', query, 150)
 
         if data_from_api["count"] > 0:
             products_selected = self._select_appropriate_products(data_from_api, query)
@@ -64,7 +64,7 @@ class OpenFoodFactsInteractions:
         This method coordinates all 
         """
         if element_type == "category":
-            data_from_api = self._get_products_from_api_category_search(info_id)
+            data_from_api = self._get_products_from_api_search('categories', info_id, 1000)
         elif element_type == "product":
             # Maybe to optimize
             product = self._get_product_from_api_code_search(info_id)
@@ -76,7 +76,7 @@ class OpenFoodFactsInteractions:
             # We try to find an associated category to the product where there are at least 6 "a" products
             while not validated and len(product_categories) > 0:
                 category_to_check = product_categories.pop()
-                check_category = self._get_products_from_api_category_search(category_to_check)
+                check_category = self._get_products_from_api_search('categories', category_to_check, 1000)
                 substitute_product = 0
                 for product in check_category["products"]:
                     try:
@@ -105,7 +105,7 @@ class OpenFoodFactsInteractions:
             return None          
 
         
-    def _get_products_from_api_brand_search(self, query):
+    def _get_products_from_api_search(self, query_type, query, page_size):
         """
         This method gets all the products from the API linked to the brands asked by the user (query)
         If there is no product -> return None
@@ -115,24 +115,14 @@ class OpenFoodFactsInteractions:
         payload = {
             'action' : 'process',
             'json' : '1',
-            'tagtype_0' : 'brands',
+            'tagtype_0' : query_type,
             'tag_contains_0' : 'contains',
             'tag_0' : query,
-            'page_size' : '150',
+            'page_size' : page_size,
             'page' : '1'
         }
 
         request = requests.get('https://fr.openfoodfacts.org/cgi/search.pl', params=payload)
-        data = request.json()
-
-        return data
-
-    def _get_products_from_api_category_search(self, category_name):
-        """
-        This method requests all the products from a category
-        """
-
-        request = requests.get("https://fr.openfoodfacts.org/categorie/" + category_name + ".json")
         data = request.json()
 
         return data
