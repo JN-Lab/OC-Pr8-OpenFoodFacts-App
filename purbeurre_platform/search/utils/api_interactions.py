@@ -103,8 +103,17 @@ class OpenFoodFactsInteractions:
             return products_selected
         else:
             return None          
+    
+    def get_selected_product(self, code):
 
-        
+        product_data = self._get_product_from_api_code_search(code)
+        if product_data["status_verbose"] == "product found":
+            product = self._select_product_info(product_data)
+        else:
+            product = None
+
+        return product
+
     def _get_products_from_api_search(self, query_type, query, page_size):
         """
         This method gets all the products from the API linked to the brands asked by the user (query)
@@ -133,6 +142,102 @@ class OpenFoodFactsInteractions:
         data = request.json()
 
         return data
+
+    def _select_product_info(self, data):
+        
+        product_info = {
+            "name" : "",
+            "ref" : "",
+            "description": "",
+            "nutriscore": "",
+            "image_url": "",
+            "categories": [],
+            "ingredients": "",
+            "nutriments": {
+                "fat": 0,
+                "saturated_fat": 0,
+                "sugar": 0,
+                "salt": 0
+            },
+            "ingredients_image_url": "",
+            "nutriments_image_url": "",
+        }
+
+        product_data = data["product"]
+
+        product_info["name"] = product_data["product_name_fr"]
+        product_info["ref"] = product_data["code"]
+        product_info["nutriscore"] = product_data["nutrition_grade_fr"]
+        
+        try:
+            if product_data["generic_name_fr"].strip():
+                product_info["description"] = product_data["generic_name_fr"]
+            else:
+                product_info["description"] = "Information manquante"        
+        except:
+            product_info["description"] = "Information manquante"
+
+        try:
+            if product_data["image_url"].strip():
+                product_info["image_url"] = product_data["image_url"]
+            else:
+                product_info["image_url"] = "Image manquante"
+        except:
+            product_info["image_url"] = "Image manquante"
+
+        try:
+            if len(product_data["categories_hierarchy"]) > 0:
+                product_info["categories"] = product_data["categories_hierarchy"]
+            else:
+                product_info["categories"] = ["Information manquante"]                
+        except:
+            product_info["categories"] = ["Information manquante"]
+
+        try:
+            if product_data["ingredients_text_fr"].strip():
+                product_info["ingredients"] = product_data["ingredients_text_fr"]
+            else:
+                product_info["ingredients"] = "Information manquante"                   
+        except:
+            product_info["ingredients"] = "Information manquante"   
+
+        try:
+            product_info["nutriments"]["fat"] = product_data["nutriments"]["fat_100g"]
+        except:
+            product_info["nutriments"]["fat"] = -1
+
+        try:
+            product_info["nutriments"]["saturated_fat"] = product_data["nutriments"]["saturated-fat_100g"]
+        except:
+            product_info["nutriments"]["saturated_fat"] = -1 
+
+        try:
+            product_info["nutriments"]["sugar"] = product_data["nutriments"]["sugars_100g"]
+        except:
+            product_info["nutriments"]["sugar"] = -1
+        
+        try:
+            product_info["nutriments"]["salt"] = product_data["nutriments"]["salt_100g"]
+        except:
+            product_info["nutriments"]["salt"] = -1 
+
+        try:
+            if product_data["image_ingredients_url"].strip():
+                product_info["ingredients_image_url"] = product_data["image_ingredients_url"]
+            else:
+                product_info["ingredients_image_url"] = "Image manquante"                
+        except:
+            product_info["ingredients_image_url"] = "Image manquante" 
+
+        try:
+            if product_data["image_nutrition_url"].strip():
+                product_info["nutriments_image_url"] = product_data["image_nutrition_url"]
+            else:
+                product_info["nutriments_image_url"] = "Image manquante"                 
+        except:
+            product_info["nutriments_image_url"] = "Image manquante" 
+
+        return product_info
 
     def _select_substitute_products(self, data):
         """

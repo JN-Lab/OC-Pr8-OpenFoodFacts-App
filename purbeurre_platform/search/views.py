@@ -64,6 +64,14 @@ def substitute(request, element_type, info_id):
     return render(request, 'substitute.html', context)    
 
 # Product
+def product(request, code):
+    header_form = HeaderSearchForm()
+    home_form = HomeSearchForm()
+    context = {
+        'header_form' : header_form,
+        'home_form' : home_form
+    }
+    return render(request, 'product.html', context)
 
 # Log-in
 

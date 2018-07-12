@@ -12,7 +12,11 @@
             </div>
             <div class="col-lg-8 mx-auto">
                 <h2 class="text-faded mb-5">
-                    Voici des propositions de produits de substitution
+                    {% if element_number > 0 %}
+                        Voici des propositions de produits de substitution
+                    {% else %}
+                        Nous n'avons malheureusement pas trouvé de produit de substitution
+                    {% endif %}
                 </h2>
             </div>
         </div>
@@ -24,37 +28,22 @@
             <div class="col-lg-8 container">
                 <div class="row justify-content-center">
                     {% if element_number > 0 %}
-                        {% if element_type == 'product' %}
-                            {% for element in list %}
-                                <div class="card product-card col-md-4 col-sm-12 col-12">
-                                    <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ element.name }} <span class="badge badge_pill badge-success">{{ element.nutriscore }}</span></h5>
-                                        <p class="card-text">{{ element.description }}</p>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <a href="{% url 'search:substitute' element_type=element_type info_id=element.ref %}" class="btn btn-primary">Selectionner</a>
-                                    </div>
+                        {% for element in list %}
+                            <div class="card product-card col-md-4 col-sm-12 col-12">
+                                <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ element.name }} <span class="badge badge_pill badge-success">{{ element.nutriscore }}</span></h5>
+                                    <p class="card-text">{{ element.description }}</p>
                                 </div>
-                            {% endfor %}
-                        {% else %}
-                            {% for element in list %}
-                                <div class="card category-card col-md-4 col-sm-12 col-12">
-                                    <img class="card-img-top" src="" alt="">
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ element.name }}</h5>
-                                        <p class="card-text">{{ element.description }}</p>
-                                    </div>
-                                    <div class="card-footer bg-transparent">
-                                        <a href="{% url 'search:substitute' element_type=element_type info_id=element.description %}" class="btn btn-primary">Selectionner</a>
-                                    </div>
+                                <div class="card-footer bg-transparent">
+                                    <a href="{% url 'search:product' code=element.ref %}" class="btn btn-primary">Selectionner</a>
                                 </div>
-                            {% endfor %}
-                        {% endif %}
+                            </div>
+                        {% endfor %}
                     {% else %}
                     <div class="col-lg-8">
                         <h3>
-                            Donner quelques précisions supplémentaires s'il vous plait
+                            Donnez-nous quelques précisions supplémentaires sur le type de produit souhaité
                         </h3>
                         <form class="form-inline form-homepage" action="{% url 'search:choice' %}" method="get">
                             {% csrf_token %}

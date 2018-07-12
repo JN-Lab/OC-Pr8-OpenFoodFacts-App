@@ -33,7 +33,7 @@ class Treatment:
             else:
                 return None
 
-    def get_substitute_products(self):
+    def get_selected_product(self):
         pass
     def get_registered_products(self):
         pass
