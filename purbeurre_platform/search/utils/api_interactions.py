@@ -7,34 +7,7 @@ import requests
 
 class OpenFoodFactsInteractions:
     """
-    This class groups all the methods to get necessary informations from
-    OpenFoodFacts API during search process. The different actions:
-            -> Request the API by using a search request on brands
-            -> Clean Json
-            -> Get the 6 (max) more appropriate product
-            -> returns a list of dict : (products)
-
-    products_info = {
-            'type' : 'product',
-            'number' : 0,
-            'elements': [
-                {
-                    'name' : '',
-                    'ref' : '',
-                    'nutriscore' : '',
-                    'description' : '',
-                    'image_url' : '' 
-                },
-                {
-                    'name' : '',
-                    'ref' : '',
-                    'nutriscore' : '',
-                    'description' : '',
-                    'image_url' : '' 
-                },
-                ...
-            ]
-        }
+    This class groups all the methods to interact with the Openfoodfacts API
     """
     
     def get_products_selection(self, query, max_numb):

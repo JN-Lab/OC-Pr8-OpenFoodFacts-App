@@ -33,8 +33,11 @@ class Treatment:
             else:
                 return None
 
-    def get_selected_product(self):
-        pass
+    def get_selected_product(self, product_ref):
+        # Need to evolve the method to see if it is a product already registered by the user
+        product_info = self.api_interactions.get_selected_product(product_ref)
+        return product_info
+
     def get_registered_products(self):
         pass
     def register_product(self):
