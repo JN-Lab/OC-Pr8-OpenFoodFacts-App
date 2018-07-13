@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 container">
+            <div class="row justify-content-center">
+                {% if element_number > 0 %}
+                    {% if element_type == 'product' %}
+                        {% for element in list %}
+                            {% if forloop.counter == 1 or forloop.counter == 4 %}
+                                <div class="col-12 card-deck card-margin">
+                            {% endif %}  
+                                <div class="card product-card">
+                                    <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ element.name }} <span class="badge badge_pill badge-warning">{{ element.nutriscore }}</span></h5>
+                                        <p class="card-text">{{ element.description }}</p>
+                                    </div>
+                                    <div class="card-footer bg-transparent">
+                                        {% if button_go_to == 'substitute_page' %} 
+                                            <a href="{% url 'search:substitute' element_type=element_type info_id=element.ref %}" class="card-link selection">SELECTIONNER</a>
+                                        {% elif button_go_to == 'product_page' %}
+                                            <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">SELECTIONNER</a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% if forloop.counter == 3 or forloop.counter == 6 %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% for element in list %}
+                            {% if forloop.counter == 1 or forloop.counter == 4 %}
+                                <div class="col-12 card-deck card-margin">
+                            {% endif %}
+                                    <div class="card category-card col-md-4 col-sm-12 col-12">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ element.name }}</h5>
+                                        </div>
+                                        <div class="card-footer bg-transparent">
+                                            {% if button_go_to == 'substitute_page' %} 
+                                                <a href="{% url 'search:substitute' element_type=element_type info_id=element.description %}" class="card-link selection">SELECTIONNER</a>
+                                            {% elif button_go_to == 'product_page' %}
+                                                <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">SELECTIONNER</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                            {% if forloop.counter == 3 or forloop.counter == 6 %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                <div class="col-lg-8">
+                    <h3>
+                        Donner quelques précisions supplémentaires s'il vous plait
+                    </h3>
+                    <form class="form-inline form-homepage" action="{% url 'search:choice' %}" method="get">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            {{ home_form.search }}
+                            <div class="input-group-append">
+                                <button type="submit" class="btn-submit-home btn btn-primary btn-xl">Chercher</button>  
+                            </div>
+                        </div>
+                    </form>
+                </div>  
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

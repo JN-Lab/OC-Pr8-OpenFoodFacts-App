@@ -15,7 +15,7 @@
                     {% if element_number > 0 %}
                         Voici des propositions de produits de substitution
                     {% else %}
-                        Nous n'avons malheureusement pas trouvé de produit de substitution
+                        Nous n'avons malheureusement pas trouvé de produit de substitution : {{element_number}}
                     {% endif %}
                 </h2>
             </div>
@@ -23,42 +23,6 @@
     </div>
 </header>
 <section>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 container">
-                <div class="row justify-content-center">
-                    {% if element_number > 0 %}
-                        {% for element in list %}
-                            <div class="card product-card col-md-4 col-sm-12 col-12">
-                                <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ element.name }} <span class="badge badge_pill badge-success">{{ element.nutriscore }}</span></h5>
-                                    <p class="card-text">{{ element.description }}</p>
-                                </div>
-                                <div class="card-footer bg-transparent">
-                                    <a href="{% url 'search:product' code=element.ref %}" class="btn btn-primary">Selectionner</a>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                    <div class="col-lg-8">
-                        <h3>
-                            Donnez-nous quelques précisions supplémentaires sur le type de produit souhaité
-                        </h3>
-                        <form class="form-inline form-homepage" action="{% url 'search:choice' %}" method="get">
-                            {% csrf_token %}
-                            <div class="input-group mb-3">
-                                {{ home_form.search }}
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn-submit-home btn btn-primary btn-xl">Chercher</button>  
-                                </div>
-                            </div>
-                        </form>
-                    </div>  
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include 'search/list.html' %}
 </section>
 {% endblock %}

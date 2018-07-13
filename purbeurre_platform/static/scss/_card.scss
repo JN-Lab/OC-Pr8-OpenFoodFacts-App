@@ -1,8 +1,12 @@
 // Styling for card
 
+.card-margin {
+    margin-bottom : 15px;
+    margin-top: 15px;
+}
+
 .card.product-card {
     padding: 0px;
-    margin-bottom: 10px;
  
     & > img {
         height: 235px;
@@ -16,8 +20,13 @@
 
 .card.category-card {
     padding: 0px;
-    & > img {
-        background-color: $blue-dark;
-        height: 50px;
-    }
+
+}
+
+.card-footer {
+    border-top: none;
+}
+
+.card-link.selection {
+    color: $blue-light;
 }

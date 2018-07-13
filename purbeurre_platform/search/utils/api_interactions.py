@@ -217,7 +217,7 @@ class OpenFoodFactsInteractions:
         This method gets the data from the API (products json linked to a category)
         and cleaned them to return only products:
             -> with a product name
-            -> a nutriscore equal to "d" or "e"
+            -> a nutriscore equal to "a"
             -> an image url
             -> a description
         """

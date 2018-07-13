@@ -25,6 +25,7 @@ def choice(request):
             product["slug_name"] = product["name"].replace(" ", "-")
         
         context = {
+            'button_go_to' : "substitute_page",
             'element_number': selection["number"],
             'element_type': selection["type"],
             'list' : selection["elements"],
@@ -49,6 +50,7 @@ def substitute(request, element_type, info_id):
     selection = find_info.get_substitute_selection(element_type, info_id)
     if selection:
         context = {
+            'button_go_to' : "product_page",
             'element_number': selection["number"],
             'element_type': selection["type"],
             'list' : selection["elements"],
