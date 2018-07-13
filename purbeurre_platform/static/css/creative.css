@@ -14,6 +14,9 @@ hr {
 hr.light {
   border-color: #fff; }
 
+hr.full {
+  max-width: 100%; }
+
 a {
   color: #C45525;
   -webkit-transition: all 0.2s;
@@ -291,6 +294,15 @@ header.minhead {
 
 .bg-secondary {
   background-color: #E8A75D; }
+
+.product-block {
+  margin-bottom: 50px; }
+
+.nutriscore {
+  font-size: 150%; }
+
+h4.product-title-part {
+  color: #345A61; }
 
 .test-merde {
   background-color: black; }

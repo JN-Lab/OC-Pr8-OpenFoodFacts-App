@@ -19,6 +19,10 @@ hr.light {
   border-color: $white;
 }
 
+hr.full {
+  max-width: 100%;
+}
+
 a {
   color: $primary;
   @include transition-all;

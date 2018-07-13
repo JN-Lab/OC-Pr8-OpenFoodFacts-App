@@ -67,10 +67,14 @@ def substitute(request, element_type, info_id):
 def product(request, code):
     header_form = HeaderSearchForm()
     home_form = HomeSearchForm()
-    context = {
-        'header_form' : header_form,
-        'home_form' : home_form
-    }
+    find_info = Treatment()
+    selection = find_info.get_selected_product(code)
+    if selection:
+        context = {
+            'header_form' : header_form,
+            'home_form' : home_form,
+            'product' : selection
+        }
     return render(request, 'product.html', context)
 
 # Log-in

@@ -3,7 +3,7 @@
 {% block content %}
 <header class="minhead text-center text-white d-flex">
     <div class="container my-auto">
-        <div class="row">
+        <div class="my-4">
             <div class="col-lg-10 mx-auto">
                 <h1 class="text-uppercase">
                     <strong>Produit de substitution</strong>
@@ -12,10 +12,112 @@
             </div>
             <div class="col-lg-8 mx-auto">
                 <h2 class="text-faded mb-5">
-                    NOM - PRODUIT
+                    {{ product.name }}
                 </h2>
             </div>
         </div>
     </div>
 </header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 product-block">
+                <h3>{{ product.name }}</h3>
+                <hr class="full">
+            </div>
+            <div class="col-lg-12 product-block">
+                <h4>Description</h4>
+                <hr class="full">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img class="img-fluid"  src="{{ product.image_url }}" alt="image de {{ product.name }}">
+                        </div>
+                        <div class="col-lg-8">
+                            <p>{{ product.description }}</p>
+                            <p>Nutriscore : <span class="nutriscore">{{ product.nutriscore | upper }}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 product-block">
+                <h4>Ingrédients</h4>
+                <hr class="full">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img class="img-fluid"  src="{{ product.ingredients_image_url }}" alt="ingrédients de {{ product.name }}">
+                        </div>
+                        <div class="col-lg-8">
+                            <p>{{ product.ingredients }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12 product-block">
+                <h4>Nutriments</h4>
+                <hr class="full">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <img class="img-fluid"  src="{{ product.nutriments_image_url }}" alt="nutriments de {{ product.name }}">
+                        </div>
+                        <div class="col-lg-8">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nutriments</th>
+                                        <th scope="col">Pour 100g</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Matières grasses</td>
+                                        <td>
+                                            {% if product.nutriments.fat >= 0  %}
+                                                {{ product.nutriments.fat}}
+                                            {% else %}
+                                                Données manquantes
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Acides gras saturés</td>
+                                        <td>
+                                            {% if product.nutriments.saturated_fat >= 0  %}
+                                                {{ product.nutriments.saturated_fat}}
+                                            {% else %}
+                                                Données manquantes
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sucres</td>
+                                        <td>
+                                            {% if product.nutriments.sugar >= 0  %}
+                                                {{ product.nutriments.sugar}}
+                                            {% else %}
+                                                Données manquantes
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sel</td>
+                                        <td>
+                                            {% if product.nutriments.salt >= 0  %}
+                                                {{ product.nutriments.salt}}
+                                            {% else %}
+                                                Données manquantes
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

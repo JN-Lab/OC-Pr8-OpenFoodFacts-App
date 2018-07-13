@@ -36,7 +36,10 @@ class Treatment:
     def get_selected_product(self, product_ref):
         # Need to evolve the method to see if it is a product already registered by the user
         product_info = self.api_interactions.get_selected_product(product_ref)
-        return product_info
+        if product_info:
+            return product_info
+        else:
+            return None
 
     def get_registered_products(self):
         pass
