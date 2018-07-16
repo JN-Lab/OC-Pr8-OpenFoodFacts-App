@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import HeaderSearchForm, HomeSearchForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
+from .forms import HeaderSearchForm, HomeSearchForm, RegisterForm, ConnexionForm
 from .utils.treatment import Treatment
 
 # Create your views here.
@@ -80,9 +83,44 @@ def product(request, code):
     return render(request, 'product.html', context)
 
 # Log-in
+def register(request):
+    header_form = HeaderSearchForm()
+    register_form = RegisterForm(request.POST or None)
+    if register_form.is_valid():
+        username = register_form.cleaned_data['username']
+        mail = register_form.cleaned_data['mail']
+        password = register_form.cleaned_data['password']
+        password_check = register_form.cleaned_data['password_check']
 
-# Sign-in
+        envoi = True
 
-# Sign-out
+    return render(request, 'register.html', locals())
+
+# Log-in
+def log_in(request):
+    header_form = HeaderSearchForm()
+
+    if request.method == "POST":
+        login_form = ConnexionForm(request.POST or None)
+        if login_form.is_valid():
+            username = login_form.cleaned_data["username"]
+            password = login_form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+            else:
+                error = True
+    else:
+        login_form = ConnexionForm()
+
+    return render(request, 'log_in.html', locals())
+
+# Log-out
+def log_out(request):
+    logout(request)
+    return redirect(reverse(log_in))
 
 # Personal account
+@login_required(login_url='/search/log_in')
+def personal(request):
+    return render(request, 'personal.html', locals())

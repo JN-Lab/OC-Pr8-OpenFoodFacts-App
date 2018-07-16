@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Pur Beurre - Connexion{% endblock %}
+{% block content %}
+{% load static %}
+{% if envoi %}On est ok{% endif %}
+<header class="minhead text-center text-white d-flex">
+        <div class="container my-auto">
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <h1 class="text-uppercase">
+                        <strong>Connexion</strong>
+                    </h1>
+                    <hr>
+                </div>
+                <div class="col-lg-8 mx-auto">
+                    <h2 class="text-faded mb-5">
+                        Connectez-vous pour accéder à votre espace personnel
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </header>
+<section>
+    <div class="container">
+        <div class="row justify-content-center">
+            <form class="col-lg-8" action="." method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ login_form.username.label }}
+                    {{ login_form.username }}
+                </div>
+                <div class="form-group">
+                    {{ login_form.password.label }}
+                    {{ login_form.password }}
+                </div>
+                <button type="submit" class="btn-submit-home btn btn-primary">Connexion</button>
+                <a href="{% url 'search:register' %}">Créer un compte</a>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
