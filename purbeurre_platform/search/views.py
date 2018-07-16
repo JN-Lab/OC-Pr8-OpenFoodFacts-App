@@ -82,45 +82,54 @@ def product(request, code):
         }
     return render(request, 'product.html', context)
 
-# Log-in
+# Register
 def register(request):
     header_form = HeaderSearchForm()
     register_form = RegisterForm(request.POST or None)
-    if register_form.is_valid():
-        username = register_form.cleaned_data['username']
-        mail = register_form.cleaned_data['mail']
-        password = register_form.cleaned_data['password']
-        password_check = register_form.cleaned_data['password_check']
 
-        envoi = True
+    # A faire Demain
+    # if request.method == "POST":
+
+
+
+
+    # if register_form.is_valid():
+    #     username = register_form.cleaned_data['username']
+    #     mail = register_form.cleaned_data['mail']
+    #     password = register_form.cleaned_data['password']
+    #     password_check = register_form.cleaned_data['password_check']
+
+    #     envoi = True
 
     return render(request, 'register.html', locals())
 
 # Log-in
 def log_in(request):
     header_form = HeaderSearchForm()
-
+    error = False
     if request.method == "POST":
-        login_form = ConnexionForm(request.POST or None)
+        login_form = ConnexionForm(request.POST)
         if login_form.is_valid():
             username = login_form.cleaned_data["username"]
             password = login_form.cleaned_data["password"]
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
+                return redirect(reverse('search:personal'), locals)
             else:
                 error = True
+                return render(request, 'log_in.html', locals())
     else:
         login_form = ConnexionForm()
-
-    return render(request, 'log_in.html', locals())
+        return render(request, 'log_in.html', locals())
 
 # Log-out
 def log_out(request):
     logout(request)
-    return redirect(reverse(log_in))
+    return redirect(reverse('search:log_in'), locals())
 
 # Personal account
-@login_required(login_url='/search/log_in')
+@login_required(login_url='/search/login')
 def personal(request):
+    header_form = HeaderSearchForm()
     return render(request, 'personal.html', locals())

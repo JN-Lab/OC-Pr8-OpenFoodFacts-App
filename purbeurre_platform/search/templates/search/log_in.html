@@ -23,8 +23,11 @@
 <section>
     <div class="container">
         <div class="row justify-content-center">
-            <form class="col-lg-8" action="." method="post">
+            <form class="col-lg-8" action="" method="post">
                 {% csrf_token %}
+                {% if error %}
+                    <p>Votre identifiant ou votre mot de passe n'est pas correcte.</p>
+                {% endif %}
                 <div class="form-group">
                     {{ login_form.username.label }}
                     {{ login_form.username }}
