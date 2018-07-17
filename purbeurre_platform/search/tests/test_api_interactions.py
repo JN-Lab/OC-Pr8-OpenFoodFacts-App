@@ -5,6 +5,10 @@ from unittest.mock import patch
 from search.utils.api_interactions import OpenFoodFactsInteractions
 
 class TestApiInteractions(TestCase):
+    """
+    This class groups all the unit tests linked to the public methods
+    from OpenFoodFactsInteractions class
+    """
 
     maxDiff = None
 

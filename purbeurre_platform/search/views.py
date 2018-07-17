@@ -12,12 +12,19 @@ from .models import Product, Category, Profile
 
 # Home page
 def index(request):
+    """
+    This view manages the home page
+    """
     header_form =  HeaderSearchForm()
     home_form = HomeSearchForm()
     return render(request, 'index.html', locals())
 
 # Search Selection
 def choice(request):
+    """
+    This view manages the selection page with products or categories
+    to substitute
+    """
     header_form = HeaderSearchForm()
     home_form = HomeSearchForm()
     query = request.GET.get('search')
@@ -48,7 +55,9 @@ def choice(request):
 
 # Search List
 def substitute(request, element_type, info_id):
-
+    """
+    This view manages the page showing a list of products for substitution
+    """
     header_form = HeaderSearchForm()
     home_form = HomeSearchForm()
     find_info = Treatment()
@@ -72,6 +81,10 @@ def substitute(request, element_type, info_id):
 
 # Product
 def product(request, code):
+    """
+    this view manages the product page showing all the elements linked
+    to a product
+    """
     header_form = HeaderSearchForm()
     home_form = HomeSearchForm()
     find_info = Treatment()
@@ -86,6 +99,9 @@ def product(request, code):
 
 # Register
 def register(request):
+    """
+    This view manages the register page to create an account
+    """
     header_form = HeaderSearchForm()
 
     if request.method == "POST":
@@ -109,6 +125,9 @@ def register(request):
 
 # Log-in
 def log_in(request):
+    """
+    This view manages the log-in page
+    """
     header_form = HeaderSearchForm()
     error = False
     if request.method == "POST":
@@ -129,17 +148,28 @@ def log_in(request):
 
 # Log-out
 def log_out(request):
+    """
+    This view manages the log-out page
+    """
     logout(request)
     return redirect(reverse('search:log_in'), locals())
 
 # Personal account
 @login_required(login_url='/search/login')
 def personal(request):
+    """
+    This view manages the personal account page where the user
+    can find all his personal informations
+    """
     header_form = HeaderSearchForm()
     return render(request, 'personal.html', locals())
 
 # Product registered
 @login_required(login_url='/search/login')
 def product_registered(request):
+    """
+    This view manages the product-registered page where the user
+    can find all the products he registered
+    """
     header_form = HeaderSearchForm()
     return render(request, 'product_registered.html', locals())

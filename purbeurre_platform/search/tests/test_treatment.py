@@ -7,6 +7,9 @@ from search.utils.api_interactions import OpenFoodFactsInteractions
 from search.utils.treatment import Treatment
 
 class TestTreatment(TestCase):
+    """
+    This class groups the unit tests linked to the Treatment class
+    """
 
     maxDiff = None
 

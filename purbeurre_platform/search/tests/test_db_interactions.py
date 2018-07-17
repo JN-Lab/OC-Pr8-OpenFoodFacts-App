@@ -5,6 +5,10 @@ from ..models import Product, Category
 from ..utils.db_interactions  import DBInteractions
 
 class TestDBInteractions(TestCase):
+    """
+    This class groups the unit tests linked to the public methods
+    from DBInteractions class
+    """
 
     maxDiff = None
 

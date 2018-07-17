@@ -8,13 +8,18 @@ from ..views import index, choice
 from ..utils.treatment import Treatment
 
 class IndexPageTestCase(TestCase):
+    """
+    This class tests the index page view
+    """
 
     def test_index_page_status(self):
         response = self.client.get(reverse('index'))
         self.assertEqual(response.status_code, 200)
 
 class ChoicePageTestCase(TestCase):
-
+    """
+    This class tests the choice page view
+    """
     # def test_choice_page(self):
     #     query = 'nutella'
     #     response = self.client.get(reverse('search:choice')))
@@ -22,6 +27,9 @@ class ChoicePageTestCase(TestCase):
     pass
 
 class RegisterPageTestCase(TestCase):
+    """
+    This class tests the register page view
+    """
     
     @classmethod
     def setUpTestData(cls):
@@ -61,6 +69,9 @@ class RegisterPageTestCase(TestCase):
         self.assertEqual(response.context['error'], True)
 
 class LoginPageTestCase(TestCase):
+    """
+    This class tests the log-in page view
+    """
 
     @classmethod
     def setUpTestData(cls):
@@ -106,6 +117,9 @@ class LoginPageTestCase(TestCase):
         self.assertEqual(response.context['error'], True)
 
 class LogoutPageTestCase(TestCase):
+    """
+    This class tests the log-out page view
+    """
 
     def test_logout_page(self):
         response = self.client.get(reverse('search:log_out'))
@@ -113,6 +127,9 @@ class LogoutPageTestCase(TestCase):
         self.assertRedirects(response, reverse('search:log_in'))
 
 class PersonalPageTestCase(TestCase):
+    """
+    This class tests the personal account page view
+    """
 
     @classmethod
     def setUpTestData(cls):
@@ -133,7 +150,10 @@ class PersonalPageTestCase(TestCase):
         self.assertRedirects(response, '/search/login?next=/search/personal-account')
 
 class ProductRegisteredPageTestCase(TestCase):
-
+    """
+    This class tests the product-registered page view
+    """
+    
     @classmethod
     def setUpTestData(cls):
         username = 'username-existing'

@@ -5,6 +5,10 @@ from ..management.commands.dbinit import DBInit
 from..models import Product, Category
 
 class TestCommandDBInit(TestCase):
+    """
+    This class groups the unit tests linked to the public methods from
+    the DBInit class (command to initialize the database for the beta app [< 10k rows])
+    """
 
     maxDiff= None
 

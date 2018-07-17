@@ -2,20 +2,33 @@
 {% block title %}PurBeurre - Compte{% endblock %}
 {% block content %}
 <header class="minhead text-center text-white d-flex">
-        <div class="container my-auto">
-            <div class="my-4">
-                <div class="col-lg-10 mx-auto">
-                    <h1 class="text-uppercase">
-                        <strong>Prout</strong>
-                    </h1>
-                    <hr>
-                </div>
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="text-faded mb-5">
-                        Prout
-                    </h2>
-                </div>
+    <div class="container my-auto">
+        <div class="my-4">
+            <div class="col-lg-10 mx-auto">
+                <h1 class="text-uppercase">
+                    <strong>Ahoy</strong>
+                </h1>
+                <hr>
+            </div>
+            <div class="col-lg-8 mx-auto">
+                <h2 class="text-faded mb-5">
+                    {{ user.username }}
+                </h2>
             </div>
         </div>
-    </header>
+    </div>
+</header>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <ul>
+                    <li>Mail : {{ user.email }}</li>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</section>
 {% endblock %}
