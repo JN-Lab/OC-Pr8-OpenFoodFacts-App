@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.urls import reverse
 from .forms import HeaderSearchForm, HomeSearchForm, RegisterForm, ConnexionForm
 from .utils.treatment import Treatment
+from .models import Product, Category, Profile
 
 # Create your views here.
 
@@ -85,23 +87,24 @@ def product(request, code):
 # Register
 def register(request):
     header_form = HeaderSearchForm()
-    register_form = RegisterForm(request.POST or None)
 
-    # A faire Demain
-    # if request.method == "POST":
+    if request.method == "POST":
+        register_form = RegisterForm(request.POST) 
+        if register_form.is_valid():
+            username = register_form.cleaned_data["username"]
+            mail = register_form.cleaned_data["mail"]
+            password = register_form.cleaned_data["password"]
+            password_check = register_form.cleaned_data["password_check"]
 
-
-
-
-    # if register_form.is_valid():
-    #     username = register_form.cleaned_data['username']
-    #     mail = register_form.cleaned_data['mail']
-    #     password = register_form.cleaned_data['password']
-    #     password_check = register_form.cleaned_data['password_check']
-
-    #     envoi = True
-
-    return render(request, 'register.html', locals())
+            username_already_exist = User.objects.filter(username=username).exists()
+            if not username_already_exist and password == password_check:
+                user = User.objects.create_user(username, mail, password)
+                return redirect(reverse('search:log_in'), locals())
+            else:
+                error = True
+    else:
+        register_form = RegisterForm()
+        return render(request, 'register.html', locals())
 
 # Log-in
 def log_in(request):

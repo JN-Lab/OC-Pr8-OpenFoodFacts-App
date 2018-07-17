@@ -23,8 +23,11 @@
 <section>
     <div class="container">
         <div class="row justify-content-center">
-            <form class="col-lg-8" action="">
+            <form class="col-lg-8" action="" method="post">
                 {% csrf_token %}
+                {% if error %}
+                    <p>un des indicateurs est pas bon</p>
+                {% endif %}
                 <div class="form-group">
                     {{ register_form.username.label }}
                     {{ register_form.username }}
