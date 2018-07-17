@@ -102,6 +102,7 @@ def register(request):
                 return redirect(reverse('search:log_in'), locals())
             else:
                 error = True
+                return render(request, 'register.html', locals())
     else:
         register_form = RegisterForm()
         return render(request, 'register.html', locals())
