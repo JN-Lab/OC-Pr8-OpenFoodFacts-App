@@ -315,8 +315,15 @@ header.minhead {
 h4.product-title-part {
   color: #345A61; }
 
-.test-merde {
-  background-color: black; }
+.btn-submit-home {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px; }
+
+.btn-submit-user {
+  border-radius: 5px; }
+
+.register-block {
+  margin-top: 15px; }
 
 .form-homepage {
   display: flex;
@@ -326,9 +333,5 @@ h4.product-title-part {
   .form-homepage > div {
     width: 100%;
     height: 100%; }
-
-.btn-submit-home {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px; }
 
 /*# sourceMappingURL=creative.css.map */

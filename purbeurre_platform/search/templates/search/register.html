@@ -14,7 +14,7 @@
             </div>
             <div class="col-lg-8 mx-auto">
                 <h2 class="text-faded mb-5">
-                    Enregistrez vos produits préférés ou ceux que vous souhaitez essayer
+                    Enregistrez et consultez vos produits préférés
                 </h2>
             </div>
         </div>
@@ -26,7 +26,16 @@
             <form class="col-lg-8" action="" method="post">
                 {% csrf_token %}
                 {% if error %}
-                    <p>un des indicateurs est pas bon</p>
+                    {% if user_exist %}
+                    <div class="alert alert-danger">
+                        L'identifiant existe déjà. Veuillez en choisir un autre.
+                    </div>
+                    {% endif %}
+                    {% if password_problem %}
+                    <div class="alert alert-danger">
+                        Il y a un problème au niveau de la sélection du mot de passe.
+                    </div>
+                    {% endif %}
                 {% endif %}
                 <div class="form-group">
                     {{ register_form.username.label }}
@@ -44,7 +53,7 @@
                     {{ register_form.password_check.label }}
                     {{ register_form.password_check }}
                 </div>
-                <button type="submit" class="btn-submit-home btn btn-primary">S'inscrire</button>
+                <button type="submit" class="btn-submit-user btn btn-block btn-primary">S'inscrire</button>
             </form>
         </div>
     </div>

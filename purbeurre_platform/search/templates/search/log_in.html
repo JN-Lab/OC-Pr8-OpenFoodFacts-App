@@ -26,7 +26,9 @@
             <form class="col-lg-8" action="" method="post">
                 {% csrf_token %}
                 {% if error %}
-                    <p>Votre identifiant ou votre mot de passe n'est pas correcte.</p>
+                    <div class="alert alert-danger">
+                        Identifiant ou mot de passe incorrect. Veuillez recommencer.
+                    </div>
                 {% endif %}
                 <div class="form-group">
                     {{ login_form.username.label }}
@@ -36,9 +38,11 @@
                     {{ login_form.password.label }}
                     {{ login_form.password }}
                 </div>
-                <button type="submit" class="btn-submit-home btn btn-primary">Connexion</button>
-                <a href="{% url 'search:register' %}">Créer un compte</a>
+                <button type="submit" class="btn-submit-user btn btn-block btn-primary">Connexion</button>    
             </form>
+        </div>
+        <div class="row justify-content-center register-block">
+            <a class="col-lg-8" href="{% url 'search:register' %}">Créer un compte</a>
         </div>
     </div>
 </section>

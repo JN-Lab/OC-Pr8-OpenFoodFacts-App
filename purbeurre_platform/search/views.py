@@ -118,6 +118,10 @@ def register(request):
                 return redirect(reverse('search:log_in'), locals())
             else:
                 error = True
+                if username_already_exist:
+                    user_exist = True
+                if password != password_check:
+                    password_problem = True
                 return render(request, 'register.html', locals())
     else:
         register_form = RegisterForm()
