@@ -137,3 +137,9 @@ def log_out(request):
 def personal(request):
     header_form = HeaderSearchForm()
     return render(request, 'personal.html', locals())
+
+# Product registered
+@login_required(login_url='/search/login')
+def product_registered(request):
+    header_form = HeaderSearchForm()
+    return render(request, 'product_registered.html', locals())

@@ -48,12 +48,12 @@
                 <button type="submit" class="btn btn-outline-primary my-2 my-sm-0 btn-hidden">Chercher</button>
               </form>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fas fa-user fa-lg"></i></a>
-            </li>
             {% if user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'search:personal' %}"><i class="fas fa-fish fa-lg"></i></a>
+                <a class="nav-link" href="{% url 'search:personal' %}"><i class="fas fa-user fa-lg"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'search:product_registered' %}"><i class="fas fa-fish fa-lg"></i></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'search:log_out' %}">

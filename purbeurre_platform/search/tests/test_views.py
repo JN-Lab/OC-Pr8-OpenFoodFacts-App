@@ -130,4 +130,24 @@ class PersonalPageTestCase(TestCase):
     def test_personal_page_non_connected(self):
         response = self.client.get(reverse('search:personal'))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/search/login?next=/search/personal')
+        self.assertRedirects(response, '/search/login?next=/search/personal-account')
+
+class ProductRegisteredPageTestCase(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        username = 'username-existing'
+        mail = 'test-ref@register.com'
+        password = 'existing-ref'
+        password_check = 'existing-ref'
+        User.objects.create_user(username, mail, password)
+
+    def test_product_registered_page_connected(self):
+        user = self.client.login(username='username-existing', password='existing-ref')
+        response = self.client.get(reverse('search:product_registered'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_product_registered_page_non_connected(self):
+        response = self.client.get(reverse('search:product_registered'))
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/search/login?next=/search/product-registered')
