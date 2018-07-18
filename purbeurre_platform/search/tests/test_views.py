@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from ..views import index, choice
 from ..utils.treatment import Treatment
+from ..models import Product, Category, Profile
 
 class IndexPageTestCase(TestCase):
     """
@@ -25,6 +26,80 @@ class ChoicePageTestCase(TestCase):
     #     response = self.client.get(reverse('search:choice')))
     #     self.assertEqual(response.status_code, 200)
     pass
+
+class ProductPageTestCase(TestCase):
+    """
+    This class tests the product page view
+    """
+    @classmethod
+    def setUpTestData(cls):
+
+        # We add two products
+        products = [
+            {
+                "product_name_fr": "Le jus de raisin 100% jus de fruits",
+                "code": "123456789",
+                "image_url":"https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+                "nutrition_grade_fr": "a",
+                "generic_name_fr" : "jus de fruit naturel sans sucre ajouté",
+                "categories_hierarchy": [
+                    "en:plant-based-foods-and-beverages",
+                    "en:beverages",
+                ],
+            },
+            {
+                "product_name_fr": "Le haricot 100% naturellement bleue",
+                "code": "987654321",
+                "image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+                "nutrition_grade_fr": "b",
+                "generic_name_fr" : "",
+                "categories_hierarchy": [
+                    "en:plant-based-foods",
+                ],
+            },
+        ]
+        for product in products:
+            new_product = Product.objects.create(name=product["product_name_fr"].lower(),
+                                   ref=product["code"],
+                                   nutriscore=product["nutrition_grade_fr"],
+                                   picture=product["image_url"],
+                                   description=product["generic_name_fr"])
+            
+            for category in product["categories_hierarchy"]:
+                try:
+                    cat_in_db = Category.objects.get(api_id=category) 
+                    new_product.categories.add(cat_in_db)
+                except:
+                    pass
+
+        # We add a user who registered the "Le jus de raisin 100% jus de fruits" product
+        username = 'test-ref'
+        mail = 'test-ref@register.com'
+        password = 'ref-test-view'
+        password_check = 'ref-test-view'
+        user = User.objects.create_user(username, mail, password)
+        user_profile = Profile(user=user)
+        user_profile.save()
+        product = Product.objects.get(ref="123456789")
+        user_profile.products.add(product.id)
+
+    def test_product_page_get(self):
+        code = Product.objects.get(ref="123456789").ref
+        response = self.client.get(reverse('search:product', args=(code,)))
+        self.assertEqual(response.status_code, 200)
+
+    def test_product_page_user_product_registered(self):
+        user = self.client.login(username='test-ref', password='ref-test-view')
+        
+        user = User.objects.get(username='test-ref')
+        product_ref = [product.ref for product in user.profile.products.all()]
+        print(product_ref)
+        code = Product.objects.get(ref="123456789").ref
+        response = self.client.get(reverse('search:product', args=(code,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['product_registered'], True)
+
+        
 
 class RegisterPageTestCase(TestCase):
     """

@@ -89,19 +89,24 @@ def product(request, code):
     home_form = HomeSearchForm()
     find_info = Treatment()
     selection = find_info.get_selected_product(code)
+    context = {
+        'header_form' : header_form,
+        'home_form' : home_form,
+        'product' : selection,
+        'product_registered': False
+    }
     if selection:
-        context = {
-            'header_form' : header_form,
-            'home_form' : home_form,
-            'product' : selection,
-        }
-    if request.user.is_authenticated:
-        user = User.objects.get(pk=request.user.id)
-        if user.profile.products.all().exists():
-            if context["product"]["ref"] in user.profile.products.all():
-                context["product_registered"] = True                
-        else:
-            context["product_registered"] = False   
+        context["product"] = selection
+
+        # Check if user is authenticated and if he already registered the product
+        if request.user.is_authenticated:
+            user = User.objects.get(pk=request.user.id)
+            if user.profile.products.all().exists():
+                ref_list = [product.ref for product in user.profile.products.all()]
+                if context["product"]["ref"] in ref_list:
+                    context["product_registered"] = True                
+            else:
+                context["product_registered"] = False
 
     return render(request, 'product.html', context)
 

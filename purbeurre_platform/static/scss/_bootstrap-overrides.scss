@@ -33,3 +33,39 @@
 .bg-secondary {
   background-color: $secondary;
 }
+
+.btn-outline-secondary{
+  color: $secondary;
+  background-color:transparent;
+  background-image:none;
+  border-color: $secondary
+}
+
+.btn-outline-secondary:hover{
+  color:#fff;
+  background-color: $secondary;
+  border-color: $secondary
+}
+
+.btn-outline-secondary.focus,
+.btn-outline-secondary:focus{
+  box-shadow:0 0 0 .2rem rgba(108,117,125,.5)
+}
+
+.btn-outline-secondary.disabled,
+.btn-outline-secondary:disabled{
+  color: $secondary;
+  background-color:transparent
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled).active,
+.btn-outline-secondary:not(:disabled):not(.disabled):active,.show>.btn-outline-secondary.dropdown-toggle{
+  color:#fff;
+  background-color: $secondary;
+  border-color: $secondary
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus,.show>.btn-outline-secondary.dropdown-toggle:focus{
+  box-shadow:0 0 0 .2rem rgba(108,117,125,.5)
+}
