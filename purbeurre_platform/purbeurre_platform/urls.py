@@ -16,13 +16,14 @@ Including another URLconf
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path, re_path, include
-from django.views.generic import RedirectView
+from django.views.generic import RedirectView, TemplateView
 
 from search import views
 
 urlpatterns = [
     path('', views.index, name="index"),
     path('search/', include('search.urls', namespace='search')),
+    path('legal-information', TemplateView.as_view(template_name='legal.html'), name="legal"),
     path('admin/', admin.site.urls),
 ]
 
