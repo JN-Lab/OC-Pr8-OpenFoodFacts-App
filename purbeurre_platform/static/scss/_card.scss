@@ -1,12 +1,20 @@
 // Styling for card
 
+.card-margin-deck {
+    @include respond-to (medium) {
+        margin-bottom : 15px;
+        margin-top: 15px;    
+    }
+}
+
 .card-margin {
-    margin-bottom : 15px;
+    margin-bottom : 25px;
     margin-top: 15px;
 }
 
 .card.product-card {
     padding: 0px;
+    @include shadow-2dp();
  
     & > img {
         height: 235px;
@@ -20,6 +28,7 @@
 
 .card.category-card {
     padding: 0px;
+    @include shadow-2dp();
 
 }
 
@@ -29,4 +38,22 @@
 
 .card-link.selection {
     color: $blue-light;
+}
+
+.card-nutriscore {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 40px;
+    height: 40px;
+    border-radius : 20px;
+    // text-align: center;
+    // vertical-align: middle;
+    background-color: $secondary;
+    color: $white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @include shadow-2dp();
+    @include title-font();
 }

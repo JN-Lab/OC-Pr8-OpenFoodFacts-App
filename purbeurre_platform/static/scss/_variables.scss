@@ -21,3 +21,16 @@ $blue-dark: #345A61;
 $blue-light: #86EBE6;
 $brown-caramel: #DE9440;
 $brown: #E8A75D;
+
+// For Shadows
+$shadow-key-umbra-opacity: 0.2 !default;
+$shadow-key-penumbra-opacity: 0.14 !default;
+$shadow-ambient-shadow-opacity: 0.12 !default;
+
+// Breakpoints Screen
+$breakpoints: (
+    'small': (min-width: 600px),
+    'medium': (min-width: 800px),
+    'large': (min-width: 1000px),
+    'huge': (min-width: 1200px),
+);

@@ -6,12 +6,13 @@
                     {% if element_type == 'product' %}
                         {% for element in list %}
                             {% if forloop.counter == 1 or forloop.counter == 4 %}
-                                <div class="col-12 card-deck card-margin">
+                                <div class="col-12 card-deck card-margin-deck">
                             {% endif %}  
-                                <div class="card product-card">
+                                <div class="card product-card card-margin">
                                     <img class="card-img-top" src="{{ element.image_url }}" alt="{{ element.name }}">
+                                    <div class="card-nutriscore">{{ element.nutriscore|upper }}</div>
                                     <div class="card-body">
-                                        <h5 class="card-title">{{ element.name }} <span class="badge badge_pill badge-warning">{{ element.nutriscore }}</span></h5>
+                                        <h5 class="card-title">{{ element.name }}</h5>
                                         <p class="card-text">{{ element.description }}</p>
                                     </div>
                                     <div class="card-footer bg-transparent">
@@ -29,9 +30,9 @@
                     {% else %}
                         {% for element in list %}
                             {% if forloop.counter == 1 or forloop.counter == 4 %}
-                                <div class="col-12 card-deck card-margin">
+                                <div class="col-12 card-deck card-margin-deck">
                             {% endif %}
-                                    <div class="card category-card col-md-4 col-sm-12 col-12">
+                                    <div class="card category-card card-margin col-md-4 col-sm-12 col-12">
                                         <div class="card-body">
                                             <h5 class="card-title">{{ element.name }}</h5>
                                         </div>
