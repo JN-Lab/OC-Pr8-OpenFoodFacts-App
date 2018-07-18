@@ -93,8 +93,16 @@ def product(request, code):
         context = {
             'header_form' : header_form,
             'home_form' : home_form,
-            'product' : selection
+            'product' : selection,
         }
+    if request.user.is_authenticated:
+        user = User.objects.get(pk=request.user.id)
+        if user.profile.products.all().exists():
+            if context["product"]["ref"] in user.profile.products.all():
+                context["product_registered"] = True                
+        else:
+            context["product_registered"] = False   
+
     return render(request, 'product.html', context)
 
 # Register
@@ -115,6 +123,8 @@ def register(request):
             username_already_exist = User.objects.filter(username=username).exists()
             if not username_already_exist and password == password_check:
                 user = User.objects.create_user(username, mail, password)
+                user_profile = Profile(user=user)
+                user_profile.save()
                 return redirect(reverse('search:log_in'), locals())
             else:
                 error = True
