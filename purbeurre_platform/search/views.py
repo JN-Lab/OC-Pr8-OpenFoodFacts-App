@@ -28,6 +28,8 @@ def choice(request):
     header_form = HeaderSearchForm()
     home_form = HomeSearchForm()
     query = request.GET.get('search')
+    # if not query:
+    #     raise un 404
     find_info = Treatment()
     selection = find_info.get_choice_selection(query)
 
@@ -89,24 +91,27 @@ def product(request, code):
     home_form = HomeSearchForm()
     find_info = Treatment()
     selection = find_info.get_selected_product(code)
-    context = {
+    if selection:
+        context = {
         'header_form' : header_form,
         'home_form' : home_form,
         'product' : selection,
-        'product_registered': False
-    }
-    if selection:
-        context["product"] = selection
+        'product_registered' : False,
+        }
 
         # Check if user is authenticated and if he already registered the product
         if request.user.is_authenticated:
-            user = User.objects.get(pk=request.user.id)
+            user = User.objects.get(username=request.user.username)
             if user.profile.products.all().exists():
                 ref_list = [product.ref for product in user.profile.products.all()]
                 if context["product"]["ref"] in ref_list:
-                    context["product_registered"] = True                
-            else:
-                context["product_registered"] = False
+                    context["product_registered"] = True
+    else:
+        context = {
+            'element_number': 0,
+            'header_form' : header_form,
+            'home_form' : home_form
+        }
 
     return render(request, 'product.html', context)
 

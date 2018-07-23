@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 # coding: utf-8
+from unittest.mock import patch
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import authenticate
@@ -21,11 +22,12 @@ class ChoicePageTestCase(TestCase):
     """
     This class tests the choice page view
     """
-    # def test_choice_page(self):
-    #     query = 'nutella'
-    #     response = self.client.get(reverse('search:choice')))
-    #     self.assertEqual(response.status_code, 200)
-    pass
+    def test_choice_page(self):
+        data = {
+            'search': 'nutella'
+        }
+        response = self.client.get(reverse('search:choice'), data)
+        self.assertEqual(response.status_code, 200)
 
 class ProductPageTestCase(TestCase):
     """
@@ -83,23 +85,98 @@ class ProductPageTestCase(TestCase):
         product = Product.objects.get(ref="123456789")
         user_profile.products.add(product.id)
 
-    def test_product_page_get(self):
+    @patch('search.utils.treatment.Treatment.get_selected_product')
+    def test_product_page_get(self, mock_get_selected_product):
+
+        mock_get_selected_product.return_value = {
+            "name" : "Le jus de raisin 100% jus de fruits",
+            "ref" : "123456789",
+            "description": "jus de fruit naturel sans sucre ajouté",
+            "nutriscore": "a",
+            "image_url": "https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+            "categories": [
+                "en:plant-based-foods-and-beverages",
+                "en:beverages",
+            ],
+            "ingredients": "du jus et du fruit (principalement du raisin)",
+            "nutriments": {
+                "fat": 0.2,
+                "saturated_fat": 0,
+                "sugar": 10,
+                "salt": 0
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+        }
+
         code = Product.objects.get(ref="123456789").ref
         response = self.client.get(reverse('search:product', args=(code,)))
         self.assertEqual(response.status_code, 200)
 
-    def test_product_page_user_product_registered(self):
+    @patch('search.utils.treatment.Treatment.get_selected_product')
+    def test_product_page_user_product_registered(self, mock_get_selected_product):
+
+        mock_get_selected_product.return_value = {
+            "name" : "Le jus de raisin 100% jus de fruits",
+            "ref" : "123456789",
+            "description": "jus de fruit naturel sans sucre ajouté",
+            "nutriscore": "a",
+            "image_url": "https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+            "categories": [
+                "en:plant-based-foods-and-beverages",
+                "en:beverages",
+            ],
+            "ingredients": "du jus et du fruit (principalement du raisin)",
+            "nutriments": {
+                "fat": 0.2,
+                "saturated_fat": 0,
+                "sugar": 10,
+                "salt": 0
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg",
+        }
+
         user = self.client.login(username='test-ref', password='ref-test-view')
         
         user = User.objects.get(username='test-ref')
-        product_ref = [product.ref for product in user.profile.products.all()]
-        print(product_ref)
         code = Product.objects.get(ref="123456789").ref
+
         response = self.client.get(reverse('search:product', args=(code,)))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['product_registered'], True)
 
+    @patch('search.utils.treatment.Treatment.get_selected_product')
+    def test_product_page_user_product_non_registered(self, mock_get_selected_product):
+
+        mock_get_selected_product.return_value = {
+            "name" : "Le haricot 100% naturellement bleue",
+            "ref" : "987654321",
+            "description": "jus de fruit naturel sans sucre ajouté",
+            "nutriscore": "b",
+            "image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+            "categories": [
+                "en:plant-based-foods",
+            ],
+            "ingredients": "du haricot bleue mais 100% naturel.",
+            "nutriments": {
+                "fat": 0.6,
+                "saturated_fat": 0.1,
+                "sugar": 0,
+                "salt": 2
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/haricot.jpg",
+        }       
+
+        user = self.client.login(username='test-ref', password='ref-test-view')
         
+        user = User.objects.get(username='test-ref')
+        code = Product.objects.get(ref="987654321").ref
+
+        response = self.client.get(reverse('search:product', args=(code,)))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['product_registered'], False)
 
 class RegisterPageTestCase(TestCase):
     """
