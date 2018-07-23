@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 # coding: utf-8
+from unittest.mock import patch
+from datetime import datetime, timedelta
 from django.test import TestCase
 from django.contrib.auth.models import User
 from ..models import Product, Category, Profile
@@ -414,7 +416,57 @@ class TestDBInteractions(TestCase):
         result = [
             "<Product: le jus de raisin 100% jus de fruits>", 
             "<Product: biscuits aux graines de tournesol et de sesame>"]
-        self.assertQuerysetEqual(query, result, ordered=False)      
+        self.assertQuerysetEqual(query, result, ordered=False)
+
+    @patch('search.utils.db_interactions.DBInteractions._count_global_rows_in_db')
+    def test_set_register_non_existing_product_to_user_too_much_rows(self, mock_count_global_rows):
+        """
+        This method tests the public method set_register_product_to_user with
+        a product which does not exist in the database (Product table) and with
+        a total of row to important -> product delete operations needed
+        """
+        
+        mock_count_global_rows.return_value = 10000
+
+        user = self.client.login(username='test-ref', password='ref-test-view')
+
+        user = User.objects.get(username='test-ref')
+
+        product_to_delete = Product.objects.get(name='steack de fausses viandes')
+        product_to_delete.last_interaction = datetime.today() - timedelta(days=2)
+        product_to_delete.save()
+
+        product = {
+            "name" : "biscuits aux graines de tournesol et de sesame",
+            "ref" : "99999999999",
+            "description": "Un biscuit sain pour un corps sain qui aime les graines",
+            "nutriscore": "a",
+            "image_url": "https://static.openfoodfacts.org/images/products/152/sushine-cookie.jpg",
+            "categories": [
+                    "en:beverages",
+                    "en:plant-based-foods-and-beverages",
+            ],
+            "ingredients": "pleins pleins de graines",
+            "nutriments": {
+                "fat": 0.2,
+                "saturated_fat": 0.1,
+                "sugar": 15,
+                "salt": 3
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-ingredients.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-nutriments.jpg",
+        }
+
+        self.analysis.set_register_product_to_user(user.username, product)
+        query = user.profile.products.all()
+        result = [
+            "<Product: le jus de raisin 100% jus de fruits>", 
+            "<Product: biscuits aux graines de tournesol et de sesame>"]
+        self.assertQuerysetEqual(query, result, ordered=False)
+
+        product_deleted = Product.objects.filter(name='steack de fausses viandes').exists()
+        self.assertEqual(product_deleted, False)
+            
 
     ## PRIVATE METHODS ##
 

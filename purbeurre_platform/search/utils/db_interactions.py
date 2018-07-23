@@ -2,6 +2,7 @@
 # coding: utf-8
 import operator
 import unicodedata
+import datetime
 from functools import reduce
 from django.db.models import Q
 from django.utils import timezone
@@ -52,13 +53,16 @@ class DBInteractions:
     def set_register_product_to_user(self, username, product_info):
         """
         This is the main method to register a product to a user. The are many steps:
+        -> We check if the total row in db is > to 8500
+            -> If it is superior, we delete the product with has no interactions
         -> We check if product exist in db (if not, we add it)
         -> We add the product to the user in the association table
         """
-        #rows = self._count_global_rows_in_db()
+        rows = self._count_global_rows_in_db()
 
-        #if rows > 8500:
-            # ON supprimer le produit ayant le moins d'interactions
+        if rows > 8500:
+            old_product = Product.objects.all().order_by('last_interaction').first()
+            old_product.delete()
         
         product_in_db = Product.objects.filter(ref=product_info["ref"]).exists()
         if not product_in_db:
@@ -165,9 +169,9 @@ class DBInteractions:
 
         try:
             product = Product.objects.get(ref=product_code)
-            ##
-            # Update last_interaction field with timezone.now
-            ##
+            product.last_interaction = datetime.datetime.now(datetime.timezone.utc)
+            product.save()
+
             return product
         except:
             return None
@@ -175,13 +179,12 @@ class DBInteractions:
 
 
     def _get_healthy_products_from_products(self, product_ref):
+        
         try:
             # We get product info
             product = Product.objects.get(ref=product_ref)
-            ##
-            # Update last_interaction field with timezone.now
-            ##
-
+            product.last_interaction = datetime.datetime.now(datetime.timezone.utc)
+            product.save()
             # We select the appropriate category associated by choosing the cat with the minimum size
             total_product = -1
             choosen_category = ""
@@ -204,9 +207,9 @@ class DBInteractions:
         try:
             category = Category.objects.get(api_id=category_name)
             products = Product.objects.filter(Q(categories=category.id) & Q(nutriscore="a"))[:6]
-            ##
-            # Update last_interaction field with timezone.now
-            ##
+            for product in products:
+                product.last_interaction = datetime.datetime.now(datetime.timezone.utc)
+                product.save()         
             return products
         except:
             return None
