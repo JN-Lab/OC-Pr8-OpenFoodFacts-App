@@ -5,7 +5,8 @@ import unicodedata
 from functools import reduce
 from django.db.models import Q
 from django.utils import timezone
-from ..models import Product, Category
+from django.contrib.auth.models import User
+from ..models import Product, Category, Profile
 
 class DBInteractions:
     """
@@ -48,6 +49,19 @@ class DBInteractions:
         else:
             return None
             
+    def set_register_product_to_user(self, username, product_info):
+        """
+        This is the main method to register a product to a user. The are many steps:
+        -> We check if product exist in db (if not, we add it)
+        -> We add the product to the user in the association table
+        """
+
+        product_in_db = Product.objects.filter(ref=product_info["ref"]).exists()
+        if not product_in_db:
+            self._set_product_for_user_registration(product_info)
+        user = User.objects.get(username=username)
+        product = Product.objects.get(ref=product_info["ref"])
+        user.profile.products.add(product.id)
 
     ## PRIVATE METHODS ##
     def _clean_query(self, query):
@@ -193,3 +207,19 @@ class DBInteractions:
         except:
             return None
 
+    def _set_product_for_user_registration(self, product_info):
+        """
+        This method adds a product when a user wants it to register
+        and it is not yet in the database
+        """
+        new_product = Product.objects.create(name=product_info["name"].lower(),
+                                             ref=product_info["ref"],
+                                             nutriscore=product_info["nutriscore"],
+                                             picture=product_info["image_url"],
+                                             description=product_info["description"])
+        for category in product_info["categories"]:
+            try:
+                cat_in_db = Category.objects.get(api_id=category) 
+                new_product.categories.add(cat_in_db)
+            except:
+                pass

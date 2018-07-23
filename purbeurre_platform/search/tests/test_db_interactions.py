@@ -1,7 +1,8 @@
 #! /usr/bin/env python3
 # coding: utf-8
 from django.test import TestCase
-from ..models import Product, Category
+from django.contrib.auth.models import User
+from ..models import Product, Category, Profile
 from ..utils.db_interactions  import DBInteractions
 
 class TestDBInteractions(TestCase):
@@ -195,6 +196,16 @@ class TestDBInteractions(TestCase):
                     new_product.categories.add(cat_in_db)
                 except:
                     pass
+
+        username = 'test-ref'
+        mail = 'test-ref@register.com'
+        password = 'ref-test-view'
+        password_check = 'ref-test-view'
+        user = User.objects.create_user(username, mail, password)
+        user_profile = Profile(user=user)
+        user_profile.save()
+        product = Product.objects.get(ref="123456789")
+        user_profile.products.add(product.id)
             
     def setUp(self):
         """
@@ -331,6 +342,79 @@ class TestDBInteractions(TestCase):
             ]
         }
         self.assertEqual(self.analysis.get_substitute_products_in_db(element_type, info_id), result)
+
+    def test_set_register_existing_product_to_user(self):
+        """
+        This method tests the public method set_register_product_to_user with
+        a product already existing in the database (Product table)
+        """
+
+        user = self.client.login(username='test-ref', password='ref-test-view')
+
+        user = User.objects.get(username='test-ref')
+        product = {
+            "name" : "cola à la mousse de bière",
+            "ref" : "456789123",
+            "description": "du coca et de la bière, ca mousse pas mal",
+            "nutriscore": "d",
+            "image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+            "categories": [
+                    "en:beverages",
+                    "en:plant-based-foods-and-beverages",
+            ],
+            "ingredients": "du haricot bleue mais 100% naturel.",
+            "nutriments": {
+                "fat": 50.1,
+                "saturated_fat": 45.2,
+                "sugar": 20,
+                "salt": 5
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
+        }
+
+        self.analysis.set_register_product_to_user(user.username, product)
+        query = user.profile.products.all()
+        result = [
+            "<Product: le jus de raisin 100% jus de fruits>", 
+            "<Product: cola à la mousse de bière>"]
+        self.assertQuerysetEqual(query, result, ordered=False)
+
+    def test_set_register_non_existing_product_to_user(self):
+        """
+        This method tests the public method set_register_product_to_user with
+        a product which does not exist in the database (Product table)
+        """
+        user = self.client.login(username='test-ref', password='ref-test-view')
+
+        user = User.objects.get(username='test-ref')
+        product = {
+            "name" : "biscuits aux graines de tournesol et de sesame",
+            "ref" : "99999999999",
+            "description": "Un biscuit sain pour un corps sain qui aime les graines",
+            "nutriscore": "a",
+            "image_url": "https://static.openfoodfacts.org/images/products/152/sushine-cookie.jpg",
+            "categories": [
+                    "en:beverages",
+                    "en:plant-based-foods-and-beverages",
+            ],
+            "ingredients": "pleins pleins de graines",
+            "nutriments": {
+                "fat": 0.2,
+                "saturated_fat": 0.1,
+                "sugar": 15,
+                "salt": 3
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-ingredients.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-nutriments.jpg",
+        }
+
+        self.analysis.set_register_product_to_user(user.username, product)
+        query = user.profile.products.all()
+        result = [
+            "<Product: le jus de raisin 100% jus de fruits>", 
+            "<Product: biscuits aux graines de tournesol et de sesame>"]
+        self.assertQuerysetEqual(query, result, ordered=False)      
 
     ## PRIVATE METHODS ##
 
