@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -28,10 +28,13 @@ def choice(request):
     header_form = HeaderSearchForm()
     home_form = HomeSearchForm()
     query = request.GET.get('search')
-    # if not query:
-    #     raise un 404
-    find_info = Treatment()
-    selection = find_info.get_choice_selection(query)
+
+    #If query had been deleted in the URL, we raise a 404 error
+    if not query.strip():
+        raise Http404("There is no request")
+    else:
+        find_info = Treatment()
+        selection = find_info.get_choice_selection(query)
 
     if selection:
         #convert products or categories name into slug type

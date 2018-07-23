@@ -22,12 +22,80 @@ class ChoicePageTestCase(TestCase):
     """
     This class tests the choice page view
     """
-    def test_choice_page(self):
+
+    @patch('search.utils.treatment.Treatment.get_choice_selection')
+    def test_choice_page_success(self, mock_get_choice_selection):
+        """
+        This method tests if there is a status 200 if a query is present in the url
+        """
+
+        mock_get_choice_selection.return_value = {
+            'type' : 'product',
+            'number' : 6,
+            'elements' : [
+                {
+                    "name" : "Nutella",
+                    "ref": "3017620429484",
+                    "nutriscore": "e",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Pâte à Tartiner Nutella,",
+                    "ref": "364561612564",
+                    "nutriscore": "e",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Pate Tartiner Nutella 750G",
+                    "ref": "54651861",
+                    "nutriscore": "e",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "Biscuits B Ready noisettes/cacao Nutella",
+                    "ref": "3453548914",
+                    "nutriscore": "e",
+                    "description": "",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                }, 
+                {
+                    "name" : "Nutella au caramel",
+                    "ref": "301776542",
+                    "nutriscore": "b",
+                    "description": "Pâtes à tartiner aux noisettes et au caramel",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+                {
+                    "name" : "gateaux Nutella et caramel,",
+                    "ref": "364561614754",
+                    "nutriscore": "b",
+                    "description": "Pâtes à tartiner aux noisettes et au cacao",
+                    "image_url": "https://static.openfoodfacts.org/images/products/301/762/404/7813/front_fr.42.400.jpg",
+                },
+            ] 
+        }
+
         data = {
             'search': 'nutella'
         }
+
         response = self.client.get(reverse('search:choice'), data)
         self.assertEqual(response.status_code, 200)
+
+    def test_choice_page_fail(self):
+        """
+        This method tests if a 404 status is raised if there is not query in the url
+        (or a simple space)
+        """
+
+        data = {
+            'search': ' '
+        }
+        response = self.client.get(reverse('search:choice'), data)
+        self.assertEqual(response.status_code, 404)
 
 class ProductPageTestCase(TestCase):
     """
@@ -87,6 +155,9 @@ class ProductPageTestCase(TestCase):
 
     @patch('search.utils.treatment.Treatment.get_selected_product')
     def test_product_page_get(self, mock_get_selected_product):
+        """
+        This method tests if there is a 200 status when a product is returned from the api
+        """
 
         mock_get_selected_product.return_value = {
             "name" : "Le jus de raisin 100% jus de fruits",
@@ -115,6 +186,10 @@ class ProductPageTestCase(TestCase):
 
     @patch('search.utils.treatment.Treatment.get_selected_product')
     def test_product_page_user_product_registered(self, mock_get_selected_product):
+        """
+        This method mainly tests if the 'product_registered' variable returns True
+        when the user is authenticated and he already resgitered the product returned by the API
+        """
 
         mock_get_selected_product.return_value = {
             "name" : "Le jus de raisin 100% jus de fruits",
@@ -148,6 +223,11 @@ class ProductPageTestCase(TestCase):
 
     @patch('search.utils.treatment.Treatment.get_selected_product')
     def test_product_page_user_product_non_registered(self, mock_get_selected_product):
+        """
+        This method mainly tests if the 'product_registered' variable returns False
+        when the user is authenticated but did not registered yet the product returned
+        by the API
+        """
 
         mock_get_selected_product.return_value = {
             "name" : "Le haricot 100% naturellement bleue",
@@ -196,6 +276,10 @@ class RegisterPageTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_register_page_success_registration(self):
+        """
+        The method tests the behavior of the app when a registration is done
+        with good informations
+        """
 
         data = {
             'username' : 'test-page',
@@ -209,6 +293,11 @@ class RegisterPageTestCase(TestCase):
         self.assertRedirects(response, reverse('search:log_in'))
 
     def test_register_page_fail_registration(self):
+        """
+        The methods tests the behavior of the app when a registration is done
+        but with a username which already exists in the database
+        """
+
         data = {
             'username' : 'test-ref',
             'mail' : 'test-unitaire@register.com',
@@ -238,6 +327,10 @@ class LoginPageTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_login_page_success_connexion(self):
+        """
+        The method tests the behavior of the app when a connexion
+        is correctly realized
+        """
 
         data = {
             'username' : 'username-existing',
@@ -249,6 +342,11 @@ class LoginPageTestCase(TestCase):
         self.assertRedirects(response, reverse('search:personal'))
     
     def test_login_page_fail_connexion_username(self):
+        """
+        The method tests the behavior of the app when there is a connexion attempt
+        is done with a wrong username
+        """
+
         data = {
             'username' : 'unknown',
             'password' : 'existing-ref',
@@ -259,6 +357,11 @@ class LoginPageTestCase(TestCase):
         self.assertEqual(response.context['error'], True)
 
     def test_login_page_fail_connexion_password(self):
+        """
+        The method tests the behavior of the app when there is a connexion attempt
+        is done with a wrong password
+        """
+
         data = {
             'username' : 'username-existing',
             'password' : 'unknown-ref',
@@ -274,6 +377,9 @@ class LogoutPageTestCase(TestCase):
     """
 
     def test_logout_page(self):
+        """
+        The method tests the behavior of the app whn a log out is done
+        """
         response = self.client.get(reverse('search:log_out'))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('search:log_in'))
@@ -292,11 +398,19 @@ class PersonalPageTestCase(TestCase):
         User.objects.create_user(username, mail, password)
 
     def test_personal_page_connected(self):
+        """
+        This method tests the behavior of the app when a connected user
+        tries to access to the personal account page
+        """
         user = self.client.login(username='username-existing', password='existing-ref')
         response = self.client.get(reverse('search:personal'))
         self.assertEqual(response.status_code, 200)
 
     def test_personal_page_non_connected(self):
+        """
+        This method tests the behavior of the app when a non-connected user
+        tries to access to the personal account page
+        """
         response = self.client.get(reverse('search:personal'))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/search/login?next=/search/personal-account')
@@ -315,11 +429,19 @@ class ProductRegisteredPageTestCase(TestCase):
         User.objects.create_user(username, mail, password)
 
     def test_product_registered_page_connected(self):
+        """
+        This method tests the behavior of the app when a connected user
+        tries to access to the personal product registered page
+        """
         user = self.client.login(username='username-existing', password='existing-ref')
         response = self.client.get(reverse('search:product_registered'))
         self.assertEqual(response.status_code, 200)
 
     def test_product_registered_page_non_connected(self):
+        """
+        This method tests the behavior of the app when a non-connected user
+        tries to access to the personal product registered page
+        """
         response = self.client.get(reverse('search:product_registered'))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/search/login?next=/search/product-registered')
