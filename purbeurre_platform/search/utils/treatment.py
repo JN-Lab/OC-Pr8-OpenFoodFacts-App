@@ -49,5 +49,5 @@ class Treatment:
         This method just gets the method in DBInteractions class to register a product.
         It is just to deal only with Treatment class in views.
         """
-        self.db_interactions.set_register_product_to_user(username, product_info)
-        
+        status = self.db_interactions.set_register_product_to_user(username, product_info)
+        return status

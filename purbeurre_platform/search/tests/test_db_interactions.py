@@ -199,6 +199,7 @@ class TestDBInteractions(TestCase):
                 except:
                     pass
 
+        # We create a first user which registered one product
         username = 'test-ref'
         mail = 'test-ref@register.com'
         password = 'ref-test-view'
@@ -208,6 +209,8 @@ class TestDBInteractions(TestCase):
         user_profile.save()
         product = Product.objects.get(ref="123456789")
         user_profile.products.add(product.id)
+
+        
             
     def setUp(self):
         """
@@ -375,12 +378,13 @@ class TestDBInteractions(TestCase):
             "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/on-en-reve-tous.jpg",
         }
 
-        self.analysis.set_register_product_to_user(user.username, product)
+        status = self.analysis.set_register_product_to_user(user.username, product)
         query = user.profile.products.all()
         result = [
             "<Product: le jus de raisin 100% jus de fruits>", 
             "<Product: cola à la mousse de bière>"]
         self.assertQuerysetEqual(query, result, ordered=False)
+        self.assertEqual(status, 'registered')
 
     def test_set_register_non_existing_product_to_user(self):
         """
@@ -411,19 +415,20 @@ class TestDBInteractions(TestCase):
             "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-nutriments.jpg",
         }
 
-        self.analysis.set_register_product_to_user(user.username, product)
+        status = self.analysis.set_register_product_to_user(user.username, product)
         query = user.profile.products.all()
         result = [
             "<Product: le jus de raisin 100% jus de fruits>", 
             "<Product: biscuits aux graines de tournesol et de sesame>"]
         self.assertQuerysetEqual(query, result, ordered=False)
+        self.assertEqual(status, 'registered')
 
     @patch('search.utils.db_interactions.DBInteractions._count_global_rows_in_db')
     def test_set_register_non_existing_product_to_user_too_much_rows(self, mock_count_global_rows):
         """
         This method tests the public method set_register_product_to_user with
-        a product which does not exist in the database (Product table) and with
-        a total of row to important -> product delete operations needed
+        a product which does not exist in the database (Product table) + different limits:
+            -> a total of row to important -> product delete operations needed
         """
         
         mock_count_global_rows.return_value = 10000
@@ -457,16 +462,126 @@ class TestDBInteractions(TestCase):
             "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-nutriments.jpg",
         }
 
-        self.analysis.set_register_product_to_user(user.username, product)
+        status = self.analysis.set_register_product_to_user(user.username, product)
         query = user.profile.products.all()
         result = [
             "<Product: le jus de raisin 100% jus de fruits>", 
             "<Product: biscuits aux graines de tournesol et de sesame>"]
         self.assertQuerysetEqual(query, result, ordered=False)
+        self.assertEqual(status, 'registered')
 
         product_deleted = Product.objects.filter(name='steack de fausses viandes').exists()
         self.assertEqual(product_deleted, False)
-            
+
+    @patch('search.utils.db_interactions.DBInteractions._count_global_rows_in_db')
+    def test_set_register_non_existing_product_to_user_too_much_rows_other(self, mock_count_global_rows):
+        """
+        This method tests the public method set_register_product_to_user with
+        a product which does not exist in the database (Product table) + different limits:
+            -> a total of row to important -> product delete operations needed
+            -> the product with the oldest last_interaction is registered by a user
+        """
+        
+        mock_count_global_rows.return_value = 10000
+
+        user = self.client.login(username='test-ref', password='ref-test-view')
+
+        user = User.objects.get(username='test-ref')
+
+        product_to_delete = Product.objects.get(name='steack de fausses viandes')
+        product_to_delete.last_interaction = datetime.today() - timedelta(days=2)
+        product_to_delete.save()
+        product_not_to_delete = Product.objects.get(name='le jus de raisin 100% jus de fruits')
+        product_not_to_delete.last_interaction = datetime.today() - timedelta(days=4)
+        product_not_to_delete.save()
+
+        product = {
+            "name" : "biscuits aux graines de tournesol et de sesame",
+            "ref" : "99999999999",
+            "description": "Un biscuit sain pour un corps sain qui aime les graines",
+            "nutriscore": "a",
+            "image_url": "https://static.openfoodfacts.org/images/products/152/sushine-cookie.jpg",
+            "categories": [
+                    "en:beverages",
+                    "en:plant-based-foods-and-beverages",
+            ],
+            "ingredients": "pleins pleins de graines",
+            "nutriments": {
+                "fat": 0.2,
+                "saturated_fat": 0.1,
+                "sugar": 15,
+                "salt": 3
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-ingredients.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-nutriments.jpg",
+        }
+
+        status = self.analysis.set_register_product_to_user(user.username, product)
+        query = user.profile.products.all()
+        result = [
+            "<Product: le jus de raisin 100% jus de fruits>", 
+            "<Product: biscuits aux graines de tournesol et de sesame>"]
+        self.assertQuerysetEqual(query, result, ordered=False)
+        self.assertEqual(status, 'registered')
+
+        product_deleted = Product.objects.filter(name='steack de fausses viandes').exists()
+        self.assertEqual(product_deleted, False)
+
+    @patch('search.utils.db_interactions.DBInteractions._count_global_rows_in_db')
+    def test_set_register_non_existing_product_impossible_to_register(self, mock_count_global_rows):
+        """
+        This method tests the public method set_register_product_to_user with
+        a product which does not exist in the database (Product table) + different limits:
+            -> a total of row to important -> product delete operations needed
+            -> all the products in the database had been registered by a user
+        """
+
+        mock_count_global_rows.return_value = 10000
+
+        # We add a new user which register all the products from the database
+        username = 'test-all-products'
+        mail = 'test-products@register.com'
+        password = 'products-test-full'
+        password_check = 'products-test-full'
+        user = User.objects.create_user(username, mail, password)
+        user_profile = Profile(user=user)
+        user_profile.save()
+        
+        for product in Product.objects.all():
+            user_profile.products.add(product.id)
+
+        user = self.client.login(username='test-ref', password='ref-test-view')
+
+        user = User.objects.get(username='test-ref')
+        
+        product = {
+            "name" : "biscuits aux graines de tournesol et de sesame",
+            "ref" : "99999999999",
+            "description": "Un biscuit sain pour un corps sain qui aime les graines",
+            "nutriscore": "a",
+            "image_url": "https://static.openfoodfacts.org/images/products/152/sushine-cookie.jpg",
+            "categories": [
+                    "en:beverages",
+                    "en:plant-based-foods-and-beverages",
+            ],
+            "ingredients": "pleins pleins de graines",
+            "nutriments": {
+                "fat": 0.2,
+                "saturated_fat": 0.1,
+                "sugar": 15,
+                "salt": 3
+            },
+            "ingredients_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-ingredients.jpg",
+            "nutriments_image_url": "https://static.openfoodfacts.org/images/products/152/sunshine-nutriments.jpg",
+        }
+
+        status = self.analysis.set_register_product_to_user(user.username, product)
+        query = user.profile.products.all()
+
+        result = [
+            "<Product: le jus de raisin 100% jus de fruits>",]
+        self.assertQuerysetEqual(query, result, ordered=False)
+        self.assertEqual(status, 'database full') 
 
     ## PRIVATE METHODS ##
 
