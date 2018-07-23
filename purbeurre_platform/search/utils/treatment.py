@@ -43,5 +43,11 @@ class Treatment:
 
     def get_registered_products(self):
         pass
-    def register_product(self):
-        pass
+
+    def register_product(self, username, product_info):
+        """
+        This method just gets the method in DBInteractions class to register a product.
+        It is just to deal only with Treatment class in views.
+        """
+        self.db_interactions.set_register_product_to_user(username, product_info)
+        

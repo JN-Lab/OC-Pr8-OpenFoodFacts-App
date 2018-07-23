@@ -537,13 +537,6 @@ class TestDBInteractions(TestCase):
             }
         self.assertEqual(self.analysis._queryset_to_dict(queryset, "product"), result)
 
-
-    # def test_get_products_from_categories(self):
-
-    #     category_name = "en:beverages"
-    #     results = [
-    #         "<Product: Le jus de raisin 100% jus de fruits>",
-    #         "<Product: banane à la feuille de coca>",
-    #     ]
-
-    #     self.assertQuerysetEqual(self.substitute_process._get_healthy_products_from_categories(category_name), results, ordered=False)
+    def test_count_global_rows_in_db(self):
+        print(self.analysis._count_global_rows_in_db())
+        self.assertEqual(self.analysis._count_global_rows_in_db(), 33)

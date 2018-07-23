@@ -55,7 +55,11 @@ class DBInteractions:
         -> We check if product exist in db (if not, we add it)
         -> We add the product to the user in the association table
         """
+        #rows = self._count_global_rows_in_db()
 
+        #if rows > 8500:
+            # ON supprimer le produit ayant le moins d'interactions
+        
         product_in_db = Product.objects.filter(ref=product_info["ref"]).exists()
         if not product_in_db:
             self._set_product_for_user_registration(product_info)
@@ -223,3 +227,30 @@ class DBInteractions:
                 new_product.categories.add(cat_in_db)
             except:
                 pass
+
+    def _count_global_rows_in_db(self):
+        """
+        This method counts the rows in the database.
+        It is used when we have to add a row in the db in order to know if the volume
+        of rows is under 10 000 which is the limit proposed by Heroku freemium solution
+        """
+        rows = 0
+        # We count Categories
+        categories = Category.objects.all()
+        rows += categories.count()
+        # We count Products
+        products = Product.objects.all().count()
+        rows += products
+        # We count Categories-Products associations
+        for category in categories:
+            products_per_category = category.products.count()
+            rows += products_per_category
+        # We count Users
+        users = User.objects.all()
+        rows += users.count()
+        # We count User-Products associations
+        for user in users:
+            products_per_user = user.profile.products.count()
+            rows += products_per_user
+
+        return rows
