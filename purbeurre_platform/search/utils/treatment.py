@@ -59,3 +59,38 @@ class Treatment:
         """
         status = self.db_interactions.set_register_product_to_user(username, product_info)
         return status
+
+        # status = ""
+        # db_ok = False
+        # rows = self.db_interactions._count_global_rows_in_db()
+
+        ## db_ok = self.db_interactions.check_db_for_registration()
+        # if rows > 8500:
+        #     products = Product.objects.all().order_by('last_interaction')
+        #     product_checked = 0
+        #     while not db_ok and product_checked < products.count() - 1:
+        #         product = products[product_checked]
+        #         if not product.users.all().exists():
+        #             product.delete()
+        #             db_ok = True
+        #         else:
+        #             product_checked += 1
+        # else:
+        #     db_ok = True
+        
+        # if db_ok:
+            ## product_in_db = self.db_interactions.check_product_in_db(product_ref)
+        #     product_in_db = Product.objects.filter(ref=product_info["ref"]).exists()
+        #     if not product_in_db:
+        #         product_info = self.get_selected_product(product_ref)
+        #         self.db_interactions._set_product_for_user_registration(product_info)
+            ## self.db_interactions.save_product_for_user(username, product_ref)
+        #     user = User.objects.get(username=username)
+        #     product = Product.objects.get(ref=product_info["ref"])
+        #     user.profile.products.add(product.id)
+        
+        #     status = "registered"
+        # else:
+        #     status = "database full"
+
+        # return status

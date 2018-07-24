@@ -19,6 +19,6 @@
     </div>
 </header>
 <section>
-    {% include 'search/list.html' %}
+    {% include 'search/list.html' with empty_message="Vous n'avez encore rien enregistré comme produit. Débutez vos recherches!" %}
 </section>
 {% endblock %}

@@ -21,11 +21,24 @@
 <section>
     <div class="container">
         <div class="row">
+            {% if status %}
+                {% if status == "registered" %}
+                    <div class="alert alert-success">
+                        Le produit a été enregistré
+                    </div>
+                {% elif status == "not registered" %}
+                    <div class="alert alert-danger">
+                        Le base de donnée de la version Bêta est pleine. Il n'est plus possible d'enregistrer un produit
+                    </div>
+                {% endif %}
+            {% endif %}
             {% if user.is_authenticated %}
                 {% if product_registered %}
                     <button type="button" class="btn btn-submit-register btn-outline-secondary btn-sm" disabled>Enregistré</button>    
                 {% else %}
-                    <button type="button" class="btn btn-submit-register btn-outline-secondary btn-sm">Sauvegarder</button>
+                    <form class="save-submit-form" action="" method="post">
+                        <input type="Sauvegarder" class="btn btn-submit-register btn-outline-secondary btn-sm" value="Sauvegarder" />
+                    </form>
                 {% endif %}
             {% else %}
                 <div class="col-lg-12">
@@ -131,4 +144,10 @@
         </div>
     </div>
 </section>
+<script>
+    var username = "{{ user.username }}";
+    var product = "{{ product }}";
+    var product_name = "{{ product.name }}";
+    var product_nutriscore = "{{ product.nutriscore }}"
+</script>
 {% endblock %}

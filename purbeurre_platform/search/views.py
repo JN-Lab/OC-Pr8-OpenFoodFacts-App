@@ -109,6 +109,7 @@ def product(request, code):
                 ref_list = [product.ref for product in user.profile.products.all()]
                 if context["product"]["ref"] in ref_list:
                     context["product_registered"] = True
+    
     else:
         context = {
             'element_number': 0,
@@ -199,6 +200,7 @@ def product_registered(request):
     can find all the products he registered
     """
     header_form = HeaderSearchForm()
+    home_form = HomeSearchForm()
     find_info = Treatment()
     selection = find_info.get_registered_products(request.user.username)
     if selection:
@@ -208,10 +210,12 @@ def product_registered(request):
             'element_type': selection["type"],
             'list' : selection["elements"],
             'header_form' : header_form,
+            'home_form' : home_form
         }
     else:
         context = {
             'element_number': 0,
             'header_form' : header_form,
+            'home_form' : home_form
         }        
     return render(request, 'product_registered.html', context)
