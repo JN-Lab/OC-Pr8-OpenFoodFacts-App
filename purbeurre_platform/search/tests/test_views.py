@@ -395,7 +395,9 @@ class PersonalPageTestCase(TestCase):
         mail = 'test-ref@register.com'
         password = 'existing-ref'
         password_check = 'existing-ref'
-        User.objects.create_user(username, mail, password)
+        user = User.objects.create_user(username, mail, password)
+        user_profile = Profile(user=user)
+        user_profile.save()
 
     def test_personal_page_connected(self):
         """
@@ -426,7 +428,9 @@ class ProductRegisteredPageTestCase(TestCase):
         mail = 'test-ref@register.com'
         password = 'existing-ref'
         password_check = 'existing-ref'
-        User.objects.create_user(username, mail, password)
+        user = User.objects.create_user(username, mail, password)
+        user_profile = Profile(user=user)
+        user_profile.save()
 
     def test_product_registered_page_connected(self):
         """

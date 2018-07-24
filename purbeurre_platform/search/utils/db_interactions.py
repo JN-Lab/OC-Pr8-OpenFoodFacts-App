@@ -49,25 +49,18 @@ class DBInteractions:
             return products
         else:
             return None
-            
-    def set_register_product_to_user(self, username, product_info):
-        """
-        This is the main method to register a product to a user. The are many steps:
-        -> We check if the total row in db is > to 8500
-            -> If it is superior, we delete the product wich has the oldest last_interactions
-                and which is not registered by a user
-        -> We check if product exist in db (if not, we add it)
-        -> We add the product to the user in the association table
-        -> If the product is registered, we return a positive status = "registered"
 
-        In the case where we don't find a product which is not registered by a user in the
-        database and the volume of rows is > to 8500 -> any registration is done and we return
-        a negative status = "database full"
+    def check_db_for_registration(self, rows):
         """
-        status = ""
+        This method checks the database capacity before register a product
+        to a user.
+        The database is ready to register a new product only if:
+            -> the volume of rows is < to 8500
+            -> if it is superior -> the db is ok if we can delete a product
+                which had not been registered by a user
+        This is the limits imposed by the free solution of Heroku
+        """
         db_ok = False
-        rows = self._count_global_rows_in_db()
-
         if rows > 8500:
             products = Product.objects.all().order_by('last_interaction')
             product_checked = 0
@@ -80,19 +73,68 @@ class DBInteractions:
                     product_checked += 1
         else:
             db_ok = True
-        
-        if db_ok:
-            product_in_db = Product.objects.filter(ref=product_info["ref"]).exists()
-            if not product_in_db:
-                self._set_product_for_user_registration(product_info)
-            user = User.objects.get(username=username)
-            product = Product.objects.get(ref=product_info["ref"])
-            user.profile.products.add(product.id)
-            status = "registered"
-        else:
-            status = "database full"
 
-        return status
+        return db_ok
+
+    def check_product_existence_in_db(self, product_ref):
+        """
+        This method checks if a product exists in the database
+        """
+        product_in_db = Product.objects.filter(ref=product_ref).exists()
+        return product_in_db
+
+    def set_product_for_user_registration(self, product_info):
+        """
+        This method adds a product when a user wants it to register
+        and it is not yet in the database
+        """
+        new_product = Product.objects.create(name=product_info["name"].lower(),
+                                                ref=product_info["ref"],
+                                                nutriscore=product_info["nutriscore"],
+                                                picture=product_info["image_url"],
+                                                description=product_info["description"])
+        for category in product_info["categories"]:
+            try:
+                cat_in_db = Category.objects.get(api_id=category) 
+                new_product.categories.add(cat_in_db)
+            except:
+                pass
+
+    def save_product_for_user(self, username, product_ref):
+        """
+        This method registers a product to a user
+        """
+
+        user = User.objects.get(username=username)
+        product = Product.objects.get(ref=product_ref)
+        user.profile.products.add(product.id)   
+
+    def count_global_rows_in_db(self):
+        """
+        This method counts the rows in the database.
+        It is used when we have to add a row in the db in order to know if the volume
+        of rows is under 10 000 which is the limit proposed by Heroku freemium solution
+        """
+        rows = 0
+        # We count Categories
+        categories = Category.objects.all()
+        rows += categories.count()
+        # We count Products
+        products = Product.objects.all().count()
+        rows += products
+        # We count Categories-Products associations
+        for category in categories:
+            products_per_category = category.products.count()
+            rows += products_per_category
+        # We count Users
+        users = User.objects.all()
+        rows += users.count()
+        # We count User-Products associations
+        for user in users:
+            products_per_user = user.profile.products.count()
+            rows += products_per_user
+
+        return rows
 
     def get_products_registered(self, username):
         """
@@ -251,46 +293,5 @@ class DBInteractions:
         except:
             return None
 
-    def _set_product_for_user_registration(self, product_info):
-        """
-        This method adds a product when a user wants it to register
-        and it is not yet in the database
-        """
-        new_product = Product.objects.create(name=product_info["name"].lower(),
-                                             ref=product_info["ref"],
-                                             nutriscore=product_info["nutriscore"],
-                                             picture=product_info["image_url"],
-                                             description=product_info["description"])
-        for category in product_info["categories"]:
-            try:
-                cat_in_db = Category.objects.get(api_id=category) 
-                new_product.categories.add(cat_in_db)
-            except:
-                pass
 
-    def _count_global_rows_in_db(self):
-        """
-        This method counts the rows in the database.
-        It is used when we have to add a row in the db in order to know if the volume
-        of rows is under 10 000 which is the limit proposed by Heroku freemium solution
-        """
-        rows = 0
-        # We count Categories
-        categories = Category.objects.all()
-        rows += categories.count()
-        # We count Products
-        products = Product.objects.all().count()
-        rows += products
-        # We count Categories-Products associations
-        for category in categories:
-            products_per_category = category.products.count()
-            rows += products_per_category
-        # We count Users
-        users = User.objects.all()
-        rows += users.count()
-        # We count User-Products associations
-        for user in users:
-            products_per_user = user.profile.products.count()
-            rows += products_per_user
 
-        return rows

@@ -51,46 +51,36 @@ class Treatment:
         products = self.db_interactions.get_products_registered(username)
         return products
 
-    def register_product(self, username, product_info):
+    def register_product(self, username, product_ref):
         """
-        This method just gets the method in DBInteractions class to register a product.
-        It is just to deal only with Treatment class in views.
-        Tests are realized in test_db_interactions.py
+        This is the main method to register a product to a user. The are many steps:
+        -> We check if the total row in db is > to 8500
+            -> If it is superior, we delete the product wich has the oldest last_interactions
+                and which is not registered by a user
+        -> We check if product exist in db (if not, we add it)
+        -> We add the product to the user in the association table
+        -> If the product is registered, we return a positive status = "registered"
+
+        In the case where we don't find a product which is not registered by a user in the
+        database and the volume of rows is > to 8500 -> any registration is done and we return
+        a negative status = "database full"
         """
-        status = self.db_interactions.set_register_product_to_user(username, product_info)
+
+        status = ""
+        rows = self.db_interactions.count_global_rows_in_db()
+        db_ok = self.db_interactions.check_db_for_registration(rows)
+
+        if db_ok:
+            product_in_db = self.db_interactions.check_product_existence_in_db(product_ref)
+            if not product_in_db:
+                product_info = self.get_selected_product(product_ref)
+                if product_info:
+                    self.db_interactions.set_product_for_user_registration(product_info)
+                else:
+                    status = "database full"
+            self.db_interactions.save_product_for_user(username, product_ref)
+            status = "registered"
+        else:
+            status = "database full"
+
         return status
-
-        # status = ""
-        # db_ok = False
-        # rows = self.db_interactions._count_global_rows_in_db()
-
-        ## db_ok = self.db_interactions.check_db_for_registration()
-        # if rows > 8500:
-        #     products = Product.objects.all().order_by('last_interaction')
-        #     product_checked = 0
-        #     while not db_ok and product_checked < products.count() - 1:
-        #         product = products[product_checked]
-        #         if not product.users.all().exists():
-        #             product.delete()
-        #             db_ok = True
-        #         else:
-        #             product_checked += 1
-        # else:
-        #     db_ok = True
-        
-        # if db_ok:
-            ## product_in_db = self.db_interactions.check_product_in_db(product_ref)
-        #     product_in_db = Product.objects.filter(ref=product_info["ref"]).exists()
-        #     if not product_in_db:
-        #         product_info = self.get_selected_product(product_ref)
-        #         self.db_interactions._set_product_for_user_registration(product_info)
-            ## self.db_interactions.save_product_for_user(username, product_ref)
-        #     user = User.objects.get(username=username)
-        #     product = Product.objects.get(ref=product_info["ref"])
-        #     user.profile.products.add(product.id)
-        
-        #     status = "registered"
-        # else:
-        #     status = "database full"
-
-        # return status
