@@ -94,6 +94,20 @@ class DBInteractions:
 
         return status
 
+    def get_products_registered(self, username):
+        """
+        This method gets all the products registered by a user and returns them
+        into a formatted dictionnary
+        """
+        user = User.objects.get(username=username)
+        check_products = user.profile.products.all().exists()
+        if check_products:
+            query = user.profile.products.all()
+            products = self._queryset_to_dict(query, 'product')
+            return products
+        else:
+            return None
+
     ## PRIVATE METHODS ##
     def _clean_query(self, query):
         useless_terms = ['a', 'de', 'de', 'des', 'un', 'une', 'tout', 'tous', 'les',

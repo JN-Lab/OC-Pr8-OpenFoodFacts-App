@@ -41,13 +41,21 @@ class Treatment:
         else:
             return None
 
-    def get_registered_products(self):
-        pass
+    def get_registered_products(self, username):
+        """
+        This method just gets the method in DBInteractions class to get the registered products.
+        It is just to deal only with Treatment class in views.
+        Tests are realized in test_db_interactions.py
+        """
+
+        products = self.db_interactions.get_products_registered(username)
+        return products
 
     def register_product(self, username, product_info):
         """
         This method just gets the method in DBInteractions class to register a product.
         It is just to deal only with Treatment class in views.
+        Tests are realized in test_db_interactions.py
         """
         status = self.db_interactions.set_register_product_to_user(username, product_info)
         return status

@@ -199,4 +199,19 @@ def product_registered(request):
     can find all the products he registered
     """
     header_form = HeaderSearchForm()
-    return render(request, 'product_registered.html', locals())
+    find_info = Treatment()
+    selection = find_info.get_registered_products(request.user.username)
+    if selection:
+        context = {
+            'button_go_to' : "product_page",
+            'element_number': selection["number"],
+            'element_type': selection["type"],
+            'list' : selection["elements"],
+            'header_form' : header_form,
+        }
+    else:
+        context = {
+            'element_number': 0,
+            'header_form' : header_form,
+        }        
+    return render(request, 'product_registered.html', context)

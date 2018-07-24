@@ -583,6 +583,45 @@ class TestDBInteractions(TestCase):
         self.assertQuerysetEqual(query, result, ordered=False)
         self.assertEqual(status, 'database full') 
 
+    def test_get_products_registered_success(self):
+        """
+        This method tests the public method get_products_registered with a user
+        which had registered a product
+        """
+
+        result = {
+            'type' : 'product',
+            'number' : 1,
+            'elements': [
+                {
+                    'name' : 'le jus de raisin 100% jus de fruits',
+                    'ref' : '123456789',
+                    'nutriscore' : 'a',
+                    'description' : 'jus de fruit naturel sans sucre ajouté',
+                    'image_url' : 'https://static.openfoodfacts.org/images/products/609/109/100/0301/front_fr.13.100.jpg' 
+                },
+            ]
+        }
+
+        user = self.client.login(username='test-ref', password='ref-test-view')
+        self.assertEqual(self.analysis.get_products_registered('test-ref'), result)
+      
+    def test_get_products_registered_fail(self):
+        """
+        This method tests the public method get_products_registered with a user
+        which had not registered yet a product
+        """
+        username = 'new-test-ref'
+        mail = 'new-ref@register.com'
+        password = 'ref-test-new'
+        password_check = 'ref-test-new'
+        user = User.objects.create_user(username, mail, password)
+        user_profile = Profile(user=user)
+        user_profile.save()
+
+        user = self.client.login(username='new-test-ref', password='ref-test-new')
+        self.assertEqual(self.analysis.get_products_registered('new-test-ref'), None)
+
     ## PRIVATE METHODS ##
 
     def test_get_in_category_model_success(self):
