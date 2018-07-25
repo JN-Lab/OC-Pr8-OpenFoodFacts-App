@@ -42,7 +42,7 @@ def choice(request):
             product["slug_name"] = product["name"].replace(" ", "-")
         
         context = {
-            'button_go_to' : "substitute_page",
+            'source' : "choice_page",
             'element_number': selection["number"],
             'element_type': selection["type"],
             'list' : selection["elements"],
@@ -69,13 +69,24 @@ def substitute(request, element_type, info_id):
     selection = find_info.get_substitute_selection(element_type, info_id)
     if selection:
         context = {
-            'button_go_to' : "product_page",
+            'source' : "substitute_page",
             'element_number': selection["number"],
             'element_type': selection["type"],
             'list' : selection["elements"],
             'header_form' : header_form,
-            'home_form' : home_form
+            'home_form' : home_form,
         }
+
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            if user.profile.products.all().exists():
+                ref_list = [product.ref for product in user.profile.products.all()]
+                for product in context["list"]:
+                    if product["ref"] in ref_list:
+                        product["product_registered"] = True
+                    else:
+                        product["product_registered"] = False
+
     else:
         context = {
             'element_number': 0,
@@ -205,13 +216,23 @@ def product_registered(request):
     selection = find_info.get_registered_products(request.user.username)
     if selection:
         context = {
-            'button_go_to' : "product_page",
+            'source' : "product_registered_page",
             'element_number': selection["number"],
             'element_type': selection["type"],
             'list' : selection["elements"],
             'header_form' : header_form,
             'home_form' : home_form
         }
+
+        if request.user.is_authenticated:
+            user = User.objects.get(username=request.user.username)
+            if user.profile.products.all().exists():
+                ref_list = [product.ref for product in user.profile.products.all()]
+                for product in context["list"]:
+                    if product["ref"] in ref_list:
+                        product["product_registered"] = True
+                    else:
+                        product["product_registered"] = False
     else:
         context = {
             'element_number': 0,

@@ -16,10 +16,23 @@
                                         <p class="card-text">{{ element.description }}</p>
                                     </div>
                                     <div class="card-footer bg-transparent">
-                                        {% if button_go_to == 'substitute_page' %} 
+                                        {% if source == 'choice_page' %} 
                                             <a href="{% url 'search:substitute' element_type=element_type info_id=element.ref %}" class="card-link selection">SELECTIONNER</a>
-                                        {% elif button_go_to == 'product_page' %}
-                                            <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">SELECTIONNER</a>
+                                        {% elif source == 'substitute_page' or source == 'product_registered_page' %}
+                                            <div>
+                                                <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">SELECTIONNER</a>
+                                            </div>
+                                            {% if user.is_authenticated %}
+                                                {% if element.product_registered %}
+                                                    <div>
+                                                        <a href="{% url 'search:delete_treatment' code=element.ref %}" class="card-link selection">SUPPRIMER DE CES FAVORIS</a>    
+                                                    </div>
+                                                {% else %}
+                                                    <div>
+                                                        <a href="{% url 'search:save_treatment' code=element.ref %}" class="card-link selection">SAUVEGARDER</a>
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
                                         {% endif %}
                                     </div>
                                 </div>
@@ -37,9 +50,9 @@
                                             <h5 class="card-title">{{ element.name }}</h5>
                                         </div>
                                         <div class="card-footer bg-transparent">
-                                            {% if button_go_to == 'substitute_page' %} 
+                                            {% if source == 'choice_page' %} 
                                                 <a href="{% url 'search:substitute' element_type=element_type info_id=element.description %}" class="card-link selection">SELECTIONNER</a>
-                                            {% elif button_go_to == 'product_page' %}
+                                            {% elif source == 'choice_page' %}
                                                 <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">SELECTIONNER</a>
                                             {% endif %}
                                         </div>
