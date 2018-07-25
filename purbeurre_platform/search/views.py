@@ -248,7 +248,9 @@ def save_treatment(request, code):
     """
     action = Treatment()
     status = action.register_product(request.user.username, code)
-    return redirect(reverse('search:product', args=[code]), locals())
+
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
 
 @login_required(login_url='/search/login')
 def delete_treatment(request, code):
@@ -257,4 +259,6 @@ def delete_treatment(request, code):
     """
     action = Treatment()
     status = action.delete_product(request.user.username, code)
-    return redirect(reverse('search:product', args=[code]), locals())
+
+    referer = request.META.get('HTTP_REFERER')
+    return redirect(referer)
