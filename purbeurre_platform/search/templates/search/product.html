@@ -26,7 +26,7 @@
                     <div class="alert alert-success">
                         Le produit a été enregistré
                     </div>
-                {% elif status == "not registered" %}
+                {% elif status == "database full" %}
                     <div class="alert alert-danger">
                         Le base de donnée de la version Bêta est pleine. Il n'est plus possible d'enregistrer un produit
                     </div>
@@ -36,9 +36,12 @@
                 {% if product_registered %}
                     <button type="button" class="btn btn-submit-register btn-outline-secondary btn-sm" disabled>Enregistré</button>    
                 {% else %}
-                    <form class="save-submit-form" action="" method="post">
+                    <!-- <form class="save-submit-form" action="" method="post">
                         <input type="Sauvegarder" class="btn btn-submit-register btn-outline-secondary btn-sm" value="Sauvegarder" />
-                    </form>
+                    </form> -->
+                    <div class="col-lg-12">
+                        <a href="{% url 'search:save_treatment' code=product.ref %}" class="btn btn-submit-register btn-outline-secondary btn-sm">Sauvegarder</a>
+                    </div>
                 {% endif %}
             {% else %}
                 <div class="col-lg-12">
@@ -144,10 +147,4 @@
         </div>
     </div>
 </section>
-<script>
-    var username = "{{ user.username }}";
-    var product = "{{ product }}";
-    var product_name = "{{ product.name }}";
-    var product_nutriscore = "{{ product.nutriscore }}"
-</script>
 {% endblock %}

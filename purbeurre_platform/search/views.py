@@ -219,3 +219,12 @@ def product_registered(request):
             'home_form' : home_form
         }        
     return render(request, 'product_registered.html', context)
+
+@login_required(login_url='/search/login')
+def save_treatment(request, code):
+    """
+    This view manages the treatment to save a product in its favorites 
+    """
+    save = Treatment()
+    status = save.register_product(request.user.username, code)
+    return redirect(reverse('search:product', args=[code]), locals())
