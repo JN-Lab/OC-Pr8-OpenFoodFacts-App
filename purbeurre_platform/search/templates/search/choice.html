@@ -15,7 +15,7 @@
                     {% if element_number > 0 %}
                         Choisissez ce qui se rapproche le plus de votre besoin
                     {% else %}
-                        Nous n'avons rien trouvé correspondant à votre requête...
+                        Mince! Nous n'avons rien trouvé correspondant à votre requête...
                     {% endif %}
                 </h2>
             </div>
@@ -23,6 +23,6 @@
     </div>
 </header>
 <section>
-    {% include 'search/list.html' with empty_message="Donner quelques précisions supplémentaires s'il vous plait" %}
+    {% include 'search/list.html' with empty_message="Donner quelques précisions supplémentaires" %}
 </section>
 {% endblock %}

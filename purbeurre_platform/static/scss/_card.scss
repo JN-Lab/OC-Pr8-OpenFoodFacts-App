@@ -1,4 +1,7 @@
 // Styling for card
+.card {
+    @include title-font;
+}
 
 .card-margin-deck {
     @include respond-to (medium) {
@@ -32,7 +35,7 @@
 
 }
 
-.card-footer {
+.card-footer.card-footer-custom {
     border-top: none;
 }
 
@@ -55,5 +58,5 @@
     align-items: center;
     justify-content: center;
     @include shadow-2dp();
-    @include title-font();
+
 }

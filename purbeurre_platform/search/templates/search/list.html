@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-8 container">
+        <div class="col-lg-12 container">
             <div class="row justify-content-center">
                 {% if element_number > 0 %}
                     {% if element_type == 'product' %}
@@ -19,20 +19,22 @@
                                         {% if source == 'choice_page' %} 
                                             <a href="{% url 'search:substitute' element_type=element_type info_id=element.ref %}" class="card-link selection">SELECTIONNER</a>
                                         {% elif source == 'substitute_page' or source == 'product_registered_page' %}
-                                            <div>
-                                                <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">SELECTIONNER</a>
+                                        <div class="row">
+                                            <div class="col-md-12 col-lg-6 text-center">
+                                                <a href="{% url 'search:product' code=element.ref %}" class="card-link selection">+INFOS</a>
                                             </div>
                                             {% if user.is_authenticated %}
                                                 {% if element.product_registered %}
-                                                    <div>
-                                                        <a href="{% url 'search:delete_treatment' code=element.ref %}" class="card-link selection">SUPPRIMER DE CES FAVORIS</a>    
+                                                    <div class="col-md-12 col-lg-6 text-center">
+                                                        <a href="{% url 'search:delete_treatment' code=element.ref %}" class="card-link selection">SUPPRIMER</a>    
                                                     </div>
                                                 {% else %}
-                                                    <div>
-                                                        <a href="{% url 'search:save_treatment' code=element.ref %}" class="card-link selection">SAUVEGARDER</a>
+                                                    <div class="col-md-12 col-lg-6 text-center">
+                                                        <a href="{% url 'search:save_treatment' code=element.ref %}" class="card-link selection">AJOUTER</a>
                                                     </div>
                                                 {% endif %}
                                             {% endif %}
+                                        </div>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -46,6 +48,9 @@
                                 <div class="col-12 card-deck card-margin-deck">
                             {% endif %}
                                     <div class="card category-card card-margin col-md-4 col-sm-12 col-12">
+                                        <div class="card-header">
+                                            Catégories
+                                        </div>
                                         <div class="card-body">
                                             <h5 class="card-title">{{ element.name }}</h5>
                                         </div>
@@ -64,10 +69,11 @@
                         </div>
                     {% endif %}
                 {% else %}
-                <div class="col-lg-8">
+                <div class="col-lg-8 text-center">
                     <h3>
                         {{ empty_message }}
                     </h3>
+                    <hr class="my-4">
                     <form class="form-inline form-homepage" action="{% url 'search:choice' %}" method="get">
                         {% csrf_token %}
                         <div class="input-group mb-3">
