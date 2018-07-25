@@ -427,6 +427,17 @@ class TestDBInteractions(TestCase):
 
         self.assertEqual(self.analysis.check_db_for_registration(10000), False)
 
+    def test_delete_product_registered_succes(self):
+        user = self.client.login(username='test-ref', password='ref-test-view')
+        status = self.analysis.delete_product_registered('test-ref', '123456789')
+
+        user_profile = User.objects.get(username='test-ref')
+        result = []
+        query = user_profile.profile.products.all()
+
+        self.assertQuerysetEqual(query, result, ordered=False)
+        self.assertEqual(status, 'success')        
+
     ## PRIVATE METHODS ##
 
     def test_get_in_category_model_success(self):

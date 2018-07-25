@@ -11,5 +11,6 @@ urlpatterns = [
     path('logout', views.log_out, name="log_out"),
     path('personal-account', views.personal, name="personal"),
     path('product-registered', views.product_registered, name="product_registered"),
-    path('save-treatment/<code>', views.save_treatment, name="save_treatment")
+    path('save-treatment/<code>', views.save_treatment, name="save_treatment"),
+    path('delete-treatment/<code>', views.delete_treatment, name="delete_treatment"),
 ]

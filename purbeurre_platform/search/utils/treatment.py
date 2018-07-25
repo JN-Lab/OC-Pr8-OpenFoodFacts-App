@@ -84,3 +84,13 @@ class Treatment:
             status = "database full"
 
         return status
+
+    def delete_product(self, username, product_ref):
+        """
+        This method just gets the method in DBInteractions class to delete the registered products.
+        It is just to deal only with Treatment class in views.
+        Tests are realized in test_db_interactions.py
+        """
+
+        status = self.db_interactions.delete_product_registered(username, product_ref)
+        return status

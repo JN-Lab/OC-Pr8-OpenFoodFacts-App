@@ -34,19 +34,12 @@
             {% endif %}
             {% if user.is_authenticated %}
                 {% if product_registered %}
-                    <button type="button" class="btn btn-submit-register btn-outline-secondary btn-sm" disabled>Enregistré</button>    
+                    <a href="{% url 'search:delete_treatment' code=product.ref %}" class="btn btn-submit-register btn-outline-secondary btn-sm">Supprimer de ces favoris</a>    
                 {% else %}
-                    <!-- <form class="save-submit-form" action="" method="post">
-                        <input type="Sauvegarder" class="btn btn-submit-register btn-outline-secondary btn-sm" value="Sauvegarder" />
-                    </form> -->
-                    <div class="col-lg-12">
-                        <a href="{% url 'search:save_treatment' code=product.ref %}" class="btn btn-submit-register btn-outline-secondary btn-sm">Sauvegarder</a>
-                    </div>
+                    <a href="{% url 'search:save_treatment' code=product.ref %}" class="btn btn-submit-register btn-outline-secondary btn-sm">Sauvegarder</a>
                 {% endif %}
             {% else %}
-                <div class="col-lg-12">
-                    <a href="{% url 'search:log_in' %}" class="btn btn-submit-register btn-outline-secondary btn-sm">Connectez-vous pour l'ajouter à vos favoris</a> 
-                </div>
+                <a href="{% url 'search:log_in' %}" class="btn btn-submit-register btn-outline-secondary btn-sm">Connectez-vous pour l'ajouter à vos favoris</a> 
             {% endif %}
             <div class="col-lg-12 product-block">
                 <h3>{{ product.name }}</h3>

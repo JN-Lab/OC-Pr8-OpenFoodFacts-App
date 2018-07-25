@@ -150,6 +150,23 @@ class DBInteractions:
         else:
             return None
 
+    def delete_product_registered(self, username, product_ref):
+        """
+        This method removed a product from the user list of registered products.
+        It removes the many-to-many relation between the user and the product
+        """
+
+        user = User.objects.get(username=username)
+        product = Product.objects.get(ref=product_ref)
+        user.profile.products.remove(product)
+
+        status = ""
+        if user.profile.products.filter(ref=product_ref).exists():
+            status = "error"
+        else:
+            status = "success"
+        return status
+
     ## PRIVATE METHODS ##
     def _clean_query(self, query):
         useless_terms = ['a', 'de', 'de', 'des', 'un', 'une', 'tout', 'tous', 'les',

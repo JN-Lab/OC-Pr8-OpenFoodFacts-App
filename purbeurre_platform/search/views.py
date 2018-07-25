@@ -225,6 +225,15 @@ def save_treatment(request, code):
     """
     This view manages the treatment to save a product in its favorites 
     """
-    save = Treatment()
-    status = save.register_product(request.user.username, code)
+    action = Treatment()
+    status = action.register_product(request.user.username, code)
+    return redirect(reverse('search:product', args=[code]), locals())
+
+@login_required(login_url='/search/login')
+def delete_treatment(request, code):
+    """
+    This view manages the treatment to delete a product from its favorites
+    """
+    action = Treatment()
+    status = action.delete_product(request.user.username, code)
     return redirect(reverse('search:product', args=[code]), locals())
