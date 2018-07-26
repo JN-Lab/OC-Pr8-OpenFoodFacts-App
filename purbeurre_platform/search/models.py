@@ -17,7 +17,6 @@ class Product(models.Model):
     nutriscore = models.CharField(max_length=1)
     description = models.TextField(null=True)
     picture = models.URLField(null=True)
-    had_been_registered = models.BooleanField(default=False)
     last_interaction = models.DateTimeField(default=timezone.now)
     categories = models.ManyToManyField(Category, related_name='products', blank=True)
 
