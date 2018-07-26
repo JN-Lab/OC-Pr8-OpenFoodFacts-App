@@ -7,7 +7,6 @@ class HeaderSearchForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control mr-sm-2', 'placeholder': 'chercher'})
         )
 
-
 class HomeSearchForm(forms.Form):
     search = forms.CharField(
         max_length=200,

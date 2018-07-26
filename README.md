@@ -5,6 +5,47 @@ Repository for Project 8 from Openclassrooms cursus in Software Development
 
 This is a web application built with **Django** to help user to find healthier products of their favorites food.
 
+### Simplified App Structure
+
+```
+|-- .gitignore
+|-- README.md
+|-- requirements.txt
+|-- purbeurre_platform/
+    |-- purbeurre_platform/
+        |-- __init__.py
+        |-- settings.py
+        |-- urls.py
+        |-- wsgi.py
+    |-- search/
+        |-- __init__.py
+        |-- management/
+        |-- migrations/
+        |-- static/
+        |-- templates/
+        |-- utils/
+        |-- tests/
+        |-- admin.py
+        |-- apps.py
+        |-- forms.py
+        |-- models.py
+        |-- urls.py
+        |-- views.py
+    |-- static/
+        |-- boostrap/
+        |-- css/
+        |-- scss/
+        |-- jquery/
+        |-- js/
+        |-- magnific-popup/
+    |-- templates/
+        |-- 404.html
+        |-- 500.html
+        |-- base.html
+        |-- legal.html
+    |-- manage.py 
+```
+
 ## Getting Started
 
 1. Clone the repository:
