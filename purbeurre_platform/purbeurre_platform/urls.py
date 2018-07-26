@@ -22,8 +22,11 @@ from search import views
 
 urlpatterns = [
     path('', views.index, name="index"),
+    path('register/', views.register, name="register"),
+    path('login/', views.log_in, name="log_in"),
+    path('logout/', views.log_out, name="log_out"),
     path('search/', include('search.urls', namespace='search')),
-    path('legal-information', TemplateView.as_view(template_name='legal.html'), name="legal"),
+    path('legal-information/', TemplateView.as_view(template_name='legal.html'), name="legal"),
     path('admin/', admin.site.urls),
 ]
 

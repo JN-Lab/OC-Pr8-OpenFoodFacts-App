@@ -272,7 +272,7 @@ class RegisterPageTestCase(TestCase):
         User.objects.create_user(username, mail, password)
 
     def test_register_page_get(self):
-        response = self.client.get(reverse('search:register'))
+        response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
 
     def test_register_page_success_registration(self):
@@ -288,9 +288,9 @@ class RegisterPageTestCase(TestCase):
             'password_check' : 'test-unitaire-view',
         }
 
-        response = self.client.post(reverse('search:register'), data)
+        response = self.client.post(reverse('register'), data)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('search:log_in'))
+        self.assertRedirects(response, reverse('log_in'))
 
     def test_register_page_fail_registration(self):
         """
@@ -305,7 +305,7 @@ class RegisterPageTestCase(TestCase):
             'password_check' : 'test-unitaire-view',
         }
 
-        response = self.client.post(reverse('search:register'), data)
+        response = self.client.post(reverse('register'), data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['error'], True)
 
@@ -323,7 +323,7 @@ class LoginPageTestCase(TestCase):
         User.objects.create_user(username, mail, password)
 
     def test_login_page_get(self):
-        response = self.client.get(reverse('search:log_in'))
+        response = self.client.get(reverse('log_in'))
         self.assertEqual(response.status_code, 200)
 
     def test_login_page_success_connexion(self):
@@ -337,7 +337,7 @@ class LoginPageTestCase(TestCase):
             'password' : 'existing-ref',
         }
 
-        response = self.client.post(reverse('search:log_in'), data)
+        response = self.client.post(reverse('log_in'), data)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('search:personal'))
     
@@ -352,7 +352,7 @@ class LoginPageTestCase(TestCase):
             'password' : 'existing-ref',
         }
 
-        response = self.client.post(reverse('search:log_in'), data)
+        response = self.client.post(reverse('log_in'), data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['error'], True)
 
@@ -367,7 +367,7 @@ class LoginPageTestCase(TestCase):
             'password' : 'unknown-ref',
         }
 
-        response = self.client.post(reverse('search:log_in'), data)
+        response = self.client.post(reverse('log_in'), data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['error'], True)
 
@@ -380,9 +380,9 @@ class LogoutPageTestCase(TestCase):
         """
         The method tests the behavior of the app whn a log out is done
         """
-        response = self.client.get(reverse('search:log_out'))
+        response = self.client.get(reverse('log_out'))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('search:log_in'))
+        self.assertRedirects(response, reverse('log_in'))
 
 class PersonalPageTestCase(TestCase):
     """
@@ -415,7 +415,7 @@ class PersonalPageTestCase(TestCase):
         """
         response = self.client.get(reverse('search:personal'))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/search/login?next=/search/personal-account')
+        self.assertRedirects(response, '/login/?next=/search/personal-account')
 
 class ProductRegisteredPageTestCase(TestCase):
     """
@@ -448,4 +448,4 @@ class ProductRegisteredPageTestCase(TestCase):
         """
         response = self.client.get(reverse('search:product_registered'))
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, '/search/login?next=/search/product-registered')
+        self.assertRedirects(response, '/login/?next=/search/product-registered')

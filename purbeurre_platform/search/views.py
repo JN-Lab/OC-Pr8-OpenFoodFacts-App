@@ -150,7 +150,7 @@ def register(request):
                 user = User.objects.create_user(username, mail, password)
                 user_profile = Profile(user=user)
                 user_profile.save()
-                return redirect(reverse('search:log_in'), locals())
+                return redirect(reverse('log_in'), locals())
             else:
                 error = True
                 if username_already_exist:
@@ -191,10 +191,10 @@ def log_out(request):
     This view manages the log-out page
     """
     logout(request)
-    return redirect(reverse('search:log_in'), locals())
+    return redirect(reverse('log_in'), locals())
 
 # Personal account
-@login_required(login_url='/search/login')
+@login_required(login_url='/login/')
 def personal(request):
     """
     This view manages the personal account page where the user
@@ -204,7 +204,7 @@ def personal(request):
     return render(request, 'personal.html', locals())
 
 # Product registered
-@login_required(login_url='/search/login')
+@login_required(login_url='/login/')
 def product_registered(request):
     """
     This view manages the product-registered page where the user
@@ -241,7 +241,7 @@ def product_registered(request):
         }        
     return render(request, 'product_registered.html', context)
 
-@login_required(login_url='/search/login')
+@login_required(login_url='/login/')
 def save_treatment(request, code):
     """
     This view manages the treatment to save a product in its favorites 
@@ -252,7 +252,7 @@ def save_treatment(request, code):
     referer = request.META.get('HTTP_REFERER')
     return redirect(referer)
 
-@login_required(login_url='/search/login')
+@login_required(login_url='/login/')
 def delete_treatment(request, code):
     """
     This view manages the treatment to delete a product from its favorites
