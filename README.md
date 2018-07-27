@@ -16,7 +16,7 @@ This is a web application built with **Django** to help user to find healthier p
     |-- settings.py
     |-- urls.py
     |-- wsgi.py
-    |-- static/
+    |-- static/s
 |-- search/
     |-- __init__.py
     |-- dumps/
