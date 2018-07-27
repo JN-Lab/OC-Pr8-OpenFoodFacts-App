@@ -29,7 +29,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = ['jn-lab-p8.herokuapp.com']
+ALLOWED_HOSTS = ['jn-lab-p8.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
@@ -150,6 +150,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = (
         os.path.join(PROJECT_ROOT, 'static'),
+        os.path.join(PROJECT_ROOT, '../static'),
     )
 
     # Simplified static file serving.
