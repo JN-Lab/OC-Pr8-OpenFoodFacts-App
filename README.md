@@ -12,38 +12,39 @@ This is a web application built with **Django** to help user to find healthier p
 |-- README.md
 |-- requirements.txt
 |-- purbeurre_platform/
-    |-- purbeurre_platform/
-        |-- __init__.py
-        |-- settings.py
-        |-- urls.py
-        |-- wsgi.py
-    |-- search/
-        |-- __init__.py
-        |-- management/
-        |-- migrations/
-        |-- static/
-        |-- templates/
-        |-- utils/
-        |-- tests/
-        |-- admin.py
-        |-- apps.py
-        |-- forms.py
-        |-- models.py
-        |-- urls.py
-        |-- views.py
+    |-- __init__.py
+    |-- settings.py
+    |-- urls.py
+    |-- wsgi.py
     |-- static/
-        |-- boostrap/
-        |-- css/
-        |-- scss/
-        |-- jquery/
-        |-- js/
-        |-- magnific-popup/
+|-- search/
+    |-- __init__.py
+    |-- dumps/
+    |-- management/
+    |-- migrations/
+    |-- static/
     |-- templates/
-        |-- 404.html
-        |-- 500.html
-        |-- base.html
-        |-- legal.html
-    |-- manage.py 
+    |-- utils/
+    |-- tests/
+    |-- admin.py
+    |-- apps.py
+    |-- forms.py
+    |-- models.py
+    |-- urls.py
+    |-- views.py
+|-- static/
+    |-- boostrap/
+    |-- css/
+    |-- scss/
+    |-- jquery/
+    |-- js/
+    |-- magnific-popup/
+|-- templates/
+    |-- 404.html
+    |-- 500.html
+    |-- base.html
+    |-- legal.html
+|-- manage.py 
 ```
 
 ## Getting Started
