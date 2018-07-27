@@ -5,21 +5,17 @@ from selenium.webdriver.support.wait import WebDriverWait
 from django.contrib.auth.models import User
 from ..models import Product, Category, Profile
 
-class SeleniumTests(StaticLiveServerTestCase, TestCase):
+class SeleniumTests(StaticLiveServerTestCase):
+    """
+    This class realizes some functional tests in order to valid the coordination
+    between all the process of the application
+    """
 
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
         cls.selenium = WebDriver()
         cls.selenium.implicitly_wait(10)
-    
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super().tearDownClass()
-
-    @classmethod
-    def setUpTestData(cls):
 
         categories = [
             {
@@ -198,18 +194,27 @@ class SeleniumTests(StaticLiveServerTestCase, TestCase):
                 except:
                     pass
 
-        # We create a first user which registered one product
+        # # We create a first user which registered one product
         username = 'test-functional'
         mail = 'test-functional@register.com'
         password = 'test-login-selenium'
         password_check = 'test-login-selenium'
-        user = User.objects.create_user(username, mail, password)
+        user = User.objects.create_superuser(username, mail, password)
         user_profile = Profile(user=user)
         user_profile.save()
         product = Product.objects.get(ref="123456789")
         user_profile.products.add(product.id)
+    
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super().tearDownClass()
 
     def test_login(self):
+        """
+        This method tests the connexion process
+        """
+
         self.selenium.get('%s%s' % (self.live_server_url, '/login/'))
         username_input = self.selenium.find_element_by_name("username")
         username_input.send_keys('test-functional')
@@ -224,14 +229,21 @@ class SeleniumTests(StaticLiveServerTestCase, TestCase):
 
         self.assertEqual(logged, True)
 
-    def test_add_product(self):
-
-        # the user is logged
-        self.selenium.get('%s%s' % (self.live_server_url, '/login/'))
+    def test_register(self):
+        """
+        This method tests the registration process
+        """
+        
+        self.selenium.get('%s%s' % (self.live_server_url, '/register/'))
         username_input = self.selenium.find_element_by_name("username")
-        username_input.send_keys('test-functional')
+        username_input.send_keys('test-register')
+        mail_input = self.selenium.find_element_by_name("mail")
+        mail_input.send_keys('test_register@gmail.com')
         password_input = self.selenium.find_element_by_name("password")
-        password_input.send_keys('test-login-selenium')
+        password_input.send_keys('secret-password')
+        password_check_input = self.selenium.find_element_by_name("password_check")
+        password_check_input.send_keys('secret-password')
+
         self.selenium.find_element_by_css_selector(".btn-submit-user").click()
 
         user = User.objects.get(username='test-functional')
@@ -241,17 +253,35 @@ class SeleniumTests(StaticLiveServerTestCase, TestCase):
 
         self.assertEqual(logged, True)
 
-        # the user look for substitue to coca
-        # Wait until the response is received
-        WebDriverWait(self.selenium, 30000).until(
+    def test_create_connect_search(self):
+        """
+        This method tests a registration, then a connexion, then a research
+        """
+        self.selenium.get('%s%s' % (self.live_server_url, '/register/'))
+        username_input = self.selenium.find_element_by_name("username")
+        username_input.send_keys('test-connexion')
+        mail_input = self.selenium.find_element_by_name("mail")
+        mail_input.send_keys('test_connexion@gmail.com')
+        password_input = self.selenium.find_element_by_name("password")
+        password_input.send_keys('secret-password')
+        password_check_input = self.selenium.find_element_by_name("password_check")
+        password_check_input.send_keys('secret-password')
+
+        self.selenium.find_element_by_css_selector(".btn-submit-user").click()
+
+        WebDriverWait(self.selenium, 10000).until(
         lambda driver: driver.find_element_by_tag_name('body'))
 
-        self.selenium.get('%s%s' %(self.live_server_url, '/search/product/12345787459'))
-        self.selenium.find_element_by_css_selector(".btn-submit-register").click
+        username_input = self.selenium.find_element_by_name("username")
+        username_input.send_keys('test-connexion')
+        password_input = self.selenium.find_element_by_name("password")
+        password_input.send_keys('secret-password')
+        self.selenium.find_element_by_css_selector(".btn-submit-user").click()
 
-        saved = False
-        product_ref = '12345787459'
-        products_saved = [product.ref for product in user.profile.products.all()]
-        if product_ref in products_saved:
-            saved = True
-        self.assertEqual(saved, True)
+        WebDriverWait(self.selenium, 10000).until(
+        lambda driver: driver.find_element_by_tag_name('body'))
+        self.selenium.get('%s%s' % (self.live_server_url, ''))
+
+        search_input = self.selenium.find_element_by_id('id_search')
+        search_input.send_keys('coca')
+        self.selenium.find_element_by_css_selector(".btn-submit-home").click()
