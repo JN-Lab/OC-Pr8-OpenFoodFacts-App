@@ -209,7 +209,4 @@ class TestCommandDBInit(TestCase):
 
         query = Product.objects.all()
         self.assertQuerysetEqual(query, result)
-
-    def test_set_categories(self):
-        pass
         
