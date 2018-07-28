@@ -144,12 +144,12 @@ INTERNAL_IPS = ['127.0.0.1']
 if os.environ.get('ENV') == 'PRODUCTION':
     # Static files settings
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'purbeurre_platform/staticfiles')
+    print(PROJECT_ROOT)
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = [
-        os.path.join(PROJECT_ROOT, 'purbeurre_platform/static'),
+        os.path.join(PROJECT_ROOT, 'static'),
     ]
 
     # Simplified static file serving.
