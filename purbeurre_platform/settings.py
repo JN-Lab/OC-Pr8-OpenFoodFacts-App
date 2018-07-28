@@ -144,8 +144,7 @@ INTERNAL_IPS = ['127.0.0.1']
 if os.environ.get('ENV') == 'PRODUCTION':
     # Static files settings
     PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-    print(PROJECT_ROOT)
-    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'allstaticfiles')
 
     # Extra places for collectstatic to find static files.
     STATICFILES_DIRS = [
