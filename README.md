@@ -4,6 +4,7 @@ Repository for Project 8 from Openclassrooms cursus in Software Development
 ## Project Description
 
 This is a web application built with **Django** to help user to find healthier products of their favorites food.
+The application is deployed on **Heroku**.
 
 ### Simplified App Structure
 
@@ -11,6 +12,9 @@ This is a web application built with **Django** to help user to find healthier p
 |-- .gitignore
 |-- README.md
 |-- requirements.txt
+|-- manage.py
+|-- Procfile
+|-- geckodriver.log
 |-- purbeurre_platform/
     |-- __init__.py
     |-- settings.py
@@ -44,7 +48,6 @@ This is a web application built with **Django** to help user to find healthier p
     |-- 500.html
     |-- base.html
     |-- legal.html
-|-- manage.py 
 ```
 
 ## Getting Started
