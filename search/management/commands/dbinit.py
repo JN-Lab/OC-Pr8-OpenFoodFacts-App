@@ -4,13 +4,14 @@ import requests
 import math
 import unicodedata
 from django.core.management.base import BaseCommand
-from ...models import Product, Category
+from django.contrib.auth.models import User
+from ...models import Product, Category, Profile
 
 class DBInit:
     """
-    This class groups all the scripts to execute to populate the database with
+    This class groups all the scripts to populate the database with
     the initial datas.
-    To objectives:
+    The objectives:
         -> Respect the limitations of 10k rows from freemium account on Heroku
         -> Get the most common datas in order to minimize API Call during navigation
     """
@@ -22,12 +23,13 @@ class DBInit:
         """
         categories = Category.objects.all()
         products = Product.objects.all()
+        users = User.objects.all()
         if categories:
             categories.delete()
         if products:
             products.delete()
-
-        print("db clean process --> OK")
+        if users:
+            users.delete()
 
     def set_categories(self):
         """
@@ -78,29 +80,33 @@ class DBInit:
 
         categories = Category.objects.all()
         for category in categories:
-            print("looking for categories : {}".format(category.name))
-            page_number = self._get_product_pages_number(category.total_products, products_per_page)
-            page = 1
-            healthy_product = 0
-            dirty_products = 0
-            while page <= page_number and (healthy_product < max_healthy_products or dirty_products < max_dirty_products):
-                products_data = self._get_from_api_products_info_from_page_category(category.api_id, products_per_page, page )
-                for product in products_data["products"]:
-                    try:
-                        print("looking for product : {}".format(product["product_name_fr"]))
-                        if product["nutrition_grade_fr"] == "a" and healthy_product < max_healthy_products:
-                            product["product_name_fr"] = self._clean_name(product["product_name_fr"])
-                            self._inject_products(product)
-                            healthy_product += 1
-                            print("SUCCESS product {} injected".format(product["product_name_fr"]))
-                        elif (product["nutrition_grade_fr"] == "d" or product["nutrition_grade_fr"] == "e") and dirty_products < max_dirty_products:
-                            product["product_name_fr"] = self._clean_name(product["product_name_fr"])
-                            self._inject_products(product)
-                            dirty_products += 1
-                            print("SUCCESS product {} injected".format(product["product_name_fr"]))
-                    except:
-                        pass
-                page +=1
+            product_numb = category.products.all().count()
+            if product_numb < 12:
+                print("looking for categories : {}".format(category.name))
+                page_number = self._get_product_pages_number(category.total_products, products_per_page)
+                page = 1
+                healthy_product = 0
+                dirty_products = 0
+                while page <= page_number and (healthy_product < max_healthy_products or dirty_products < max_dirty_products):
+                    products_data = self._get_from_api_products_info_from_page_category(category.api_id, products_per_page, page )
+                    for product in products_data["products"]:
+                        try:
+                            print("looking for product : {}".format(product["product_name_fr"]))
+                            if product["nutrition_grade_fr"] == "a" and healthy_product < max_healthy_products:
+                                product["product_name_fr"] = self._clean_name(product["product_name_fr"])
+                                self._inject_products(product)
+                                healthy_product += 1
+                                print("SUCCESS product {} injected".format(product["product_name_fr"]))
+                            elif (product["nutrition_grade_fr"] == "d" or product["nutrition_grade_fr"] == "e") and dirty_products < max_dirty_products:
+                                product["product_name_fr"] = self._clean_name(product["product_name_fr"])
+                                self._inject_products(product)
+                                dirty_products += 1
+                                print("SUCCESS product {} injected".format(product["product_name_fr"]))
+                        except:
+                            pass
+                    page +=1
+            else:
+                print("the {} category already has enough products".format(category.name))
         
         print("### Selected Products Injected ###")
     
@@ -161,10 +167,12 @@ class DBInit:
         """
         This method injects a category into the database
         """
-        Category.objects.create(name=category["name"],
-                                api_id=category["id"],
-                                total_products=category["products"],
-                                enough_good_nutriscore=True)
+        category_exists = Category.objects.filter(api_id=category["id"]).exists()
+        if not category_exists:
+            Category.objects.create(name=category["name"],
+                                    api_id=category["id"],
+                                    total_products=category["products"],
+                                    enough_good_nutriscore=True)
 
     def _inject_products(self, product):
         """
@@ -206,8 +214,21 @@ class Command(BaseCommand):
     This class describe the different actions to realize when the dbinit command
     is launched.
     """
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--cleandb',
+            action='store_true',
+            dest='cleandb',
+            help="""All the elements from the database are deleted before
+            the update""",
+        )
+
     def handle(self, **options):
         db_init = DBInit()
-        db_init.clean_db()
+    
+        if options['cleandb']:
+            db_init.clean_db()
+    
         db_init.set_categories()
         db_init.set_products()
